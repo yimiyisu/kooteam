@@ -1,0 +1,33 @@
+
+.card {
+    width: 40%;
+    height: 100px;
+    display: inline-block;
+    border: 1px solid #eee;
+    text-align: center;
+    margin: 10px;
+    background: #f8f8f8;
+    border-radius: 3px;
+}
+
+.card view {
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.card text {
+    color: #666;
+}
+
+.unfinish view {
+    color: #E7C004;
+}
+
+.finished view {
+    color: #79aa1c;
+}
+
+.over view {
+    color: #f80e15;
+}

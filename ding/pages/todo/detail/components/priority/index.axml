@@ -1,0 +1,12 @@
+<picker value="{{index}}" onChange="priorityChange" id="{{ _id }}" range-key="name" range="{{priorityArr}}">
+    <view class="picker">
+        <view class="priority">
+            <label><k-icon cls="priority-icon"/>优先级：
+            </label>
+            <text a:if="{{ priority === 'a'}}" class="item">{{priorityArr[0].name}}</text>
+            <text a:if="{{ priority === 'b'}}" class="item">{{priorityArr[1].name}}</text>
+            <text a:if="{{ priority === 'c'}}" class="item">{{priorityArr[2].name}}</text>
+            <text a:if="{{ priority === 'd'}}" class="item">{{priorityArr[3].name}}</text>
+        </view>
+    </view>
+</picker>

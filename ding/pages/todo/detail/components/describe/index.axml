@@ -1,0 +1,3 @@
+<textarea class="describe" placeholder="请输入备注" id="{{ _id }}"
+          onBlur="saveRemark" value="{{ describe }}"
+/>

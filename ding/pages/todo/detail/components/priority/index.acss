@@ -1,0 +1,13 @@
+.priority {
+    display: flex;
+    color: #666;
+    margin-top: 5px;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+}
+
+.priority-icon:before {
+    content: "\e55e";
+}
+

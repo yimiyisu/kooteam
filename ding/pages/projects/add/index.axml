@@ -1,0 +1,4 @@
+<view class="content">
+    <input type="text" class="title" onInput="bindProjectTitle" placeholder="请输入项目名称"/>
+    <view class="btn" catchTap="userSelector">下一步</view>
+</view>

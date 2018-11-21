@@ -1,0 +1,49 @@
+{
+  "pages": [
+    "pages/todo/index",
+    "pages/projects/projects",
+    "pages/my/my",
+    "pages/todo/detail/detail",
+    "pages/my/create/index",
+    "pages/my/todo/index",
+    "pages/my/message/index",
+    "pages/my/userinfo/index",
+    "pages/my/login/index",
+    "pages/my/help/index",
+    "pages/projects/add/index",
+    "pages/projects/chart/index",
+    "pages/projects/menbers/menbers",
+    "pages/projects/docs/docs",
+    "pages/projects/detail/index",
+    "pages/projects/set/set",
+    "pages/my/userinfo/changeInfo/changeInfo"
+  ],
+  "tabBar": {
+    "textColor": "#5a5866",
+    "selectedColor": "#0285d7",
+    "backgroundColor": "#ffffff",
+    "items": [
+      {
+        "pagePath": "pages/todo/index",
+        "icon": "imgs/home.png",
+        "activeIcon": "imgs/home-active.png",
+        "name": "待办"
+      },
+      {
+        "pagePath": "pages/projects/projects",
+        "icon": "imgs/project.png",
+        "activeIcon": "imgs/project-active.png",
+        "name": "项目"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "icon": "imgs/my.png",
+        "activeIcon": "imgs/my-active.png",
+        "name": "我的"
+      }
+    ]
+  },
+  "window": {
+    "defaultTitle": "Kooteam"
+  }
+}

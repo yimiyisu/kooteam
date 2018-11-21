@@ -1,0 +1,22 @@
+.remind {
+    display: flex;
+    color: #999;
+    margin-top: 5px;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+}
+
+.remind-icon {
+    width: 40px;
+    text-align: center;
+}
+
+.item {
+    padding-top: 4px;
+    flex: 1;
+}
+
+.remind-icon:before {
+    content: "\e190";
+}

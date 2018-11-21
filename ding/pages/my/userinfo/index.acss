@@ -1,0 +1,25 @@
+.row {
+    border-bottom: 1px solid #eee;
+    display: flex;
+    padding: 10px;
+    color: #666;
+}
+
+.left {
+    width: 40px;
+
+}
+
+.right {
+    text-align: right;
+    flex: 1;
+}
+
+.right .k-icon:before {
+    color: #ccc;
+    content: "\e409";
+}
+
+.avatar {
+    margin-top: 20px;
+}

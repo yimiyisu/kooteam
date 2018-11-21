@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "新建项目",
+  "enablePullDownRefresh": true,
+  "onReachBottomDistance": 0,
+  "backgroundColor": "#0285d7",
+  "usingComponents": {
+    "k-icon": "/pages/components/icon/index"
+  }
+}

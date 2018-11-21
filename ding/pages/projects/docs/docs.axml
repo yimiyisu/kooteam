@@ -1,0 +1,12 @@
+<view>
+    <view class="doc">
+        <view class="title">文档标题</view>
+        <view class="info">张学友 2018-10-20</view>
+    </view>
+    <block a:for="{{docs}}" key="_id" a:for-item="doc">
+        <view class="doc">
+            <view class="title">{{doc.title}}</view>
+            <view class="info">{{doc.uid}} 2018-10-20</view>
+        </view>
+    </block>
+</view>

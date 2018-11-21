@@ -1,0 +1,11 @@
+<view>
+    <view class="filter">
+        <view class="{{todoClass}}" data-type="0" catchTap="filter">进行中</view>
+        <view class="{{finishedClass}}" data-type="1" catchTap="filter">已完成</view>
+    </view>
+    <view class="list">
+        <block a:for="{{things}}" key="_id" a:for-item="thing">
+            <k-todo thing="{{thing}}"/>
+        </block>
+    </view>
+</view>

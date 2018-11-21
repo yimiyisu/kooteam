@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "项目统计",
+  "usingComponents": {
+    "k-icon": "/pages/components/icon/index"
+  }
+}

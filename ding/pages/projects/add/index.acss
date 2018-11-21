@@ -1,0 +1,48 @@
+.content {
+    margin: 20px 10px;
+}
+
+.content input {
+    height: 50px;
+    line-height: 50px;
+    display: block;
+}
+
+.btn {
+    background: #0FA1FD;
+    color: #fff;
+    padding: 12px;
+    margin: 15px 0 5px 0;
+    text-align: center;
+    border: 0;
+    border-radius: 3px;
+}
+
+.info {
+    background: #f4f4f4;
+    font-size: 12px;
+    color: #666;
+    padding: 10px;
+}
+
+.user {
+    width: 60px;
+    overflow: hidden;
+    text-align: center;
+    padding: 5px;
+    color: #666;
+    font-size: 12px;
+    display: inline-block;
+    margin: 5px;
+}
+
+.active {
+    border: solid 1px #2d8cf0;
+    border-radius: 5px;
+}
+
+.user image {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+}

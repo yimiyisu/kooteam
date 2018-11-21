@@ -1,0 +1,22 @@
+<!--pages/projects/projects.wxml-->
+<view class="k-projects">
+    <!--<view class="search">-->
+    <!--<icon/>-->
+    <!--<input type="text" placeholder="请输入关键字搜索" confirm-hold="true"/>-->
+    <!--</view>-->
+    <view class="add" catchTap="add">新建项目</view>
+    <!--<view class="tip">新建项目，请到kooteam.com电脑端操作</view>-->
+    <block a:for="{{projects}}" key="_id" a:for-item="project">
+        <view class="project" catchTap="detail" data-project-id="{{project._id}}"
+              data-title="{{project.title}}">
+            <view class="title">
+                <text>{{project.title}}</text>
+                <k-icon class="arrow"/>
+            </view>
+            <view>
+                <text class="info">{{project.finished}}个已完成</text>
+                <text class="info">{{project.unfinish}}个未完成</text>
+            </view>
+        </view>
+    </block>
+</view>

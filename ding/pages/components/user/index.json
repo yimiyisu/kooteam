@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "k-icon": "/pages/components/icon/index"
+  }
+}

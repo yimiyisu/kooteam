@@ -1,0 +1,23 @@
+.inputBox {
+    margin: 20px 10px 10px 10px;
+    border-bottom: 1px solid #0285d7;
+}
+
+.saveBtn {
+    margin: 20px 10px 0 10px;
+    display: flex;
+    justify-content: flex-end
+}
+
+.btn {
+    width: 28%;
+    border: 1px solid #0285d7;
+    border-radius: 3px;
+    color: #ffffff;
+    background-color: #0285d7;
+    text-align: center;
+}
+
+.inputBox-sex {
+    margin: 20px 10px 10px 10px;
+}

@@ -1,0 +1,8 @@
+<view class="author">
+    <label>
+        <k-icon cls="person-icon"/>负责人：
+    </label>
+    <view class="item" catchTap="show">
+        <text>{{thing.nick}}</text>
+    </view>
+</view>

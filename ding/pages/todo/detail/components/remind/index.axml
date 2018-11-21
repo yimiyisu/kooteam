@@ -1,0 +1,4 @@
+<view class="remind">
+    <k-icon class="remind-icon"/>
+    <view class="item">设置提醒</view>
+</view>
