@@ -2,6 +2,11 @@
 + kooteam是一款轻量级的在线团队协作工具，提供各类文档工具、在线思维导图、在线流程图、项目管理、任务分发，知识库管理等工具。
 + kooteam完全打通钉钉功能，同步企业通讯录，实现钉钉扫码自动登陆，100%保障数据安全。
 
+## 技术选型
++ 后端框架：[于Blade MVC](https://github.com/lets-blade/blade)
++ 前端框架：Vue 2.0
++ 数据库：Mongodb
+
 ## 功能简介
 **1. 待办四象限：突出事情优先级，帮助员工合理安排时间，提高工作效率**
 ![待办四象限：突出事情优先级，帮助员工合理安排时间，提高工作效率](https://b.yimiyisu.com/kooteam/banner/todo.jpg)
@@ -21,11 +26,6 @@
 
 **6. 在线流程图：在线流程图工具，使用方便**
 ![在线流程图：在线流程图工具，使用方便](https://b.yimiyisu.com/kooteam/banner/1.jpg)
-
-## 技术选型
-+ 后端框架：[于Blade MVC](https://github.com/lets-blade/blade)
-+ 前端框架：Vue 2.0
-+ 数据库：Mongodb
 
 ## 相关网址
 + 在线体验地址：[https://www.kooteam.com](https://www.kooteam.com)
