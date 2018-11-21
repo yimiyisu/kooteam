@@ -1,1 +1,0 @@
-zenTemplate={"content":"<div id='J_app'><k-todo></k-todo><k-todo-detail quadrant=\"true\"></k-todo-detail></div>","ext":"","sons":{},"data":{}};

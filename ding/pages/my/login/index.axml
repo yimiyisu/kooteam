@@ -1,4 +1,0 @@
-<view class="k-login">
-    <icon type="success" color="green" size="45"/>
-    <view>恭喜你，登录成功！</view>
-</view>

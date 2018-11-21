@@ -1,1 +1,0 @@
-zenTemplate={"content":"<div id='J_app'><z-datasource> <var name=\"data\">/select/thing.json</var></z-datasource><div class=\"k-calendar z-row\"><k-calendar v-if=\"data\" v-model=\"data.data\"></k-calendar></div><k-todo-detail></k-todo-detail></div>","ext":"","sons":{},"data":{"data":""}};

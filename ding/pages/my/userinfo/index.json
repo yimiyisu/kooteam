@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "个人信息",
-  "usingComponents": {
-    "k-avator": "/pages/components/avator/index"
-  }
-}

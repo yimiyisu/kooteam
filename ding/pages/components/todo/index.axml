@@ -1,6 +1,0 @@
-<view class="k-todo {{isFinished?'finish':'unfinish'}}">
-    <view class="k-thing-icon" catchTap="statusChange">
-        <k-icon/>
-    </view>
-    <view class="content" catchTap="detail">{{thing.title}}</view>
-</view>

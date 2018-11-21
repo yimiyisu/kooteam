@@ -1,7 +1,0 @@
-<view class="project">
-    <k-icon class="project-icon"/>
-    <view class="item" a:if="{{projectId !== null && projectId !== '0' && projectId !== undefined}}">
-        所属项目:{{projectTitle}}
-    </view>
-    <view class="item" a:else>所属项目:暂无</view>
-</view>

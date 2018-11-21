@@ -1,3 +1,0 @@
-<view class="avator">
-    <image mode="aspectFill" a:if="{{!!src}}" onError="onError" src="{{src}}"/>
-</view>

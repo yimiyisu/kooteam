@@ -1,1 +1,0 @@
-zenTemplate={"content":"<div id='J_app'><div style=\"margin-bottom:20px;text-align: center\"><k-check-login :timer=\"2\" type=\"ding\">扫描完成后系统不能自动登录，请点击这里</k-check-login></div></div>","ext":"","sons":{},"data":{}};
