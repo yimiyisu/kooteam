@@ -31,6 +31,9 @@
 + 在线体验地址：[https://www.kooteam.com](https://www.kooteam.com)
 + [安装教程](https://www.kooteam.com/view.html?id=5bf35ce443880a6558827185)
 
+## 微信交流群
++ ![微信交流群](https://img.yimiyisu.com/wx.jpg)
+
 ## 开源说明
 1. kooteam是上海宾弗信息科技公司的内部开发工具，使用了数年，一直都在慢步迭代。2018年7月内部决定，将kooteam工具进行产品化，由独立的研发团队负责，历时5个多月的艰苦努力，终于完成产品开发。 
 2. 目前产品的前后端代码全部重构，前端UI重新设计，剥离了所有内部业务逻辑，以Apache Licence 2.0开源协议与大家分享。
