@@ -1,0 +1,14 @@
+<view class="stat">
+    <view class="card unfinish">
+        <view>{{stat.unfinish}}</view>
+        <text>未完成任务</text>
+    </view>
+    <view class="card finished">
+        <view>{{stat.finished}}</view>
+        <text>已完成任务</text>
+    </view>
+    <view class="card over">
+        <view>{{stat.overtime}}</view>
+        <text>超期任务</text>
+    </view>
+</view>

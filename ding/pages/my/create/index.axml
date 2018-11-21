@@ -1,0 +1,6 @@
+<view>
+    <block a:for="{{things}}" key="_id" a:for-item="thing">
+        <k-todo thing="{{thing}}"/>
+    </block>
+    <view class="empty" a:if="{{things.length===0}}">暂无你创建的任务</view>
+</view>

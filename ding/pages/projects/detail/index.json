@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "项目详情",
+  "enablePullDownRefresh": true,
+  "onReachBottomDistance": 0,
+  "usingComponents": {
+    "k-add": "/pages/components/todo-add/index",
+    "k-todo": "/pages/components/todo/index",
+    "k-icon": "/pages/components/icon/index"
+  }
+}

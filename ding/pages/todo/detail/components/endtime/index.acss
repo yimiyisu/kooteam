@@ -1,0 +1,12 @@
+.endtime {
+    display: flex;
+    color: #999;
+    margin-top: 5px;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+}
+
+.endtime-icon:before {
+    content: "\e916";
+}

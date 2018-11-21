@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "我创建的任务",
+  "usingComponents": {
+    "k-todo": "/pages/components/todo/index"
+  }
+}

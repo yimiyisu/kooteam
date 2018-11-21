@@ -1,0 +1,16 @@
+<view class="k-detail">
+    <view class="content">
+        <textarea a:if="showArea" class="detail" onConfirm="saveContent"
+                  value="{{thing.title}}" placeholder="请输入任务详情"/>
+    </view>
+    <k-owner bindhideEvent="hideEvent" thing="{{thing}}"/>
+    <k-priority bindpriorityChange="priorityChange" priority="{{priority}}" _id="{{thing._id}}"/>
+    <!--<k-project projectId="{{thing.projectId}}" projectTitle="{{projectTitle}}"/>-->
+    <!--<k-endtime bindendDataChange="endDataChange" end="{{end}}" _id="{{thing._id}}"/>-->
+    <view class="action">
+        <view class="btn" catchTap="statusChange">
+            <text a:if="{{isFinished}}">取消完成</text>
+            <text a:if="{{!isFinished}}">标记完成</text>
+        </view>
+    </view>
+</view>

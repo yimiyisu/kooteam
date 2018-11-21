@@ -1,0 +1,12 @@
+<view class="endtime">
+    <view class="item">
+        <picker mode="date" class="item"
+                onChange="dateChange" id="{{_id}}">
+            <label><k-icon cls="endtime-icon"/>完成日期：
+            </label>
+            <view class="picker ">
+                {{end}}
+            </view>
+        </picker>
+    </view>
+</view>

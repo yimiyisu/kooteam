@@ -1,0 +1,28 @@
+<view>
+    <view class="row " catchTap="changeAvatar">
+        <view class="left avatar">头像</view>
+        <view class="right">
+            <k-avator style="width:60px;height:60px;" uid="{{data._id}}"/>
+        </view>
+    </view>
+    <view class="row" catchTap="changeNick">
+        <view class="left">昵称</view>
+        <view class="right">{{userInfo.nick}}
+            <k-icon/>
+        </view>
+    </view>
+    <view class="row" catchTap="changePhone">
+        <view class="left">手机</view>
+        <view class="right">
+            {{userInfo.phone}}
+            <k-icon/>
+        </view>
+    </view>
+    <view class="row" catchTap="changeSex">
+        <view class="left">性别</view>
+        <view class="right">
+            {{userInfo.sex===1 ? '男':'女'}}
+            <k-icon/>
+        </view>
+    </view>
+</view>

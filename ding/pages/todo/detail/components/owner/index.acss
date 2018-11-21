@@ -1,0 +1,13 @@
+.author {
+    display: flex;
+    color: #666;
+    margin-top: 5px;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+    z-index: 3;
+}
+
+.person-icon:before {
+    content: "\e7ff";
+}

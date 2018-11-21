@@ -1,0 +1,29 @@
+<view class="k-add">
+    <view class="top">
+        <input type="text"
+               onConfirm="save"
+               maxlength="120"
+               onInput="todoTitle"
+               placeholder="请输入待办事项"/>
+        <view class="member" a:if="{{projectId && members.length>0}}">
+            <picker onChange="memberChange" range-key="nick" range="{{members}}">
+                <view class="picker">
+                    负责人：{{members[member].nick}}
+                </view>
+            </picker>
+        </view>
+        <view class="add-content">
+            <view class="left">
+                <picker onChange="priorityChange" range-key="name" range="{{priority}}" value="{{index}}">
+                    <view class="picker">
+                        优先级：{{priority[index].name}}
+                    </view>
+                </picker>
+            </view>
+            <view class="right" onTap="save">
+                保存
+            </view>
+        </view>
+    </view>
+    <view onTouchStart="hide" class="more"/>
+</view>

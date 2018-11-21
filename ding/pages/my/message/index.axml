@@ -1,0 +1,7 @@
+<view class="container">
+    <view class="message" a:for="{{items}}" key="_id">
+        <view class="content">{{item.content}}</view>
+        <view class="info">{{item.date}}</view>
+    </view>
+    <view class="empty" a:if="{{items.length===0}}">暂无任何消息</view>
+</view>

@@ -1,0 +1,30 @@
+
+.k-todo {
+    font-weight: normal;
+    color: #666;
+    background: #fff;
+    min-height: 28px;
+    padding: 10px 6px 0 0;
+    border-top: 1px solid #eee;
+    display: flex;
+}
+
+.unfinish .k-icon:before {
+    content: "\e40c";
+    color: #0285d7;
+}
+
+.finish .k-icon:before {
+    content: "\e86c";
+    color: #999;
+}
+
+.finish .content {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.k-thing-icon {
+    width: 35px;
+    text-align: center;
+}
