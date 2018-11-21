@@ -3,7 +3,7 @@
 + kooteam完全打通钉钉功能，同步企业通讯录，实现钉钉扫码自动登陆，100%保障数据安全。
 
 ## 技术选型
-+ 后端框架：[于Blade MVC](https://github.com/lets-blade/blade)
++ 后端框架：[Blade MVC](https://github.com/lets-blade/blade)
 + 前端框架：Vue 2.0
 + 数据库：Mongodb
 
