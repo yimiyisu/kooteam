@@ -4,8 +4,16 @@
 
 ## 技术选型
 + 后端框架：[Blade MVC](https://github.com/lets-blade/blade)
-+ 前端框架：Vue 2.0
++ 前端框架：[Vue 2.0](https://cn.vuejs.org/)
 + 数据库：Mongodb
++ web服务器：nginx（开发与运行环境都依赖）
+
+## 相关网址
++ 在线体验地址：[https://www.kooteam.com](https://www.kooteam.com)
++ [安装教程](https://www.kooteam.com/view.html?id=5bf35ce443880a6558827185)
+
+## 微信交流群
++ ![微信交流群](https://img.yimiyisu.com/wx.jpg)
 
 ## 功能简介
 **1. 待办四象限：突出事情优先级，帮助员工合理安排时间，提高工作效率**
@@ -23,16 +31,6 @@
 
 **5. 在线知识库：在线流程图，在线文档，以及可视化的目录编排，文档管理无忧**
 ![在线知识库：在线流程图，在线文档，以及可视化的目录编排，文档管理无忧](https://b.yimiyisu.com/kooteam/banner/wiki.jpg)
-
-**6. 在线流程图：在线流程图工具，使用方便**
-![在线流程图：在线流程图工具，使用方便](https://b.yimiyisu.com/kooteam/banner/1.jpg)
-
-## 相关网址
-+ 在线体验地址：[https://www.kooteam.com](https://www.kooteam.com)
-+ [安装教程](https://www.kooteam.com/view.html?id=5bf35ce443880a6558827185)
-
-## 微信交流群
-+ ![微信交流群](https://img.yimiyisu.com/wx.jpg)
 
 ## 开源说明
 1. kooteam是上海宾弗信息科技公司的内部开发工具，使用了数年，一直都在慢步迭代。2018年7月内部决定，将kooteam工具进行产品化，由独立的研发团队负责，历时5个多月的艰苦努力，终于完成产品开发。 
