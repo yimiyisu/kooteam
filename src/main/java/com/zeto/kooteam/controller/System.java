@@ -2,6 +2,7 @@ package com.zeto.kooteam.controller;
 
 import com.blade.ioc.annotation.Inject;
 import com.zeto.ZenData;
+import com.zeto.ZenEnvironment;
 import com.zeto.ZenResult;
 import com.zeto.annotation.AccessRole;
 import com.zeto.dal.UserMapper;
@@ -30,6 +31,7 @@ public class System {
             zenStorageEngine.execute("put/user", param, user);
             return zenStorageEngine.execute("get/userById", param, user);
         }
+        profile.put("isLocal", ZenEnvironment.isLocalApp());
         return profile;
     }
 

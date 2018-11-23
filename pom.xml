@@ -35,18 +35,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>4.12</junit.version>
         <slf4j-api.version>1.7.25</slf4j-api.version>
-        <netty.version>4.1.28.Final</netty.version>
+        <netty.version>4.1.31.Final</netty.version>
         <gson.version>2.8.5</gson.version>
         <lombok.version>1.16.20</lombok.version>
         <hikarcp.version>3.2.0</hikarcp.version>
-        <guava.version>26.0-jre</guava.version>
+        <guava.version>27.0-jre</guava.version>
         <gson.version>2.8.5</gson.version>
-        <mysql.version>6.0.6</mysql.version>
         <mongodb.version>3.6.3</mongodb.version>
         <cglib.version>3.2.6</cglib.version>
         <protobuf.java>3.6.0</protobuf.java>
         <apache.log4j>2.11.1</apache.log4j>
-        <apache.http>4.5.4</apache.http>
+        <apache.http>4.5.6</apache.http>
+        <apache.httpcore>4.4.10</apache.httpcore>
         <blade.log>0.1.6</blade.log>
     </properties>
     <dependencies>
@@ -64,13 +64,15 @@
             <groupId>com.zeto</groupId>
             <artifactId>core</artifactId>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/zeto-core.jar</systemPath>
+            <version>1.0.0</version>
+            <systemPath>${pom.basedir}/libs/zeto-core.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.taobao.dingtalk</groupId>
             <artifactId>taobao</artifactId>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/taobao-open-api.jar</systemPath>
+            <version>1.0.0</version>
+            <systemPath>${pom.basedir}/libs/taobao-open-api.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
@@ -94,19 +96,9 @@
             <version>${gson.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>${hikarcp.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.version}</version>
         </dependency>
         <dependency>
             <groupId>cglib</groupId>
@@ -122,6 +114,11 @@
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
             <version>${protobuf.java}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>${apache.httpcore}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
