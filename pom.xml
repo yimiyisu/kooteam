@@ -48,6 +48,7 @@
         <apache.http>4.5.6</apache.http>
         <apache.httpcore>4.4.10</apache.httpcore>
         <blade.log>0.1.6</blade.log>
+        <ons.client>1.7.8.Final</ons.client>
     </properties>
     <dependencies>
         <!--<dependency>-->
@@ -73,6 +74,17 @@
             <scope>system</scope>
             <version>1.0.0</version>
             <systemPath>${pom.basedir}/libs/taobao-open-api.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun.openservices</groupId>
+            <artifactId>ons-client</artifactId>
+            <version>${ons.client}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
