@@ -11,6 +11,7 @@
 ## 相关网址
 + 个人版在线体验地址：[https://www.kooteam.com](https://www.kooteam.com)
 + [安装教程](https://www.kooteam.com/view.html?id=5bf35ce443880a6558827185)
++ 二进制安装包，在dist目录下
 
 ## 微信交流群
 + ![微信交流群](https://img.yimiyisu.com/wx.jpg)
