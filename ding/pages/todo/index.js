@@ -28,6 +28,7 @@ Page({
         this.refreshThing(true);
     },
     onLoad: function () {
+        // app.checkId = "local_5bf8a9f16cfc056321876476";
         if (app.checkId) {
             return dd.navigateTo({
                 url: "/pages/my/login/index"

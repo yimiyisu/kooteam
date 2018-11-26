@@ -3,8 +3,8 @@ import User from "./utils/user"
 import Http from "./utils/http"
 
 App({
-    // domain: "http://jabinfo.gicp.net",
-    domain: "https://www.kooteam.com",
+    domain: "http://jabinfo.gicp.net",
+    // domain: "https://www.kooteam.com",
     http: Http,
     user: User,
     util: Util,

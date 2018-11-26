@@ -4,10 +4,7 @@ import com.blade.ioc.annotation.Inject;
 import com.blade.kit.StringKit;
 import com.blade.mvc.http.Cookie;
 import com.google.common.base.Strings;
-import com.zeto.ZenCache;
-import com.zeto.ZenCookie;
-import com.zeto.ZenData;
-import com.zeto.ZenResult;
+import com.zeto.*;
 import com.zeto.annotation.AccessRole;
 import com.zeto.annotation.MethodType;
 import com.zeto.dal.UserMapper;
@@ -34,10 +31,14 @@ public class Ding {
 
     private final static String loginPrefix = "dingLogin-";
     private final static long loginTime = 3600 * 24 * 30;
+    private final static String dailyPrefix = "daily_";
 
     @MethodType(ZenMethod.ALL)
     public ZenResult qr() {
         String checkId = StringKit.objectId();
+        if (ZenEnvironment.isDaily()) {
+            checkId = dailyPrefix + checkId;
+        }
         DingApp dingApp = DingClient.info();
         if (dingApp.getAppId() == null) {
             return ZenResult.fail("系统配置错误，请检查app.properties文件配置信息");
@@ -50,9 +51,17 @@ public class Ding {
     }
 
     // 钉钉端扫码后调用的登录接口
-    public ZenResult login(ZenData data) {
+    public ZenResult login(ZenData data, ZenUser zenUser) {
         String checkId = data.get("checkId"), authCode = data.get("authCode");
-        ZenUser zenUser = dingUserLoginService.getUserByAuthCode(authCode);
+        if (zenUser == null) {
+            if (Strings.isNullOrEmpty(authCode)) {
+                return ZenResult.fail();
+            }
+            zenUser = dingUserLoginService.getUserByAuthCode(authCode);
+        }
+        if (zenUser == null) {
+            return ZenResult.fail();
+        }
         // 手机端直接登录
         if (Strings.isNullOrEmpty(checkId)) {
             String appId = DingClient.info().getAppId();
@@ -62,6 +71,10 @@ public class Ding {
                     put("uid", zenUser.getUid()).
                     put("appId", appId).
                     put("auth", authCode);
+        }
+        // 非日常环境，自动更新用ukey
+        if (!checkId.contains(dailyPrefix)) {
+            zenUser = UserMapper.i().updateUkey(zenUser.getUid());
         }
         String cacheId = loginPrefix + checkId;
         ZenCache.setToUnit(cacheId, zenUser);
@@ -73,6 +86,11 @@ public class Ding {
         String uid = cookie.get("uid"),
                 ukey = cookie.get("ukey"),
                 checkId = data.get("id");
+        // 跳转到登陆页面
+        if (ZenEnvironment.isLocalApp() && !DingClient.isDD()) {
+            return ZenResult.jump("/install.html", "系统尚未初始化");
+        }
+        // 判断系统是否初始化，没有的话，自动跳转到登陆页面
         ZenUser user;
         if (checkId != null) {// 优先扫码登录
             String cacheId = loginPrefix + checkId;

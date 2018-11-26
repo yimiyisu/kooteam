@@ -3,20 +3,17 @@ package com.zeto.kooteam.dingtalk;
 import com.blade.ioc.annotation.Bean;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.request.OapiGettokenRequest;
-import com.dingtalk.api.request.OapiMicroappListRequest;
 import com.dingtalk.api.response.OapiGettokenResponse;
-import com.dingtalk.api.response.OapiMicroappListResponse;
-import com.taobao.api.ApiException;
 import com.zeto.Zen;
 import com.zeto.ZenCache;
 import com.zeto.ZenEnvironment;
-import com.zeto.kooteam.service.EventBiz;
 import com.zeto.kooteam.service.domain.DingApp;
 import com.zeto.util.GsonUtil;
 
-import java.io.*;
-import java.net.URLDecoder;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 
 @Bean
 public class DingClient {
@@ -36,7 +33,7 @@ public class DingClient {
         if (dingApp != null) {
             return;
         }
-        String configPath = ZenEnvironment.getPath() + "/" + ZenEnvironment.getAppName() + ".conf";// 文件配置路径
+        String configPath = ZenEnvironment.getPath() + "/" + ZenEnvironment.getAppName() + ".json";// 文件配置路径
         try {
             File configFile = new File(configPath);
             if (configFile.exists()) {
@@ -49,30 +46,8 @@ public class DingClient {
                 }
                 // 从配置文件中读取
                 dingApp = GsonUtil.parse(result, DingApp.class);
-                return;
             }
         } catch (Exception e) {
-            Zen.getLoggerEngine().exception(e);
-        }
-        // 初始化失败，则不生成配置文件
-        if (!initAppInfo()) {
-            return;
-        }
-        // 第一次写配置文件，需要自动同步会员信息
-        EventBiz.employeeSync();
-        // 初始化文件写入到配置文件中
-        String content = GsonUtil.stringify(dingApp);
-        File writename = new File(configPath); // 相对路径，如果没有则要建立一个新的output。txt文件
-        try {
-            // 不能写入则退出
-            if (!writename.createNewFile()) {
-                return;
-            }
-            BufferedWriter out = new BufferedWriter(new FileWriter(writename));
-            out.write(content);
-            out.flush(); // 把缓存区内容压入文件
-            out.close(); // 最后记得关闭文件
-        } catch (IOException e) {
             Zen.getLoggerEngine().exception(e);
         }
     }
@@ -110,38 +85,5 @@ public class DingClient {
             Zen.getLoggerEngine().exception(ex);
         }
         return null;
-    }
-
-    private static boolean initAppInfo() {
-        dingApp = new DingApp();
-        dingApp.setCorpId(ZenEnvironment.get("dingCorpId"));
-        DefaultDingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/microapp/list");
-        OapiMicroappListRequest req = new OapiMicroappListRequest();
-        try {
-            OapiMicroappListResponse response = client.execute(req, DingClient.getToken());
-            List<OapiMicroappListResponse.Applist> applists = response.getAppList();
-            for (OapiMicroappListResponse.Applist app : applists) {
-                if (app.getName().equals(dingApp.getName())) {
-                    String link = app.getHomepageLink();
-                    try {
-                        link = URLDecoder.decode(link, "utf-8");
-                        link = link.substring(link.lastIndexOf("?") + 1);
-                        String[] params = link.split("&");
-                        for (String param : params) {
-                            if (param.contains("miniAppId")) {
-                                dingApp.setAppId(param.substring(param.indexOf("=") + 1));
-                                dingApp.setAgentId(app.getAgentId());
-                                return true;
-                            }
-                        }
-                    } catch (UnsupportedEncodingException e) {
-                        Zen.getLoggerEngine().exception(e);
-                    }
-                }
-            }
-        } catch (ApiException e) {
-            Zen.getLoggerEngine().exception(e);
-        }
-        return false;
     }
 }

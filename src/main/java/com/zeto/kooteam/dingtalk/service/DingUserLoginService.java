@@ -42,11 +42,12 @@ public class DingUserLoginService {
         try {
             OapiUserGetuserinfoResponse response = client.execute(request, accessToken);
             String unionId = response.getUserid();
+            if (unionId == null) {
+                return null;
+            }
             user = UserMapper.i().getByUnionId(unionId, UserFrom.DINGTALK);
             if (user == null) {
                 user = this.addUser(unionId);
-            } else {
-//                user = UserMapper.i().updateUkey(user.getUid());
             }
             return user;
         } catch (ApiException e) {

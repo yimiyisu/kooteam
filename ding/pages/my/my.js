@@ -25,15 +25,8 @@ Page({
         })
     },
     quit: function () {
-        try {
-            dd.removeStorage({
-                key: "user",
-                success: function () {
-                    dd.alert({content: "清除成功"});
-                }
-            });
-        } catch (e) {
-        }
+        app.user.clean();
+        dd.alert({content: "清除成功"});
     },
     userinfo: function () {
         dd.navigateTo({

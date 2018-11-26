@@ -2,6 +2,7 @@
 
 function login(data, url, callback, context) {
     let app = getApp();
+    app.user.clean();
     dd.getAuthCode({
         success: (res) => {
             let param = {
@@ -12,7 +13,11 @@ function login(data, url, callback, context) {
                 method: 'POST',
                 data: param,
                 success: (res) => {
-                    app.user.set(res.data.data);
+                    let result = res.data;
+                    if (result.hasError) {
+                        return dd.alert({content: "获取授权失败，请稍后再试"});
+                    }
+                    app.user.set(result.data);
                     http(data, url, callback, context);
                 },
                 fail: (res) => {

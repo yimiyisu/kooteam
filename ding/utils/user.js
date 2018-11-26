@@ -1,10 +1,11 @@
 let current = null;
+const cacheKey = "currentUser";
 
 const getUser = function () {
     if (current != null) {
         return current;
     }
-    let user = dd.getStorageSync({key: "user"});
+    let user = dd.getStorageSync({key: cacheKey});
     if (!user.data) {
         return null;
     }
@@ -23,9 +24,13 @@ const setUser = function (data) {
         appId: data.appId
     };
     try {
-        dd.setStorageSync({key: "user", data: current});
+        dd.setStorageSync({key: cacheKey, data: current});
     } catch (e) {
     }
+};
+const clean = function () {
+    current = null;
+    dd.removeStorageSync({key: cacheKey});
 };
 const imgDomain = "https://img.yimiyisu.com/";
 const avator = function (uid) {
@@ -39,5 +44,6 @@ const avator = function (uid) {
 module.exports = {
     get: getUser,
     set: setUser,
+    clean: clean,
     avator: avator
 };
