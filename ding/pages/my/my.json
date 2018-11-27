@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "个人中心",
-  "usingComponents": {
-    "k-icon": "/pages/components/icon/index",
-    "k-avator": "/pages/components/avator/index"
-  }
-}

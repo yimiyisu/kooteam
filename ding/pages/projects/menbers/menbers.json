@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "项目成员",
-  "enablePullDownRefresh": true,
-  "usingComponents": {
-    "k-icon": "/pages/components/icon/index",
-    "k-avator": "/pages/components/avator/index"
-  }
-}

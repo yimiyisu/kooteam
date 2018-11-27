@@ -1,5 +1,0 @@
-<view class="user {{isSelected?'active':''}}" id="{{uid}}" catchTap="selecteMembers"
-      data-uid="{{uid}}" data-avator="{{avator}}">
-    <image src="{{avator}}"/>
-    <view>{{nick}}</view>
-</view>
