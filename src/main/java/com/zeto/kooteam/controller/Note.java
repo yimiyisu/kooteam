@@ -31,11 +31,18 @@ public class Note {
         note.put("content", extend.get("content"));
         return note;
     }
-    
+
     public ZenResult patch(ZenData data, ZenUser user) {
         zenStorageEngine.execute("patch/note", data, user);
 
         return ZenResult.success().setData("保存成功");
+    }
+
+    public ZenResult graph(ZenData data, ZenUser user) {
+        ZenData params = ZenData.put("_id", data.get("filename"));
+        params.add("content", data.get("xml"));
+        zenStorageEngine.execute("patch/note", params, user);
+        return ZenResult.success("保存成功！");
     }
 
     private static final String docType = "4";

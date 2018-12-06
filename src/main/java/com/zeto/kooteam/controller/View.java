@@ -39,7 +39,6 @@ public class View {
                 return ZenResult.fail(error);
             }
         }
-
         ZenResult navContent = zenStorageEngine.extend("note", parentId);
         content.put("nav", navContent.get("content"));
         content.put("navTitle", nav.get("title"));

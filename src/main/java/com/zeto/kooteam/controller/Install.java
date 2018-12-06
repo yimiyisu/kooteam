@@ -5,6 +5,7 @@ import com.zeto.*;
 import com.zeto.annotation.AccessRole;
 import com.zeto.domain.ZenRole;
 import com.zeto.kooteam.dingtalk.DingClient;
+import com.zeto.kooteam.service.EventBiz;
 import com.zeto.kooteam.service.domain.AppConf;
 import com.zeto.kooteam.service.install.DBValidate;
 import com.zeto.kooteam.service.install.DingTalkValidate;
@@ -52,6 +53,7 @@ public class Install {
         if (conf.isDingCheck()) {
             //保存配置，执行钉钉通讯录同步任务，拉取应用信息
             DingTalkValidate.Serialize(conf);
+            DingClient.init();
             serialize(conf);
             return ZenResult.success("配置成功").refresh();
         }
@@ -86,9 +88,9 @@ public class Install {
             OutputStream fos = new FileOutputStream(profilepath);
             props.store(fos, "auto created");
             fos.close();
-            DingClient.init();
             // 重新加载服务
             Zen.reload();
+            EventBiz.employeeSync();// 同步企业账户
         } catch (IOException e) {
             e.printStackTrace();
         }

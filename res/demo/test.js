@@ -1,0 +1,1 @@
+zenTemplate={"content":"<div id='J_app'><z-datasource> <var name=\"test\">/user/addFriend.do?from=5b7bdcda98d6d205d22945cf</var></z-datasource> 22</div>","ext":"","sons":{},"data":{"test":""}};

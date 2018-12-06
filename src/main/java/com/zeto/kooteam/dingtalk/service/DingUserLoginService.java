@@ -7,6 +7,7 @@ import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.request.OapiUserGetuserinfoRequest;
 import com.dingtalk.api.response.OapiUserGetResponse;
 import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
+import com.google.common.base.Strings;
 import com.taobao.api.ApiException;
 import com.zeto.dal.UserMapper;
 import com.zeto.dal.domain.UserFrom;
@@ -64,9 +65,13 @@ public class DingUserLoginService {
         user.setNick(dingUser.getName());
         user.setFrom(UserFrom.DINGTALK.getValue());
         user.setUkey(uid);
+        user.setDingUid(dingUser.getDingId());
         user.setUnionId(unionId);
         UserMapper.i().insert(user);
-        uploaderService.avator(dingUser.getAvatar(), uid);
+        String avatar = dingUser.getAvatar();
+        if (!Strings.isNullOrEmpty(avatar)) {
+            uploaderService.avator(dingUser.getAvatar(), uid);
+        }
         return user;
     }
 }

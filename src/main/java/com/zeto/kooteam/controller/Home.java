@@ -13,7 +13,7 @@ import java.util.List;
 
 @AccessRole(ZenRole.NORMAL)
 public class Home {
-    // 退出网页
+    // 退出系统
     public ZenResult quit() {
         List<Cookie> newCookie = new ArrayList<>();
         Cookie cookie = new Cookie();

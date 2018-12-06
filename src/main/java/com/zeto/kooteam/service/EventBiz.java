@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.google.common.eventbus.AsyncEventBus;
 import com.zeto.domain.ZenUser;
 import com.zeto.kooteam.service.eventbus.EmployeeListener;
+import com.zeto.kooteam.service.eventbus.MessageListener;
 import com.zeto.kooteam.service.eventbus.ProjectListener;
 import com.zeto.kooteam.service.eventbus.UserNickListener;
 import com.zeto.kooteam.service.eventbus.model.EmployeeModel;
@@ -19,6 +20,7 @@ public class EventBiz {
     public static void init() {
         eventBus.register(new ProjectListener());
         eventBus.register(new UserNickListener());
+        eventBus.register(new MessageListener());
         eventBus.register(new EmployeeListener());
     }
 

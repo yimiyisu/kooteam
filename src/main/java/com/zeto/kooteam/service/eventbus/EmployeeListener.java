@@ -40,7 +40,7 @@ public class EmployeeListener {
 
     // 同步用户信息
     private void syncUser(DingUserData item) {
-        String unionId = item.getDingId();
+        String unionId = item.getId();
         if (UserMapper.i().existByUnionId(unionId, from)) {
             return;
         }
@@ -50,7 +50,7 @@ public class EmployeeListener {
         user.setNick(item.getName());
         user.setFrom(from);
         user.setUkey(unionId);
-        user.setDingUid(item.getId());
+        user.setDingUid(item.getDingId());
         user.setUnionId(unionId);
         UserMapper.i().insert(user);
         String avator = item.getAvator();

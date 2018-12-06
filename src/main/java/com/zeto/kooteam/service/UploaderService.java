@@ -91,7 +91,6 @@ public class UploaderService {
             if (response.getStatusLine().getStatusCode() != 200) {
                 return null;
             }
-            
             HttpEntity entity = response.getEntity();
             if (entity == null) {
                 return null;

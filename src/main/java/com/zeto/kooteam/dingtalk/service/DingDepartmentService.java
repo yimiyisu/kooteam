@@ -30,7 +30,7 @@ public class DingDepartmentService {
         try {
             OapiDepartmentListResponse response = client.execute(request, DingClient.getToken());
             List<OapiDepartmentListResponse.Department> departments = response.getDepartment();
-            if (departments.isEmpty()) {
+            if (departments == null || departments.isEmpty()) {
                 return this.users(departmentId);
             }
             DingUserResult result = new DingUserResult();

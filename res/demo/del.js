@@ -1,0 +1,1 @@
+zenTemplate={"content":"<div id='J_app'><k-test-del></k-del></div>","ext":"","sons":{},"data":{}};

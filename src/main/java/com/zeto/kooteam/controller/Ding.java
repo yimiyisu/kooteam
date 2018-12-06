@@ -40,14 +40,44 @@ public class Ding {
             checkId = dailyPrefix + checkId;
         }
         DingApp dingApp = DingClient.info();
-        if (dingApp.getAppId() == null) {
+        if (dingApp.getCorpId() == null) {
             return ZenResult.fail("系统配置错误，请检查app.properties文件配置信息");
         }
         return ZenResult.success().
-                put("appId", dingApp.getAppId()).
-                put("corpId", dingApp.getCorpId()).
-                put("agentId", dingApp.getAgentId()).
+                put("host", dingApp.getHost()).
                 put("checkId", checkId);
+    }
+
+    public ZenResult wapCheck(ZenData data, ZenUser zenUser) {
+        String checkId = data.get("checkId"), authCode = data.get("authCode");
+        boolean updateCookie = false;
+        // 返回配置信息
+        if (zenUser == null) {
+            // 生微应用成签名
+            if (Strings.isNullOrEmpty(authCode)) {
+                DingApp dingApp = DingClient.info();
+                ZenResult result = ZenResult.success();
+                result.put("initing", true);
+                result.put("corpId", dingApp.getCorpId());
+                return result;
+            }
+            updateCookie = true;
+            zenUser = dingUserLoginService.getUserByAuthCode(authCode);
+        }
+
+        if (!Strings.isNullOrEmpty(checkId)) {
+            // 非日常环境，自动更新用ukey
+            if (!checkId.contains(dailyPrefix)) {
+                updateCookie = true;
+                zenUser = UserMapper.i().updateUkey(zenUser.getUid());
+            }
+            String cacheId = loginPrefix + checkId;
+            ZenCache.setToUnit(cacheId, zenUser);
+        }
+        if (updateCookie) {
+            return setCookie(zenUser);
+        }
+        return ZenResult.success();
     }
 
     // 钉钉端扫码后调用的登录接口
@@ -98,19 +128,7 @@ public class Ding {
             if (user == null) {
                 return ZenResult.fail();
             }
-            // 扫码登录
-            Cookie uidCookie = new Cookie();
-            uidCookie.maxAge(loginTime);
-            uidCookie.name("uid");
-            uidCookie.value(user.getUid());
-            uidCookie.httpOnly(true);
-
-            Cookie ukeyCookie = new Cookie();
-            ukeyCookie.maxAge(loginTime);
-            ukeyCookie.name("ukey");
-            ukeyCookie.value(user.getUkey());
-            ukeyCookie.httpOnly(true);
-            return ZenResult.success().addCookie(uidCookie).addCookie(ukeyCookie);
+            return setCookie(user);
         }
         // 已登录过的，只校验cookie
         if (uid != null && ukey != null) {
@@ -122,8 +140,20 @@ public class Ding {
         return ZenResult.fail();
     }
 
-    // 安装成功
-    public ZenResult install() {
-        return ZenResult.success();
+    private ZenResult setCookie(ZenUser user) {
+        // 扫码登录
+        Cookie uid = new Cookie();
+        uid.maxAge(loginTime);
+        uid.name("uid");
+        uid.value(user.getUid());
+        uid.httpOnly(true);
+
+        Cookie ukeyCookie = new Cookie();
+        ukeyCookie.maxAge(loginTime);
+        ukeyCookie.name("ukey");
+        ukeyCookie.value(user.getUkey());
+        ukeyCookie.httpOnly(true);
+
+        return ZenResult.success().addCookie(ukeyCookie).addCookie(uid);
     }
 }

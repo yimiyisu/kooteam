@@ -61,7 +61,7 @@ public class MessageListener {
         OA.getBody().setContent(messageModel.getContent());
 
         OA.setMessageUrl("");
-        OA.setPcMessageUrl("//kooteam.com/todo/home.htm#xxxxxId");
+//        OA.setPcMessageUrl("//kooteam.com/todo/home.htm#xxxxxId");
 
         msg.setMsgtype("oa");
         request.setMsg(msg);

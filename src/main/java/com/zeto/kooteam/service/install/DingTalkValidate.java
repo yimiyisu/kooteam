@@ -1,12 +1,15 @@
 package com.zeto.kooteam.service.install;
 
 import com.dingtalk.api.DefaultDingTalkClient;
-import com.dingtalk.api.request.OapiGettokenRequest;
-import com.dingtalk.api.request.OapiMicroappListRequest;
+import com.dingtalk.api.DingTalkClient;
+import com.dingtalk.api.request.*;
 import com.dingtalk.api.response.OapiGettokenResponse;
+import com.dingtalk.api.response.OapiMediaUploadResponse;
+import com.dingtalk.api.response.OapiMicroappCreateResponse;
 import com.dingtalk.api.response.OapiMicroappListResponse;
 import com.google.common.base.Strings;
 import com.taobao.api.ApiException;
+import com.taobao.api.FileItem;
 import com.zeto.*;
 import com.zeto.domain.ZenAction;
 import com.zeto.kooteam.service.EventBiz;
@@ -14,12 +17,13 @@ import com.zeto.kooteam.service.domain.AppConf;
 import com.zeto.kooteam.service.domain.DingApp;
 import com.zeto.util.GsonUtil;
 
-import java.io.*;
-import java.net.URLDecoder;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 public class DingTalkValidate {
-    private static String token = null;
 
     public static ZenResult check(ZenData data) {
         AppConf conf = ZenCache.get(AppConf.cacheKey, AppConf.class);
@@ -28,6 +32,7 @@ public class DingTalkValidate {
         }
         conf.setDingCorpId(data.get("dingCorpId"));
         conf.setDingSecret(data.get("dingSecret"));
+        conf.setDomain(data.get("domain"));
         String dingAppName = data.get("dingAppName");
         if (!Strings.isNullOrEmpty(dingAppName)) {
             conf.setDingAppName(dingAppName);
@@ -46,12 +51,12 @@ public class DingTalkValidate {
         request.setHttpMethod("GET");
         try {
             OapiGettokenResponse response = client.execute(request);
-            token = response.getAccessToken();
+            String token = response.getAccessToken();
             if (token == null) {
                 return ZenResult.fail("dingCorpId或dingSecret配置错误");
             }
-            if (!getAppInfo(conf)) {
-                return ZenResult.fail("请先在钉钉后台创建名为" + conf.getDingAppName() + "的钉钉E应用");
+            if (!getAppInfo(conf, token)) {
+                createMApp(conf, token);
             }
             conf.setDingCheck(true);
             ZenCache.set(AppConf.cacheKey, conf);
@@ -59,19 +64,56 @@ public class DingTalkValidate {
         } catch (Exception ex) {
             ZenResult.error(ex);
         }
-
-//        if (result) {
-//            return ZenResult.success("钉钉配置校验成功");
-//        }
-//        return ZenResult.fail("钉钉配置错误");
-//
         conf.setDingCheck(false);
         ZenCache.set(AppConf.cacheKey, conf);
         return ZenResult.fail("钉钉配置错误");
     }
 
-    private static void createMApp(AppConf conf) {
+    private static void updateDomain(String domain, OapiMicroappListResponse.Applist app, String token) {
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/microapp/update");
+        OapiMicroappUpdateRequest req = new OapiMicroappUpdateRequest();
+        req.setAppName(app.getName());
+        req.setAppIcon(app.getAppIcon());
+        req.setAppDesc(app.getAppDesc());
+        req.setHomepageUrl(domain + "/ding/home.wap");
+        req.setAgentId(app.getAgentId());
+        try {
+            client.execute(req, token);
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+    }
 
+    private static void createMApp(AppConf conf, String token) {
+        String icon = uploadIcon(token);
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/microapp/create");
+        OapiMicroappCreateRequest req = new OapiMicroappCreateRequest();
+        req.setAppName(conf.getDingAppName());
+        req.setAppIcon(icon);
+        req.setAppDesc("Kooteam");
+        req.setHomepageUrl(conf.getDomain() + "/ding/home.wap");
+        try {
+            OapiMicroappCreateResponse response = client.execute(req, token);
+            conf.setDingAgentId(response.getAgentid());
+            conf.setDingAppId(response.getSubCode());
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String uploadIcon(String token) {
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/media/upload");
+        OapiMediaUploadRequest request = new OapiMediaUploadRequest();
+        request.setType("image");
+        String filePath = ZenEnvironment.getPath() + "/logo.png";
+        request.setMedia(new FileItem(filePath));
+        try {
+            OapiMediaUploadResponse response = client.execute(request, token);
+            return response.getMediaId();
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void Serialize(AppConf conf) {
@@ -80,6 +122,7 @@ public class DingTalkValidate {
         dingApp.setAppId(conf.getDingAppId());
         dingApp.setAgentId(conf.getDingAgentId());
         dingApp.setName(conf.getDingAppName());
+        dingApp.setHost(conf.getDomain());
 
         String configPath = ZenEnvironment.getPath() + "/" + ZenEnvironment.getAppName() + ".json";// 文件配置路径
         EventBiz.employeeSync();
@@ -101,30 +144,21 @@ public class DingTalkValidate {
     }
 
     // 查询E应用信息，查询不到则创建
-    private static boolean getAppInfo(AppConf conf) throws ApiException {
+    private static boolean getAppInfo(AppConf conf, String token) throws ApiException {
         String apiURL = "https://oapi.dingtalk.com/microapp/list";
         DefaultDingTalkClient client = new DefaultDingTalkClient(apiURL);
         OapiMicroappListRequest req = new OapiMicroappListRequest();
-        String appName = conf.getDingAppName().toLowerCase();
+        String appName = conf.getDingAppName();
         OapiMicroappListResponse response = client.execute(req, token);
         List<OapiMicroappListResponse.Applist> applists = response.getAppList();
         for (OapiMicroappListResponse.Applist app : applists) {
-            if (app.getName().toLowerCase().equals(appName)) {
+            if (app.getName().equals(appName)) {
                 String link = app.getHomepageLink();
-                try {
-                    link = URLDecoder.decode(link, "utf-8");
-                    link = link.substring(link.lastIndexOf("?") + 1);
-                    String[] params = link.split("&");
-                    for (String param : params) {
-                        if (param.contains("miniAppId")) {
-                            conf.setDingAppId(param.substring(param.indexOf("=") + 1));
-                            conf.setDingAgentId(app.getAgentId());
-                            return true;
-                        }
-                    }
-                } catch (UnsupportedEncodingException e) {
-                    Zen.getLoggerEngine().exception(e);
+                conf.setDingAgentId(app.getAgentId());
+                if (!link.contains(conf.getDomain())) {
+                    updateDomain(conf.getDomain(), app, token);
                 }
+                return true;
             }
         }
 

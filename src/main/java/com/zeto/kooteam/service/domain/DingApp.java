@@ -8,4 +8,5 @@ public class DingApp {
     private String appId;
     private Long agentId;
     private String corpId;
+    private String host;
 }

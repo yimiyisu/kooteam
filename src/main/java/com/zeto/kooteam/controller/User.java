@@ -61,9 +61,10 @@ public class User {
 
     public ZenResult searchFriend(ZenUser user, ZenData data) {
         String keyword = data.get("keyword");
+        int size = data.getInt("size", 10);
         // 本地应用，直接查询数据库
         if (ZenEnvironment.isLocalApp()) {
-            List<ZenUser> users = UserMapper.i().search(keyword, 10);
+            List<ZenUser> users = UserMapper.i().search(keyword, size);
             return ZenResult.success().setData(users);
         }
         ZenCondition condition = ZenCondition.And().eq("myId", user.getUid());
@@ -73,11 +74,14 @@ public class User {
             Pattern pattern = Pattern.compile("^.*" + keyword + ".*$", Pattern.CASE_INSENSITIVE);
             condition.like("nick", pattern);
         }
-        return zenStorageEngine.select("friend", condition, 10);
+        return zenStorageEngine.select("friend", condition, size);
     }
 
     public ZenResult getById(ZenData data) {
         ZenUser user = UserMapper.i().get(data.get("uid"));
+        if (user == null) {
+            return ZenResult.success();
+        }
         return ZenResult.success().put("nick", user.getNick());
     }
 

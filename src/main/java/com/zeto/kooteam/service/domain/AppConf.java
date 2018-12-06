@@ -19,7 +19,7 @@ public class AppConf {
     private String mongoPort;
     private String dingCorpId;
     private String dingSecret;
-    private String dingAppName = "kooteam";
+    private String dingAppName = "Kooteam";
     private String dingAppId;
     private long dingAgentId;
 }
