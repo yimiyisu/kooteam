@@ -23,7 +23,7 @@ public class TodoInit {
 //            return;
         }
         if (ZenEnvironment.isOnline()) {
-            ZenCache.set(cacheID, "init", maxtime);
+            ZenCache.set(cacheID, "MgCondition", maxtime);
         }
         // 添加初期数据
         int now = DateKit.now();

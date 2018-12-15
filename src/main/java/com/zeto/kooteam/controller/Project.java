@@ -3,6 +3,7 @@ package com.zeto.kooteam.controller;
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.DateKit;
 import com.zeto.ZenCondition;
+import com.zeto.ZenConditioner;
 import com.zeto.ZenData;
 import com.zeto.ZenResult;
 import com.zeto.annotation.AccessRole;
@@ -249,7 +250,7 @@ public class Project {
         }
 
         int now = DateKit.now();
-        ZenCondition condition = ZenCondition.And().
+        ZenCondition condition = ZenConditioner.And().
                 eq("projectId", projectId).
                 greater("end", 0).
                 lesser("end", now);
@@ -258,4 +259,5 @@ public class Project {
 
         return ZenResult.success().setData(stat);
     }
+    
 }

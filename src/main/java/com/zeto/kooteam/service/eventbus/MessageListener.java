@@ -34,11 +34,16 @@ public class MessageListener {
                 add("content", model.getContent());
         // 保存消息记录
         Zen.getStorageEngine().execute("put/message", data, null);
-        if (DingClient.isDD()) {
+        // 发送钉钉消息
+        if (DingClient.isInited()) {
             dingTalk(model);
             return;
         }
-        metaQ(data);
+
+        // 云端发送微服务消息
+        if (ZenEnvironment.isCloudApp()) {
+            metaQ(data);
+        }
     }
 
     private void dingTalk(MessageModel messageModel) {
@@ -71,6 +76,10 @@ public class MessageListener {
         } catch (ApiException e) {
             Zen.getLoggerEngine().exception(e);
         }
+    }
+
+    private void wechat() {
+
     }
 
     private void metaQ(ZenData data) {

@@ -5,6 +5,7 @@ import com.google.common.base.Strings;
 import com.google.common.eventbus.Subscribe;
 import com.zeto.dal.UserMapper;
 import com.zeto.domain.ZenUser;
+import com.zeto.kooteam.dingtalk.DingClient;
 import com.zeto.kooteam.dingtalk.domain.DingUserData;
 import com.zeto.kooteam.dingtalk.domain.DingUserResult;
 import com.zeto.kooteam.dingtalk.service.DingDepartmentService;
@@ -18,6 +19,9 @@ public class EmployeeListener {
 
     @Subscribe
     public void execute(EmployeeModel model) {
+        if (!DingClient.isInited()) {
+            return;
+        }
         DingUserResult rootDepartment = departmentService.selectByParent(1L);
         for (DingUserData data : rootDepartment.getData()) {
             syncByDepartment(data);

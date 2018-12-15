@@ -7,19 +7,17 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public class AppConf {
     public static final String cacheKey = "initConfig";
+    private static final String MYSQL_KEY = "mysql";
     private boolean dbCheck = false;
-    private boolean dingCheck = false;
-    private boolean wxCheck = false;
-    private String domain;
+    private String dbType;
+    private String host;
+    private String database;
+    private String user;
+    private String password;
+    private String rootPwd;
+    private String port;
 
-    private String mongoHost;
-    private String mongoDB;
-    private String mongoUser;
-    private String mongoPassword;
-    private String mongoPort;
-    private String dingCorpId;
-    private String dingSecret;
-    private String dingAppName = "Kooteam";
-    private String dingAppId;
-    private long dingAgentId;
+    public boolean isMysql() {
+        return MYSQL_KEY.equals(dbType);
+    }
 }

@@ -15,7 +15,7 @@ public class DocInit {
         }
         ZenStorageEngine zenStorageEngine = Zen.getStorageEngine();
         if (ZenEnvironment.isOnline()) {
-            ZenCache.set(cacheID, "init", maxtime);
+            ZenCache.set(cacheID, "MgCondition", maxtime);
         }
 
         // 添加初期数据

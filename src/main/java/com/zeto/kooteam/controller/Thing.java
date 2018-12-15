@@ -3,6 +3,8 @@ package com.zeto.kooteam.controller;
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.DateKit;
 import com.google.common.base.Strings;
+import com.zeto.ZenCondition;
+import com.zeto.ZenConditioner;
 import com.zeto.ZenData;
 import com.zeto.ZenResult;
 import com.zeto.annotation.AccessRole;
@@ -34,7 +36,7 @@ public class Thing {
             data.add("size", "200");
         }
         ZenResult result = zenStorageEngine.execute(path, data, user);
-        if (result.getLong("total") == 0) {
+        if (result.isEmpty()) {
             ObjectId objectId = new ObjectId(user.getUid());
             long regTime = objectId.getDate().getTime() / 1000 + 24 * 360;
             int now = DateKit.now();
@@ -103,5 +105,19 @@ public class Thing {
             EventBiz.sendMessage(new MessageModel(user.getUid(), owner, message, data.get("_id"), MessageType.THING));
         }
         return result;
+    }
+
+    public ZenResult selectByUid(ZenUser user, ZenData data) {
+        ZenResult things = zenStorageEngine.execute("select/thingByUid", data, user);
+        long total = zenStorageEngine.count("thing", ZenConditioner.And().eq("uid", user.getUid()));
+        return ZenResult.success().put("total", total).put("data", things.getData());
+    }
+
+    public ZenResult selectByFinish(ZenUser user, ZenData data) {
+        data.add("status", "1");
+        ZenResult things = zenStorageEngine.execute("select/thing", data, user);
+        ZenCondition condition = ZenConditioner.And().eq("uid", user.getUid()).eq("status", "1");
+        long total = zenStorageEngine.count("thing", condition);
+        return ZenResult.success().put("total", total).put("data", things.getData());
     }
 }

@@ -2,6 +2,7 @@ package com.zeto.kooteam.controller;
 
 import com.blade.ioc.annotation.Inject;
 import com.zeto.ZenCondition;
+import com.zeto.ZenConditioner;
 import com.zeto.ZenData;
 import com.zeto.ZenResult;
 import com.zeto.annotation.AccessRole;
@@ -33,7 +34,7 @@ public class View {
             if (user == null) {
                 return ZenResult.fail(error);
             }
-            ZenCondition condition = ZenCondition.And().eq("uid", user.getUid()).eq("noteId", parentId);
+            ZenCondition condition = ZenConditioner.And().eq("uid", user.getUid()).eq("noteId", parentId);
             long count = zenStorageEngine.count("noteUser", condition);
             if (count < 1) {
                 return ZenResult.fail(error);

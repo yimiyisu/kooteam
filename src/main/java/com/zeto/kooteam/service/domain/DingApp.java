@@ -4,9 +4,8 @@ import lombok.Data;
 
 @Data
 public class DingApp {
-    private String name = "kooteam";
-    private String appId;
-    private Long agentId;
+    private String secret;
     private String corpId;
     private String host;
+    private Long agentId;
 }

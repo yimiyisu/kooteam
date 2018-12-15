@@ -1,14 +1,13 @@
 package com.zeto.kooteam.controller;
 
+import com.blade.kit.EncryptKit;
+import com.google.common.base.Strings;
 import com.google.common.io.Files;
 import com.zeto.*;
 import com.zeto.annotation.AccessRole;
 import com.zeto.domain.ZenRole;
-import com.zeto.kooteam.dingtalk.DingClient;
-import com.zeto.kooteam.service.EventBiz;
 import com.zeto.kooteam.service.domain.AppConf;
 import com.zeto.kooteam.service.install.DBValidate;
-import com.zeto.kooteam.service.install.DingTalkValidate;
 
 import java.io.*;
 import java.util.Properties;
@@ -16,14 +15,10 @@ import java.util.Properties;
 @AccessRole(ZenRole.NORMAL)
 public class Install {
 
+
     public ZenResult check(ZenData data) {
-        if (!ZenEnvironment.isLocalApp()) {// 私有化部署
-            return ZenResult.jump("/home.html");
-        }
-        if (DingClient.isDD()) {// 初始化已完成
-            if (data.contains("status")) {
-                return ZenResult.success();
-            }
+        String status = data.get("status");
+        if (Strings.isNullOrEmpty(status) && !ZenEnvironment.isNoSetup()) {// 私有化部署
             return ZenResult.jump("/install.html?status=finish");
         }
         return ZenResult.success();
@@ -33,15 +28,11 @@ public class Install {
         return DBValidate.check(data);
     }
 
-    public ZenResult checkDing(ZenData data) {
-        return DingTalkValidate.check(data);
-    }
-
-    public ZenResult checkWX(ZenData data) {
-        return ZenResult.success();
-    }
-
     public ZenResult save(ZenData data) {
+        String pwd = data.get("pwd");
+        if (Strings.isNullOrEmpty(pwd)) {
+            return ZenResult.fail("管理员不能为空");
+        }
         AppConf conf = ZenCache.get(AppConf.cacheKey, AppConf.class);
         if (conf == null) {
             return ZenResult.fail("保存失败，配置信息校验失败。");
@@ -49,20 +40,11 @@ public class Install {
         if (!conf.isDbCheck()) {
             return ZenResult.fail("保存失败，数据库配置错误。");
         }
-
-        if (conf.isDingCheck()) {
-            //保存配置，执行钉钉通讯录同步任务，拉取应用信息
-            DingTalkValidate.Serialize(conf);
-            DingClient.init();
-            serialize(conf);
-            return ZenResult.success("配置成功").refresh();
-        }
-        if (conf.isWxCheck()) {
-            serialize(conf);
-            // 保存配置
-            return ZenResult.success("配置成功").refresh();
-        }
-        return ZenResult.fail("保存失败，钉钉配置信息错误");
+        serialize(conf);
+        Zen.reload();
+        pwd = EncryptKit.md5(pwd);
+        ZenCache.set("rootInit", pwd);
+        return ZenResult.jump("/install.html?status=finish");
     }
 
     private void serialize(AppConf conf) {
@@ -74,23 +56,28 @@ public class Install {
             }
             Properties props = new Properties();
             props.load(new FileInputStream(profilepath));
-
-            props.setProperty("mongoHost", conf.getMongoHost());
-            props.setProperty("mongoDB", conf.getMongoDB());
-            props.setProperty("mongoUser", conf.getMongoUser());
-            props.setProperty("mongoPassword", conf.getMongoPassword());
-            props.setProperty("mongoPort", conf.getMongoPort());
-
-            props.setProperty("dingCorpId", conf.getDingCorpId());
-            props.setProperty("dingSecret", conf.getDingSecret());
             props.setProperty("env", "online");
 
+            if (conf.isMysql()) {
+                props.setProperty("mode", "3");
+                props.setProperty("dbHost", "jdbc:mysql://" + conf.getHost() + "/" + conf.getDatabase());
+                props.setProperty("dbUser", conf.getUser());
+                props.setProperty("dbPasswd", conf.getPassword());
+            } else {
+                props.setProperty("mode", "4");
+                props.setProperty("mongoHost", conf.getHost());
+                props.setProperty("mongoDB", conf.getDatabase());
+                props.setProperty("mongoUser", conf.getUser());
+                props.setProperty("mongoPassword", conf.getPassword());
+                props.setProperty("mongoPort", conf.getPort());
+            }
+
             OutputStream fos = new FileOutputStream(profilepath);
-            props.store(fos, "auto created");
+            props.store(fos, "Kooteam Created");
             fos.close();
             // 重新加载服务
-            Zen.reload();
-            EventBiz.employeeSync();// 同步企业账户
+//            Zen.reload();
+//            EventBiz.employeeSync();// 同步企业账户
         } catch (IOException e) {
             e.printStackTrace();
         }
