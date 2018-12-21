@@ -3,12 +3,8 @@ package com.zeto.kooteam.controller;
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.DateKit;
 import com.google.common.base.Strings;
-import com.zeto.ZenCondition;
-import com.zeto.ZenConditioner;
-import com.zeto.ZenData;
-import com.zeto.ZenResult;
+import com.zeto.*;
 import com.zeto.annotation.AccessRole;
-import com.zeto.dal.UserMapper;
 import com.zeto.domain.ZenUser;
 import com.zeto.driver.ZenLoggerEngine;
 import com.zeto.driver.ZenStorageEngine;
@@ -64,7 +60,7 @@ public class Thing {
         if (user.getUid().equals(ownerId)) {
             thing.put("nick", user.getNick());
         } else {
-            ZenUser current = UserMapper.i().get(ownerId);
+            ZenUser current = ZenUserHelper.i().get(ownerId);
             thing.put("nick", current.getNick());
         }
         return thing;
@@ -81,7 +77,7 @@ public class Thing {
         }
         data.add("start", start);
         data.add("order", start);
-        ZenResult result = zenStorageEngine.execute("put/thing", data, user);
+        ZenResult result = zenStorageEngine.execute("set/thing", data, user);
         // 给别人发送任务，需要发送消息通知
         if (!user.getUid().equals(owner) && !Strings.isNullOrEmpty(owner)) {
             String message = user.getNick() + "给你分配了一个任务：" + data.get("title");

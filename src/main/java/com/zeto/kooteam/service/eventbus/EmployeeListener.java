@@ -3,7 +3,7 @@ package com.zeto.kooteam.service.eventbus;
 import com.blade.kit.StringKit;
 import com.google.common.base.Strings;
 import com.google.common.eventbus.Subscribe;
-import com.zeto.dal.UserMapper;
+import com.zeto.ZenUserHelper;
 import com.zeto.domain.ZenUser;
 import com.zeto.kooteam.dingtalk.DingClient;
 import com.zeto.kooteam.dingtalk.domain.DingUserData;
@@ -45,7 +45,7 @@ public class EmployeeListener {
     // 同步用户信息
     private void syncUser(DingUserData item) {
         String unionId = item.getId();
-        if (UserMapper.i().existByUnionId(unionId, from)) {
+        if (ZenUserHelper.i().existByUnionId(unionId, from)) {
             return;
         }
         ZenUser user = new ZenUser();
@@ -56,7 +56,7 @@ public class EmployeeListener {
         user.setUkey(unionId);
         user.setDingUid(item.getDingId());
         user.setUnionId(unionId);
-        UserMapper.i().insert(user);
+        ZenUserHelper.i().insert(user);
         String avator = item.getAvator();
         if (Strings.isNullOrEmpty(avator)) {
             return;

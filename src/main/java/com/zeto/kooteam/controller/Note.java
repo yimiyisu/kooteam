@@ -1,12 +1,8 @@
 package com.zeto.kooteam.controller;
 
 import com.blade.ioc.annotation.Inject;
-import com.zeto.ZenCondition;
-import com.zeto.ZenConditioner;
-import com.zeto.ZenData;
-import com.zeto.ZenResult;
+import com.zeto.*;
 import com.zeto.annotation.AccessRole;
-import com.zeto.dal.UserMapper;
 import com.zeto.domain.ZenUser;
 import com.zeto.driver.ZenStorageEngine;
 
@@ -51,13 +47,13 @@ public class Note {
     private static final String docType = "4";
 
     public ZenResult add(ZenData data, ZenUser user) {
-        ZenResult result = zenStorageEngine.execute("put/note", data, user);
+        ZenResult result = zenStorageEngine.execute("set/note", data, user);
         if (docType.equals(data.get("type"))) {
             ZenData param = ZenData.put("noteId", result.get("_id")).
                     add("uid", user.getUid()).
                     add("op", user.getUid()).
                     add("permission", "3");
-            zenStorageEngine.execute("put/noteUser", param, user);
+            zenStorageEngine.execute("set/noteUser", param, user);
         }
         return ZenResult.success().setData(result.getData());
     }
@@ -81,12 +77,12 @@ public class Note {
         if (count.getLong() > 0) {
             return ZenResult.fail("该用户已添加");
         }
-        zenStorageEngine.execute("put/noteUser", data, user);
+        zenStorageEngine.execute("set/noteUser", data, user);
         return ZenResult.success("添加成功");
     }
 
     public ZenResult users(ZenData data, ZenUser user) {
         ZenResult users = zenStorageEngine.execute("select/noteUser", data, user);
-        return UserMapper.selectByUids(users, "uid");
+        return ZenUserHelper.selectByUids(users, "uid");
     }
 }

@@ -12,7 +12,7 @@ import com.taobao.api.ApiException;
 import com.zeto.Zen;
 import com.zeto.ZenData;
 import com.zeto.ZenEnvironment;
-import com.zeto.dal.UserMapper;
+import com.zeto.ZenUserHelper;
 import com.zeto.domain.ZenUser;
 import com.zeto.kooteam.dingtalk.DingClient;
 import com.zeto.kooteam.service.domain.DingApp;
@@ -33,7 +33,7 @@ public class MessageListener {
                 add("to", model.getTo()).
                 add("content", model.getContent());
         // 保存消息记录
-        Zen.getStorageEngine().execute("put/message", data, null);
+        Zen.getStorageEngine().execute("set/message", data, null);
         // 发送钉钉消息
         if (DingClient.isInited()) {
             dingTalk(model);
@@ -47,7 +47,7 @@ public class MessageListener {
     }
 
     private void dingTalk(MessageModel messageModel) {
-        ZenUser to = UserMapper.i().get(messageModel.getTo());
+        ZenUser to = ZenUserHelper.i().get(messageModel.getTo());
         DefaultDingTalkClient client = new DefaultDingTalkClient(apiURL);
         DingApp app = DingClient.info();
 

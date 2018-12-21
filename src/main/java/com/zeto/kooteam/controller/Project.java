@@ -2,12 +2,8 @@ package com.zeto.kooteam.controller;
 
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.DateKit;
-import com.zeto.ZenCondition;
-import com.zeto.ZenConditioner;
-import com.zeto.ZenData;
-import com.zeto.ZenResult;
+import com.zeto.*;
 import com.zeto.annotation.AccessRole;
-import com.zeto.dal.UserMapper;
 import com.zeto.dal.domain.UserFrom;
 import com.zeto.domain.ZenUser;
 import com.zeto.driver.ZenStorageEngine;
@@ -32,23 +28,23 @@ public class Project {
     // 创建项目
     public ZenResult create(ZenUser user, ZenData data) {
         data.add("owner", user.getUid());
-        ZenResult result = zenStorageEngine.execute("put/project", data, user);
+        ZenResult result = zenStorageEngine.execute("set/project", data, user);
         String projectId = result.get("_id");
         // 创建者为负责人
         ZenData param = ZenData.put("userId", user.getUid()).
                 add("projectId", projectId).add("role", "5");
-        zenStorageEngine.execute("put/projectUser", param, user);
+        zenStorageEngine.execute("set/projectUser", param, user);
         // 手机端项目成员添加
         String[] dingUsers = data.getParameters("dingUsers");
         if (dingUsers != null) {
             for (String dingUid : dingUsers) {
-                ZenUser dingUser = UserMapper.i().getByDingUid(dingUid, UserFrom.DINGTALK);
+                ZenUser dingUser = ZenUserHelper.i().getByDingUid(dingUid, UserFrom.DINGTALK);
                 if (dingUser == null || dingUser.getUid().equals(user.getUid())) {
                     continue;
                 }
                 param = ZenData.put("userId", dingUser.getUid()).
                         add("projectId", projectId).add("role", "1");
-                zenStorageEngine.execute("put/projectUser", param, user);
+                zenStorageEngine.execute("set/projectUser", param, user);
             }
         }
         return ZenResult.success().setData(projectId);
@@ -100,7 +96,7 @@ public class Project {
             ids = new String[dingUsers.length];
             ZenUser dingUser;
             for (int i = 0; i < dingUsers.length; i++) {
-                dingUser = UserMapper.i().getByDingUid(dingUsers[i], UserFrom.DINGTALK);
+                dingUser = ZenUserHelper.i().getByDingUid(dingUsers[i], UserFrom.DINGTALK);
                 if (dingUser != null) {
                     ids[i] = dingUser.getUid();
                 }
@@ -123,7 +119,7 @@ public class Project {
             param.add("role", role);
             message = user.getNick() + "已经把你加入到项目[" + projectInfo.get("title") + "]成员中";
             EventBiz.sendMessage(new MessageModel(user.getUid(), uid, message, projectId, MessageType.PROJECT));
-            zenStorageEngine.execute("put/projectUser", param, user);
+            zenStorageEngine.execute("set/projectUser", param, user);
         }
         return ZenResult.success("添加成功");
     }
@@ -134,13 +130,13 @@ public class Project {
         if (result.getLong() > 0) {
             return ZenResult.success("收藏成功");
         }
-        zenStorageEngine.execute("put/projectFavi", data, user);
+        zenStorageEngine.execute("set/projectFavi", data, user);
         return ZenResult.success("收藏成功");
     }
 
     public ZenResult members(ZenData data, ZenUser user) {
         ZenResult members = zenStorageEngine.execute("select/projectUserByProjectId", data, user);
-        return UserMapper.selectByUids(members);
+        return ZenUserHelper.selectByUids(members);
     }
 
     // 转交
@@ -259,5 +255,5 @@ public class Project {
 
         return ZenResult.success().setData(stat);
     }
-    
+
 }

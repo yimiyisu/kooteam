@@ -47,18 +47,21 @@ public class DBValidate {
             ResultSet rs = ps.executeQuery(sql);
             if (rs.next()) {
                 System.out.println(rs.getString(1));
+                // 矫正数据库编码
+                sql = "alter database `" + conf.getDatabase() + "` default character set utf8 COLLATE utf8_unicode_ci;";
+                ps.executeUpdate(sql);
             }
             rs.close();
         } catch (Exception e) {
             conf.setDbCheck(false);
             ZenCache.set(AppConf.cacheKey, conf);
-            return ZenResult.fail("Mysql链接失败！");
+            return ZenResult.error(e);
         } finally {
             if (conn != null) {
                 try {
                     conn.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    return ZenResult.error(e);
                 }
             }
         }
@@ -102,8 +105,9 @@ public class DBValidate {
             }
             doc.drop();
         } catch (Exception e) {
-            e.printStackTrace();
+            return ZenResult.error(e);
         }
         return ZenResult.fail("数据库链接失败");
     }
+
 }

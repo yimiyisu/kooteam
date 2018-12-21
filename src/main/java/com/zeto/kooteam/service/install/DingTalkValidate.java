@@ -124,7 +124,6 @@ public class DingTalkValidate {
             }
             Properties props = new Properties();
             props.load(new FileInputStream(profilepath));
-            props.setProperty("mode", "4");
             props.setProperty("dingDomain", dingApp.getHost());
             props.setProperty("dingAgentId", dingApp.getAgentId().toString());
             props.setProperty("dingCorpId", dingApp.getCorpId());
@@ -134,6 +133,9 @@ public class DingTalkValidate {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        ZenEnvironment.set("dingDomain", dingApp.getHost());
+        ZenEnvironment.set("dingAgentId", dingApp.getAgentId().toString());
+        ZenEnvironment.set("dingCorpId", dingApp.getCorpId());
         DingClient.init();
         EventBiz.employeeSync();
     }

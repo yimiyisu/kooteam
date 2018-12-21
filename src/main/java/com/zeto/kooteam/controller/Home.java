@@ -3,8 +3,8 @@ package com.zeto.kooteam.controller;
 import com.blade.mvc.http.Cookie;
 import com.zeto.ZenData;
 import com.zeto.ZenResult;
+import com.zeto.ZenUserHelper;
 import com.zeto.annotation.AccessRole;
-import com.zeto.dal.UserMapper;
 import com.zeto.domain.ZenRole;
 import com.zeto.domain.ZenUser;
 
@@ -26,7 +26,7 @@ public class Home {
 
     public ZenResult nick(ZenData data) {
         String uid = data.get("uid");
-        ZenUser user = UserMapper.i().get(uid);
+        ZenUser user = ZenUserHelper.i().get(uid);
         if (user == null) {
             return ZenResult.success().put("nick", "");
         }

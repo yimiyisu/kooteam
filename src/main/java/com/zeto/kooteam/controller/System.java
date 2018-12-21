@@ -6,8 +6,8 @@ import com.blade.mvc.http.Request;
 import com.zeto.ZenData;
 import com.zeto.ZenEnvironment;
 import com.zeto.ZenResult;
+import com.zeto.ZenUserHelper;
 import com.zeto.annotation.AccessRole;
-import com.zeto.dal.UserMapper;
 import com.zeto.domain.ZenUser;
 import com.zeto.driver.ZenStorageEngine;
 import com.zeto.kooteam.dingtalk.DingClient;
@@ -32,7 +32,7 @@ public class System {
             param.add("home", "todo/home.htm");
             param.add("skin", "3");
             param.add("calendar", "month");
-            zenStorageEngine.execute("put/user", param, user);
+            zenStorageEngine.execute("set/user", param, user);
             return zenStorageEngine.execute("get/userById", param, user);
         }
         profile.put("username", user.getUsername());
@@ -52,7 +52,7 @@ public class System {
             String domain = request.header("Origin");
             return ZenResult.success().put("isInited", DingClient.isInited()).put("domain", domain);
         }
-        if (user.getUsername().equals("root")) {
+        if (!user.getUsername().equals("root")) {
             return ZenResult.fail("只有管理员才能配置钉钉信息");
         }
         boolean status = DingTalkValidate.check(data.get("corpId"), data.get("secret"), data.get("domain"));
@@ -72,7 +72,7 @@ public class System {
             return ZenResult.fail("两次密码输入不一致！");
         }
         String pwd = EncryptKit.md5(data.get("pwd"));
-        UserMapper.i().changePassword(pwd, user.getUid());
+        ZenUserHelper.i().changePassword(pwd, user.getUid());
         return ZenResult.success("修改成功！");
     }
 
@@ -83,7 +83,7 @@ public class System {
             model.setUid(user.getUid());
             model.setNick(nick);
             EventBiz.trigger(model);
-            UserMapper.i().updateNick(nick, user.getUid());
+            ZenUserHelper.i().updateNick(nick, user.getUid());
         }
         return zenStorageEngine.execute("patch/user", data, user);
     }

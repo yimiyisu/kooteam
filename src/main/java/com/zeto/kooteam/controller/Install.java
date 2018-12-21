@@ -44,6 +44,9 @@ public class Install {
         Zen.reload();
         pwd = EncryptKit.md5(pwd);
         ZenCache.set("rootInit", pwd);
+        if (!conf.isMysql()) {
+            ZenUserHelper.resetRoot();
+        }
         return ZenResult.jump("/install.html?status=finish");
     }
 
