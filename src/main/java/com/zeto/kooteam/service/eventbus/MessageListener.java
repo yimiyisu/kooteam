@@ -33,7 +33,7 @@ public class MessageListener {
                 add("to", model.getTo()).
                 add("content", model.getContent());
         // 保存消息记录
-        Zen.getStorageEngine().execute("set/message", data, null);
+        Zen.getStorageEngine().execute("put/message", data, null);
         // 发送钉钉消息
         if (DingClient.isInited()) {
             dingTalk(model);

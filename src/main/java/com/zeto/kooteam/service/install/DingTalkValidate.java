@@ -25,14 +25,13 @@ import java.util.Properties;
 
 public class DingTalkValidate {
 
-    private final static String dingAppName = "Kooteam";
     private final static String dingConfigKey = "DingConfigKey";
 
-    public static boolean check(String corpId, String secret, String domain) {
+    public static boolean check(String appKey, String secret, String appName, String corpId) {
         String apiURL = "https://oapi.dingtalk.com/gettoken";
         DefaultDingTalkClient client = new DefaultDingTalkClient(apiURL);
         OapiGettokenRequest request = new OapiGettokenRequest();
-        request.setAppkey(corpId);
+        request.setAppkey(appKey);
         request.setAppsecret(secret);
         request.setHttpMethod("GET");
         try {
@@ -41,16 +40,14 @@ public class DingTalkValidate {
             if (token == null) {
                 return false;
             }
-            DingApp dingApp = getAppInfo(domain, token);
-            if (dingApp == null) {
-                dingApp = createMApp(domain, token);
-            }
+            DingApp dingApp = getAppInfo(appName, token);
             if (dingApp == null) {
                 return false;
             }
-            dingApp.setSecret(secret);
             dingApp.setCorpId(corpId);
-            dingApp.setHost(domain);
+            dingApp.setSecret(secret);
+            dingApp.setAppKey(appKey);
+            dingApp.setName(appName);
             ZenCache.set(dingConfigKey, dingApp);
             return true;
         } catch (Exception ex) {
@@ -74,7 +71,7 @@ public class DingTalkValidate {
         }
     }
 
-    private static DingApp createMApp(String domain, String token) {
+    private static DingApp createMApp(String dingAppName, String domain, String token, String corpId) {
         String icon = uploadIcon(token);
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/microapp/create");
         OapiMicroappCreateRequest req = new OapiMicroappCreateRequest();
@@ -124,24 +121,30 @@ public class DingTalkValidate {
             }
             Properties props = new Properties();
             props.load(new FileInputStream(profilepath));
-            props.setProperty("dingDomain", dingApp.getHost());
-            props.setProperty("dingAgentId", dingApp.getAgentId().toString());
+            props.setProperty("dingName", dingApp.getName());
+            props.setProperty("dingHome", dingApp.getHomeUrl());
             props.setProperty("dingCorpId", dingApp.getCorpId());
+            props.setProperty("dingAgentId", dingApp.getAgentId().toString());
+            props.setProperty("dingAppKey", dingApp.getAppKey());
+            props.setProperty("dingSecret", dingApp.getSecret());
             OutputStream fos = new FileOutputStream(profilepath);
             props.store(fos, "Ding Set");
             fos.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ZenEnvironment.set("dingDomain", dingApp.getHost());
-        ZenEnvironment.set("dingAgentId", dingApp.getAgentId().toString());
+        ZenEnvironment.set("dingName", dingApp.getName());
         ZenEnvironment.set("dingCorpId", dingApp.getCorpId());
+        ZenEnvironment.set("dingHome", dingApp.getHomeUrl());
+        ZenEnvironment.set("dingAgentId", dingApp.getAgentId().toString());
+        ZenEnvironment.set("dingAppKey", dingApp.getAppKey());
+        ZenEnvironment.set("dingSecret", dingApp.getSecret());
         DingClient.init();
         EventBiz.employeeSync();
     }
 
     // 查询E应用信息，查询不到则创建
-    private static DingApp getAppInfo(String domain, String token) throws ApiException {
+    private static DingApp getAppInfo(String dingAppName, String token) throws ApiException {
         String apiURL = "https://oapi.dingtalk.com/microapp/list";
         DefaultDingTalkClient client = new DefaultDingTalkClient(apiURL);
         OapiMicroappListRequest req = new OapiMicroappListRequest();
@@ -152,10 +155,12 @@ public class DingTalkValidate {
             if (app.getName().equals(dingAppName)) {
                 DingApp dingApp = new DingApp();
                 dingApp.setAgentId(app.getAgentId());
-                String link = app.getHomepageLink();
-                if (!link.contains(domain)) {
-                    updateDomain(domain, app, token);
-                }
+                dingApp.setHomeUrl(app.getHomepageLink());
+
+//                String link = app.getHomepageLink();
+//                if (!link.contains(domain)) {
+//                    updateDomain(domain, app, token);
+//                }
                 return dingApp;
             }
         }

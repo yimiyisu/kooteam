@@ -77,7 +77,7 @@ public class Thing {
         }
         data.add("start", start);
         data.add("order", start);
-        ZenResult result = zenStorageEngine.execute("set/thing", data, user);
+        ZenResult result = zenStorageEngine.execute("put/thing", data, user);
         // 给别人发送任务，需要发送消息通知
         if (!user.getUid().equals(owner) && !Strings.isNullOrEmpty(owner)) {
             String message = user.getNick() + "给你分配了一个任务：" + data.get("title");

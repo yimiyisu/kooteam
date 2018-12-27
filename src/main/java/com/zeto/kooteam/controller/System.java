@@ -32,7 +32,7 @@ public class System {
             param.add("home", "todo/home.htm");
             param.add("skin", "3");
             param.add("calendar", "month");
-            zenStorageEngine.execute("set/user", param, user);
+            zenStorageEngine.execute("put/user", param, user);
             return zenStorageEngine.execute("get/userById", param, user);
         }
         profile.put("username", user.getUsername());
@@ -50,12 +50,12 @@ public class System {
         // 查询状态
         if (data.isEmpty()) {
             String domain = request.header("Origin");
-            return ZenResult.success().put("isInited", DingClient.isInited()).put("domain", domain);
+            return ZenResult.success().put("isInited", DingClient.isInited()).put("appName", domain);
         }
         if (!user.getUsername().equals("root")) {
             return ZenResult.fail("只有管理员才能配置钉钉信息");
         }
-        boolean status = DingTalkValidate.check(data.get("corpId"), data.get("secret"), data.get("domain"));
+        boolean status = DingTalkValidate.check(data.get("appKey"), data.get("appSecret"), data.get("appName"), data.get("corpId"));
         if (status) {
             DingTalkValidate.Serialize();
             return ZenResult.success("配置成功").refresh();

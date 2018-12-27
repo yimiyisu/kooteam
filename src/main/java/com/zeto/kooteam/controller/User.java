@@ -132,7 +132,7 @@ public class User {
         ZenData params = ZenData.put("userId", user.getUid());
         params.add("myId", myId);
         params.add("nick", user.getNick());
-        zenStorageEngine.execute("set/friend", params, user);
+        zenStorageEngine.execute("put/friend", params, user);
     }
 
     private void deleteFriendData(String myId, String userId, ZenUser user) {

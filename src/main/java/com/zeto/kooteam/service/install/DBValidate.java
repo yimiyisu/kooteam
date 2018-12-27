@@ -6,6 +6,7 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.zeto.Zen;
 import com.zeto.ZenCache;
 import com.zeto.ZenData;
 import com.zeto.ZenResult;
@@ -19,6 +20,7 @@ import java.util.List;
 
 public class DBValidate {
     private static final String testTable = "k_test";
+
 
     public static ZenResult check(ZenData data) {
         AppConf conf = ZenCache.get(AppConf.cacheKey, AppConf.class);
@@ -42,6 +44,7 @@ public class DBValidate {
         String sql = "show tables";
         Connection conn = null;
         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(URL, conf.getUser(), conf.getPassword());
             Statement ps = conn.createStatement();
             ResultSet rs = ps.executeQuery(sql);
@@ -53,6 +56,7 @@ public class DBValidate {
             }
             rs.close();
         } catch (Exception e) {
+            Zen.getLoggerEngine().exception(e);
             conf.setDbCheck(false);
             ZenCache.set(AppConf.cacheKey, conf);
             return ZenResult.error(e);
@@ -105,6 +109,7 @@ public class DBValidate {
             }
             doc.drop();
         } catch (Exception e) {
+            Zen.getLoggerEngine().exception(e);
             return ZenResult.error(e);
         }
         return ZenResult.fail("数据库链接失败");

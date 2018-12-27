@@ -40,7 +40,7 @@ public class Login {
         if (DingClient.isInited()) {
             result.put("qr", "dd");
             result.put("checkId", StringKit.objectId());
-            result.put("host", DingClient.info().getHost());
+            result.put("host", DingClient.info().getHomeUrl());
         }
         return result;
     }
@@ -88,6 +88,7 @@ public class Login {
                 DingApp dingApp = DingClient.info();
                 ZenResult result = ZenResult.success();
                 result.put("initing", true);
+                result.put("agentId", dingApp.getAgentId());
                 result.put("corpId", dingApp.getCorpId());
                 return result;
             }

@@ -33,7 +33,6 @@ public class Note {
 
     public ZenResult patch(ZenData data, ZenUser user) {
         zenStorageEngine.execute("patch/note", data, user);
-
         return ZenResult.success().setData("保存成功");
     }
 
@@ -47,13 +46,13 @@ public class Note {
     private static final String docType = "4";
 
     public ZenResult add(ZenData data, ZenUser user) {
-        ZenResult result = zenStorageEngine.execute("set/note", data, user);
+        ZenResult result = zenStorageEngine.execute("put/note", data, user);
         if (docType.equals(data.get("type"))) {
             ZenData param = ZenData.put("noteId", result.get("_id")).
                     add("uid", user.getUid()).
                     add("op", user.getUid()).
                     add("permission", "3");
-            zenStorageEngine.execute("set/noteUser", param, user);
+            zenStorageEngine.execute("put/noteUser", param, user);
         }
         return ZenResult.success().setData(result.getData());
     }
@@ -77,7 +76,7 @@ public class Note {
         if (count.getLong() > 0) {
             return ZenResult.fail("该用户已添加");
         }
-        zenStorageEngine.execute("set/noteUser", data, user);
+        zenStorageEngine.execute("put/noteUser", data, user);
         return ZenResult.success("添加成功");
     }
 

@@ -16,6 +16,7 @@ import com.zeto.kooteam.service.eventbus.model.MessageType;
 public class Project {
     @Inject
     private ZenStorageEngine zenStorageEngine;
+    private static final int count = 100;
 
     // 我的项目
     public ZenResult my(ZenUser user, ZenData data) {
@@ -28,12 +29,12 @@ public class Project {
     // 创建项目
     public ZenResult create(ZenUser user, ZenData data) {
         data.add("owner", user.getUid());
-        ZenResult result = zenStorageEngine.execute("set/project", data, user);
+        ZenResult result = zenStorageEngine.execute("put/project", data, user);
         String projectId = result.get("_id");
         // 创建者为负责人
         ZenData param = ZenData.put("userId", user.getUid()).
                 add("projectId", projectId).add("role", "5");
-        zenStorageEngine.execute("set/projectUser", param, user);
+        zenStorageEngine.execute("put/projectUser", param, user);
         // 手机端项目成员添加
         String[] dingUsers = data.getParameters("dingUsers");
         if (dingUsers != null) {
@@ -44,7 +45,7 @@ public class Project {
                 }
                 param = ZenData.put("userId", dingUser.getUid()).
                         add("projectId", projectId).add("role", "1");
-                zenStorageEngine.execute("set/projectUser", param, user);
+                zenStorageEngine.execute("put/projectUser", param, user);
             }
         }
         return ZenResult.success().setData(projectId);
@@ -76,7 +77,23 @@ public class Project {
 
     // 项目包含的任务
     public ZenResult things(ZenUser user, ZenData data) {
-        return ZenResult.success();
+        ZenCondition condition = ZenConditioner.And().eq("projectId", data.get("id"));
+        String type = data.get("type");
+        ZenResult result = ZenResult.success();
+        if (type.equals("unfinish")) {
+            result.put("title", "未完成任务");
+            condition.eq("status", 0);
+        }
+        if (type.equals("finished")) {
+            result.put("title", "已完成任务");
+            condition.eq("status", 1);
+        }
+        if (type.equals("overtime")) {
+            result.put("title", "超期任务");
+            condition.greater("end", 0).lesser("end", DateKit.now());
+        }
+        ZenResult things = zenStorageEngine.select("thing", condition, count);
+        return result.put("data", things.getData());
     }
 
     public ZenResult addUser(ZenData data, ZenUser user) {
@@ -119,7 +136,7 @@ public class Project {
             param.add("role", role);
             message = user.getNick() + "已经把你加入到项目[" + projectInfo.get("title") + "]成员中";
             EventBiz.sendMessage(new MessageModel(user.getUid(), uid, message, projectId, MessageType.PROJECT));
-            zenStorageEngine.execute("set/projectUser", param, user);
+            zenStorageEngine.execute("put/projectUser", param, user);
         }
         return ZenResult.success("添加成功");
     }
@@ -130,7 +147,7 @@ public class Project {
         if (result.getLong() > 0) {
             return ZenResult.success("收藏成功");
         }
-        zenStorageEngine.execute("set/projectFavi", data, user);
+        zenStorageEngine.execute("put/projectFavi", data, user);
         return ZenResult.success("收藏成功");
     }
 
@@ -222,14 +239,30 @@ public class Project {
     public ZenResult chapter(ZenData data, ZenUser user) {
         String projectId = data.get("id");
         ZenData params = ZenData.put("_id", projectId);
-        ZenResult result = zenStorageEngine.execute("extend/projectExtendField", params, user);
         ZenResult projectInfo = zenStorageEngine.execute("get/projectById", params, user);
-        return result.put("title", projectInfo.get("title"));
+        String title = projectInfo.get("title");
+        ZenResult extend = zenStorageEngine.extend("note", projectId);
+        if (extend.isEmpty()) {
+            // 合并数据
+            extend = zenStorageEngine.execute("extend/projectExtendField", params, user);
+            String doc = "";
+            if (extend.isEmpty()) {
+                doc = extend.get("doc");
+            }
+            params.add("permision", "4");
+            params.add("isProject", "1");
+            params.add("title", title);
+            params.add("type", "4");
+            params.add("content", doc);
+            params.add("parentId", projectId);
+            zenStorageEngine.execute("put/note", params, user);
+        }
+        return extend.put("title", title);
     }
 
     // 保存项目文档
     public ZenResult saveDoc(ZenData data, ZenUser user) {
-        zenStorageEngine.execute("patch/project", data, user);
+        zenStorageEngine.execute("patch/note", data, user);
         return ZenResult.success().setData("保存成功");
     }
 
@@ -254,6 +287,10 @@ public class Project {
         stat.setOvertime(overtime);
 
         return ZenResult.success().setData(stat);
+    }
+
+    private boolean checkPermission() {
+        return false;
     }
 
 }

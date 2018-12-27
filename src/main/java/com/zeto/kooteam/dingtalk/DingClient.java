@@ -35,14 +35,18 @@ public class DingClient {
         if (ZenEnvironment.isNoSetup() && !isMerge()) {
             return;
         }
-        String dingDomain = ZenEnvironment.get("dingDomain");
-        String dingAgentId = ZenEnvironment.get("dingAgentId");
-        if (Strings.isNullOrEmpty(dingAgentId) || Strings.isNullOrEmpty(dingDomain)) {
+        String dingName = ZenEnvironment.get("dingName");
+        String corpId = ZenEnvironment.get("dingCorpId");
+        String appKey = ZenEnvironment.get("dingAppKey");
+        if (Strings.isNullOrEmpty(appKey) || Strings.isNullOrEmpty(dingName) || Strings.isNullOrEmpty(corpId)) {
             return;
         }
+        String dingAgentId = ZenEnvironment.get("dingAgentId");
         dingApp = new DingApp();
-        dingApp.setHost(dingDomain);
-        dingApp.setCorpId(ZenEnvironment.get("dingCorpId"));
+        dingApp.setName(dingName);
+        dingApp.setCorpId(corpId);
+        dingApp.setHomeUrl(ZenEnvironment.get("dingHome"));
+        dingApp.setAppKey(appKey);
         dingApp.setSecret(ZenEnvironment.get("dingSecret"));
         dingApp.setAgentId(Long.valueOf(dingAgentId));
     }
@@ -75,9 +79,9 @@ public class DingClient {
                 Properties props = new Properties();
                 props.load(new FileInputStream(profilepath));
                 props.setProperty("mode", "4");
-                props.setProperty("dingDomain", dingApp.getHost());
+                props.setProperty("dingDomain", dingApp.getName());
                 props.setProperty("dingAgentId", dingApp.getAgentId().toString());
-                props.setProperty("dingCorpId", dingApp.getCorpId());
+                props.setProperty("dingCorpId", dingApp.getAppKey());
                 OutputStream fos = new FileOutputStream(profilepath);
                 props.store(fos, "Kooteam Updated");
                 fos.close();
@@ -108,7 +112,7 @@ public class DingClient {
         }
         DefaultDingTalkClient client = new DefaultDingTalkClient(apiURL);
         OapiGettokenRequest request = new OapiGettokenRequest();
-        request.setAppkey(dingApp.getCorpId());
+        request.setAppkey(dingApp.getAppKey());
         request.setAppsecret(dingApp.getSecret());
         request.setHttpMethod("GET");
         try {
