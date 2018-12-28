@@ -32,4 +32,16 @@ public class Home {
         }
         return ZenResult.success().put("nick", user.getNick());
     }
+
+    public ZenResult test() {
+        return ZenResult.success().setData("test");
+    }
+
+    public ZenResult test2() {
+        return ZenResult.success().setData("test2");
+    }
+
+    public ZenResult test3() {
+        return ZenResult.success().setData("test3");
+    }
 }

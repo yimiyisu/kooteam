@@ -24,18 +24,25 @@ public class UploaderService {
 
     public String avator(String uri, String uid) {
         byte[] data = download(uri);
+        return avator(data, uid);
+    }
+
+    public String avator(byte[] data, String uid) {
         if (data == null) {
             return null;
         }
-        String path = ZenEnvironment.getPath() + String.format("/res/avator/%s/%s/",
+        String webPath = String.format("/avator/%s/%s/",
                 uid.substring(0, 4), uid.substring(4, 6));
+        String path = ZenEnvironment.getPath() + "/res" + webPath;
+
         File dir = new File(path);
         if (!dir.isDirectory()) {
             dir.mkdirs();
         }
-        path += uid.substring(6) + ".jpg";
+        String fileName = uid.substring(6) + ".jpg";
+        path += fileName;
         this.save(data, path);
-        return path;
+        return webPath + fileName;
     }
 
     public String image(byte[] data, String ext) {

@@ -6,6 +6,7 @@ import com.zeto.ZenFiles;
 import com.zeto.ZenResult;
 import com.zeto.annotation.AccessRole;
 import com.zeto.domain.ZenPostFile;
+import com.zeto.domain.ZenUser;
 import com.zeto.kooteam.service.UploaderService;
 
 import java.util.HashMap;
@@ -24,6 +25,15 @@ public class Upload {
             put("image/jpeg", "jpg");
         }
     };
+
+    public ZenResult avator(ZenUser user, ZenFiles files) {
+        ZenPostFile fileItem = files.get("file");
+        if (fileItem == null) {
+            return ZenResult.fail("请选择文件");
+        }
+        String savePath = this.uploaderService.avator(fileItem.getData(), user.getUid());
+        return ZenResult.success().put("url", savePath);
+    }
 
     // 上传图片
     public ZenResult image(ZenData data, ZenFiles files) {

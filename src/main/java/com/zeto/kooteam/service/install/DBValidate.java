@@ -59,7 +59,7 @@ public class DBValidate {
             Zen.getLoggerEngine().exception(e);
             conf.setDbCheck(false);
             ZenCache.set(AppConf.cacheKey, conf);
-            return ZenResult.error(e);
+            return ZenResult.fail("数据库检查失败");
         } finally {
             if (conn != null) {
                 try {
