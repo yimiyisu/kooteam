@@ -631,6 +631,9 @@
 .simditor .simditor-body h6, .editor-style h6 {
   font-size: 16px;
 }
+ .simditor .simditor-body h1, .simditor .simditor-body h2, .editor-style h1, .editor-style h2 {
+    border-bottom: 1px solid #eaecef;
+}
 .simditor .simditor-body p, .simditor .simditor-body div, .editor-style p, .editor-style div {
   word-wrap: break-word;
   margin: 0 0 15px 0;
