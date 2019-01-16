@@ -95,6 +95,9 @@ public class Login {
             updateCookie = true;
             zenUser = dingUserLoginService.getUserByAuthCode(authCode);
         }
+        if (zenUser == null) {
+            return ZenResult.success();
+        }
 
         if (!Strings.isNullOrEmpty(checkId)) {
             // 非日常环境，自动更新用ukey

@@ -20,16 +20,22 @@ import java.util.List;
 
 public class DBValidate {
     private static final String testTable = "k_test";
-
+    private static final String[] errorDB = new String[]{"system", "mysql"};
 
     public static ZenResult check(ZenData data) {
+        String dbName = data.get("database");
+        for (String name : errorDB) {
+            if (name.equals(dbName)) {
+                return ZenResult.fail("数据库名称不能为系统关键字");
+            }
+        }
         AppConf conf = ZenCache.get(AppConf.cacheKey, AppConf.class);
         if (conf == null) {
             conf = new AppConf();
         }
         conf.setDbType(data.get("dbType"));
         conf.setHost(data.get("host"));
-        conf.setDatabase(data.get("database"));
+        conf.setDatabase(dbName);
         conf.setUser(data.get("user"));
         conf.setPassword(data.get("password"));
         conf.setPort(data.get("port"));
