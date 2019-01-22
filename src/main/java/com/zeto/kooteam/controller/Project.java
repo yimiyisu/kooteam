@@ -51,6 +51,16 @@ public class Project {
         return ZenResult.success().setData(projectId);
     }
 
+    public ZenResult edit(ZenUser user, ZenData data) {
+        String projectId = data.get("_id");
+        ZenResult project = checkOnwer(user, projectId);
+        if (!project.isSuccess()) {
+            return project;
+        }
+        zenStorageEngine.execute("patch/project", data, user);
+        return ZenResult.success("修改成功！");
+    }
+
     // 我收藏的项目
     public ZenResult faviList(ZenUser user) {
         ZenData param = new ZenData();
@@ -92,7 +102,7 @@ public class Project {
             result.put("title", "超期任务");
             condition.greater("end", 0).lesser("end", DateKit.now());
         }
-        ZenResult things = zenStorageEngine.select("thing", condition, count);
+        ZenResult things = zenStorageEngine.select("thing", condition.limit(count));
         return result.put("data", things.getData());
     }
 
@@ -100,12 +110,9 @@ public class Project {
         // 先判断用户是否为项目创始人或管理员
         String role = data.get("role", "1"), message;
         String projectId = data.get("projectId");
-        ZenResult projectInfo = zenStorageEngine.execute("get/projectById", ZenData.put("_id", projectId), user);
-        if (projectInfo.isEmpty()) {
-            return ZenResult.fail("项目不存在");
-        }
-        if (!user.getUid().equals(projectInfo.get("owner"))) {
-            return ZenResult.fail("只有项目负责人才能添加成员");
+        ZenResult projectInfo = checkOnwer(user, projectId);
+        if (!projectInfo.isSuccess()) {
+            return projectInfo;
         }
         String[] dingUsers = data.getParameters("dingUsers"), ids;
         if (dingUsers != null) {
@@ -158,12 +165,10 @@ public class Project {
 
     // 转交
     public ZenResult trans(ZenData data, ZenUser user) {
-        ZenResult result = zenStorageEngine.execute("get/projectById", data, user);
-        if (result.isEmpty()) {
-            return ZenResult.fail("项目ID错误");
-        }
-        if (!user.getUid().equals(result.get("owner"))) {
-            return ZenResult.fail("只要owner才能转交项目");
+        String projectId = data.get("_id");
+        ZenResult result = checkOnwer(user, projectId);
+        if (!result.isSuccess()) {
+            return result;
         }
         ZenData params = ZenData.put("owner", data.get("userId")).add("_id", data.get("_id"));
         zenStorageEngine.execute("patch/project", params, user);
@@ -179,12 +184,10 @@ public class Project {
 
     // 删除
     public ZenResult remove(ZenData data, ZenUser user) {
-        ZenResult result = zenStorageEngine.execute("get/projectById", data, user);
-        if (result.isEmpty()) {
-            return ZenResult.fail("项目ID错误");
-        }
-        if (!user.getUid().equals(result.get("owner"))) {
-            return ZenResult.fail("只要owner才能转交项目");
+        String projectId = data.get("_id");
+        ZenResult result = checkOnwer(user, projectId);
+        if (!result.isSuccess()) {
+            return result;
         }
         ZenData params = ZenData.put("projectId", data.get("_id"));
         result = zenStorageEngine.execute("count/thingByProjectId", params, user);
@@ -233,6 +236,17 @@ public class Project {
             return zenStorageEngine.execute("delete/projectUser", data, user);
         }
         return ZenResult.fail("只要项目负责人才有权限删除成员");
+    }
+
+    private ZenResult checkOnwer(ZenUser user, String projectId) {
+        ZenResult result = zenStorageEngine.execute("get/projectById", ZenData.put("_id", projectId), user);
+        if (result.isEmpty()) {
+            return ZenResult.fail("项目不存在");
+        }
+        if (!user.getUid().equals(result.get("owner"))) {
+            return ZenResult.fail("只有负责人才能操作");
+        }
+        return result;
     }
 
     // 获取项目章节

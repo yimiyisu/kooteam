@@ -63,7 +63,7 @@ public class Install {
 
             if (conf.isMysql()) {
                 props.setProperty("mode", "3");
-                props.setProperty("dbHost", "jdbc:mysql://" + conf.getHost() + "/" + conf.getDatabase());
+                props.setProperty("dbHost", "jdbc:mysql://" + conf.getHost() + ":" + conf.getPort() + "/" + conf.getDatabase());
                 props.setProperty("dbUser", conf.getUser());
                 props.setProperty("dbPasswd", conf.getPassword());
             } else {

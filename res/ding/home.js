@@ -1,1 +1,0 @@
-zenTemplate={"content":"<div id='J_app'><k-login></k-login></div>","ext":"","sons":{},"data":{}};

@@ -85,7 +85,8 @@ public class User {
             keyword = keyword.trim();
             condition.like("nick", keyword);
         }
-        return zenStorageEngine.select("friend", condition, size);
+        condition.limit(size);
+        return zenStorageEngine.select("friend", condition);
     }
 
     public ZenResult friend(ZenData data, ZenUser user) {
