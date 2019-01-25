@@ -29,6 +29,9 @@ public class Install {
     }
 
     public ZenResult save(ZenData data) {
+        if (!ZenEnvironment.isNoSetup()) {
+            return ZenResult.fail("已经配置过，不能重复配置");
+        }
         String pwd = data.get("pwd");
         if (Strings.isNullOrEmpty(pwd)) {
             return ZenResult.fail("管理员不能为空");

@@ -1,10 +1,13 @@
 package com.zeto.kooteam.controller;
 
 import com.blade.mvc.http.Cookie;
+import com.zeto.Zen;
 import com.zeto.ZenData;
 import com.zeto.ZenResult;
 import com.zeto.ZenUserHelper;
 import com.zeto.annotation.AccessRole;
+import com.zeto.annotation.MethodType;
+import com.zeto.domain.ZenMethod;
 import com.zeto.domain.ZenRole;
 import com.zeto.domain.ZenUser;
 
@@ -33,15 +36,9 @@ public class Home {
         return ZenResult.success().put("nick", user.getNick());
     }
 
+    @MethodType(ZenMethod.ALL)
     public ZenResult test() {
+        Zen.getLoggerEngine().error("error");
         return ZenResult.success().setData("test");
-    }
-
-    public ZenResult test2() {
-        return ZenResult.success().setData("test2");
-    }
-
-    public ZenResult test3() {
-        return ZenResult.success().setData("test3");
     }
 }
