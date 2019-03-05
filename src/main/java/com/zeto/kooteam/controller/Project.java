@@ -2,9 +2,13 @@ package com.zeto.kooteam.controller;
 
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.DateKit;
-import com.zeto.*;
+import com.zeto.ZenConditioner;
+import com.zeto.ZenData;
+import com.zeto.ZenResult;
+import com.zeto.ZenUserHelper;
 import com.zeto.annotation.AccessRole;
 import com.zeto.dal.domain.UserFrom;
+import com.zeto.domain.ZenCondition;
 import com.zeto.domain.ZenUser;
 import com.zeto.driver.ZenStorageEngine;
 import com.zeto.kooteam.service.EventBiz;
@@ -20,7 +24,7 @@ public class Project {
 
     // 我的项目
     public ZenResult my(ZenUser user, ZenData data) {
-        data.add("userId", user.getUid());
+        data.set("userId", user.getUid());
         ZenResult source = zenStorageEngine.execute("select/projectUserByUserId", data, user);
         ZenResult projects = zenStorageEngine.selectByIds("project", "projectId", source);
         return source.setData(projects.getData());
@@ -28,12 +32,12 @@ public class Project {
 
     // 创建项目
     public ZenResult create(ZenUser user, ZenData data) {
-        data.add("owner", user.getUid());
+        data.set("owner", user.getUid());
         ZenResult result = zenStorageEngine.execute("put/project", data, user);
         String projectId = result.get("_id");
         // 创建者为负责人
         ZenData param = ZenData.put("userId", user.getUid()).
-                add("projectId", projectId).add("role", "5");
+                set("projectId", projectId).set("role", "5");
         zenStorageEngine.execute("put/projectUser", param, user);
         // 手机端项目成员添加
         String[] dingUsers = data.getParameters("dingUsers");
@@ -44,7 +48,7 @@ public class Project {
                     continue;
                 }
                 param = ZenData.put("userId", dingUser.getUid()).
-                        add("projectId", projectId).add("role", "1");
+                        set("projectId", projectId).set("role", "1");
                 zenStorageEngine.execute("put/projectUser", param, user);
             }
         }
@@ -65,7 +69,7 @@ public class Project {
     public ZenResult faviList(ZenUser user) {
         ZenData param = new ZenData();
         if (!param.contains("size")) {
-            param.add("size", "5");
+            param.set("size", "5");
         }
         ZenResult result = zenStorageEngine.execute("select/projectFaviByUid", param, user);
         return zenStorageEngine.selectByIds("project", "projectId", result);
@@ -79,7 +83,7 @@ public class Project {
         }
         ZenResult boardData = zenStorageEngine.extend("project", projectId);
         project.put("board", boardData.get("board"));
-        ZenData param = ZenData.put("projectId", projectId).add("size", "200");
+        ZenData param = ZenData.put("projectId", projectId).set("size", "200");
         ZenResult thingsData = zenStorageEngine.execute("select/thingByProjectId", param, user);
         project.put("things", thingsData.getData());
         return project;
@@ -134,13 +138,13 @@ public class Project {
 
         for (String uid : ids) {
             ZenData param = ZenData.put("userId", uid);
-            param.add("projectId", projectId);
-            param.add("userId", uid);
+            param.set("projectId", projectId);
+            param.set("userId", uid);
             ZenResult checkData = zenStorageEngine.execute("get/projectUserByProjectIdUid", param, user);
             if (!checkData.isEmpty()) {// 每个用户只能添加一次
                 continue;
             }
-            param.add("role", role);
+            param.set("role", role);
             message = user.getNick() + "已经把你加入到项目[" + projectInfo.get("title") + "]成员中";
             EventBiz.sendMessage(new MessageModel(user.getUid(), uid, message, projectId, MessageType.PROJECT));
             zenStorageEngine.execute("put/projectUser", param, user);
@@ -170,11 +174,11 @@ public class Project {
         if (!result.isSuccess()) {
             return result;
         }
-        ZenData params = ZenData.put("owner", data.get("userId")).add("_id", data.get("_id"));
+        ZenData params = ZenData.put("owner", data.get("userId")).set("_id", data.get("_id"));
         zenStorageEngine.execute("patch/project", params, user);
 
         // 删除负责人项目权限
-        params = ZenData.put("projectId", result.get("_id")).add("userId", user.getUid());
+        params = ZenData.put("projectId", result.get("_id")).set("userId", user.getUid());
         zenStorageEngine.execute("delete/projectUserWidthProject", params, user);
 
         String message = user.getNick() + "已把[" + result.get("title") + "]项目负责人角色转交给你";
@@ -202,7 +206,7 @@ public class Project {
 
     // 退出
     public ZenResult quit(ZenData data, ZenUser user) {
-        data.add("userId", user.getUid());
+        data.set("userId", user.getUid());
         ZenResult result = zenStorageEngine.execute("get/projectUserByProjectIdUid", data, user);
         if (result.isEmpty()) {
             ZenResult.success("退出完成");
@@ -263,12 +267,12 @@ public class Project {
             if (extend.isEmpty()) {
                 doc = extend.get("doc");
             }
-            params.add("permision", "4");
-            params.add("isProject", "1");
-            params.add("title", title);
-            params.add("type", "4");
-            params.add("content", doc);
-            params.add("parentId", projectId);
+            params.set("permision", "4")
+                    .set("isProject", "1")
+                    .set("title", title)
+                    .set("type", "4")
+                    .set("content", doc)
+                    .set("parentId", projectId);
             zenStorageEngine.execute("put/note", params, user);
         }
         return extend.put("title", title);
@@ -292,7 +296,7 @@ public class Project {
             return ZenResult.success().setData(0);
         }
 
-        int now = DateKit.now();
+        long now = DateKit.now();
         ZenCondition condition = ZenConditioner.And().
                 eq("projectId", projectId).
                 greater("end", 0).

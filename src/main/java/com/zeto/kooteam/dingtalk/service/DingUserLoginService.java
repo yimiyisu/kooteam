@@ -12,15 +12,14 @@ import com.taobao.api.ApiException;
 import com.zeto.ZenUserHelper;
 import com.zeto.dal.domain.UserFrom;
 import com.zeto.domain.ZenUser;
-import com.zeto.driver.ZenLoggerEngine;
 import com.zeto.driver.ZenStorageEngine;
 import com.zeto.kooteam.dingtalk.DingClient;
 import com.zeto.kooteam.service.UploaderService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Bean
 public class DingUserLoginService {
-    @Inject
-    private ZenLoggerEngine zenLoggerEngine;
 
     @Inject
     private ZenStorageEngine zenStorageEngine;
@@ -52,7 +51,7 @@ public class DingUserLoginService {
             }
             return user;
         } catch (ApiException e) {
-            zenLoggerEngine.exception(e);
+            log.error("", e);
         }
         return null;
     }

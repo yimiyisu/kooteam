@@ -3,8 +3,12 @@ package com.zeto.kooteam.controller;
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.DateKit;
 import com.google.common.base.Strings;
-import com.zeto.*;
+import com.zeto.ZenConditioner;
+import com.zeto.ZenData;
+import com.zeto.ZenResult;
+import com.zeto.ZenUserHelper;
 import com.zeto.annotation.AccessRole;
+import com.zeto.domain.ZenCondition;
 import com.zeto.domain.ZenUser;
 import com.zeto.driver.ZenLoggerEngine;
 import com.zeto.driver.ZenStorageEngine;
@@ -29,13 +33,13 @@ public class Thing {
     public ZenResult latest(ZenData data, ZenUser user) {
         String path = "select/thing";
         if (!data.contains("size")) {
-            data.add("size", "200");
+            data.set("size", "200");
         }
         ZenResult result = zenStorageEngine.execute(path, data, user);
         if (result.isEmpty()) {
             ObjectId objectId = new ObjectId(user.getUid());
             long regTime = objectId.getDate().getTime() / 1000 + 24 * 360;
-            int now = DateKit.now();
+            long now = DateKit.now();
             // 注册时间在一天以内的用户，帮助初始化数据
             if (regTime > now) {
                 // 初始化数据
@@ -61,7 +65,9 @@ public class Thing {
             thing.put("nick", user.getNick());
         } else {
             ZenUser current = ZenUserHelper.i().get(ownerId);
-            thing.put("nick", current.getNick());
+            if (current != null) {
+                thing.put("nick", current.getNick());
+            }
         }
         return thing;
     }
@@ -69,14 +75,14 @@ public class Thing {
     public ZenResult put(ZenData data, ZenUser user) {
         String owner = data.get("owner");
         if (Strings.isNullOrEmpty(owner)) {
-            data.add("owner", user.getUid());
+            data.set("owner", user.getUid());
         }
         String start = data.get("start");
         if (Strings.isNullOrEmpty(start)) {
-            start = DateKit.now().toString();
+            start = DateKit.now() + "";
         }
-        data.add("start", start);
-        data.add("order", start);
+        data.set("start", start);
+        data.set("order", start);
         ZenResult result = zenStorageEngine.execute("put/thing", data, user);
         // 给别人发送任务，需要发送消息通知
         if (!user.getUid().equals(owner) && !Strings.isNullOrEmpty(owner)) {
@@ -110,7 +116,7 @@ public class Thing {
     }
 
     public ZenResult selectByFinish(ZenUser user, ZenData data) {
-        data.add("status", "1");
+        data.set("status", "1");
         ZenResult things = zenStorageEngine.execute("select/thing", data, user);
         ZenCondition condition = ZenConditioner.And().eq("uid", user.getUid()).eq("status", "1");
         long total = zenStorageEngine.count("thing", condition);

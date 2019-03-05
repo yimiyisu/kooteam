@@ -2,9 +2,9 @@ package com.zeto.kooteam.service.eventbus;
 
 import com.google.common.eventbus.Subscribe;
 import com.zeto.Zen;
-import com.zeto.ZenCondition;
 import com.zeto.ZenConditioner;
 import com.zeto.ZenData;
+import com.zeto.domain.ZenCondition;
 import com.zeto.driver.ZenStorageEngine;
 import com.zeto.kooteam.service.eventbus.model.ProjectModel;
 
@@ -21,7 +21,7 @@ public class ProjectListener {
         ZenCondition finishedCon = ZenConditioner.And().eq("projectId", model.getProjectId()).eq("status", 1);
         long finished = storageEngine.count(thingTable, finishedCon);
         ZenData params = ZenData.put("_id", model.getProjectId()).
-                add("unfinish", unfinish + "").add("finished", finished + "");
+                set("unfinish", unfinish + "").set("finished", finished + "");
         storageEngine.execute(executor, params, null);
     }
 }

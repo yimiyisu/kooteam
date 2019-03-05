@@ -13,7 +13,7 @@ public class MessageModel {
 
     public MessageModel(String from, String to, String content, String objectId, MessageType type) {
         this.from = from;
-        this.to = from;
+        this.to = to;
         this.content = content;
         this.objectId = objectId;
         this.messageType = type;

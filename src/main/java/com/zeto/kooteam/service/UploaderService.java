@@ -1,29 +1,21 @@
 package com.zeto.kooteam.service;
 
 import com.blade.ioc.annotation.Bean;
-import com.blade.ioc.annotation.Inject;
+import com.blade.kit.HttpKit;
 import com.blade.kit.StringKit;
-import com.google.common.io.ByteStreams;
 import com.zeto.ZenEnvironment;
-import com.zeto.driver.ZenLoggerEngine;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
+@Slf4j
 @Bean
 public class UploaderService {
-    @Inject
-    private ZenLoggerEngine zenLoggerEngine;
 
     public String avator(String uri, String uid) {
-        byte[] data = download(uri);
+        byte[] data = HttpKit.download(uri);
         return avator(data, uid);
     }
 
@@ -70,46 +62,15 @@ public class UploaderService {
             outputStream = new FileOutputStream(file);
             outputStream.write(data);
         } catch (Exception e) {
-            zenLoggerEngine.exception(e);
+            log.error("", e);
         } finally {
             if (outputStream != null) {
                 try {
                     outputStream.close();
                 } catch (IOException e) {
-                    zenLoggerEngine.exception(e);
+                    log.error("", e);
                 }
             }
         }
-    }
-
-    // 下载远程图片
-    private byte[] download(String url) {
-        try {
-            HttpGet httpGet = new HttpGet(url);
-            CloseableHttpClient httpClient;
-            if (url.contains("https:")) {
-                httpClient = new SSLClient();
-            } else {
-                httpClient = HttpClients.createDefault();
-            }
-
-            // 客户端开始向指定的网址发送请求
-            CloseableHttpResponse response = httpClient.execute(httpGet);
-            if (response.getStatusLine().getStatusCode() != 200) {
-                return null;
-            }
-            HttpEntity entity = response.getEntity();
-            if (entity == null) {
-                return null;
-            }
-            InputStream inputStream = entity.getContent();
-            // 使用guava 实现输入字节码转换
-            byte[] in2b = ByteStreams.toByteArray(inputStream);
-            inputStream.close();
-            return in2b;
-        } catch (Exception e) {
-            zenLoggerEngine.exception(e);
-        }
-        return null;
     }
 }

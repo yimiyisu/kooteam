@@ -26,12 +26,12 @@ public class TodoInit {
             ZenCache.set(cacheID, "MgCondition", maxtime);
         }
         // 添加初期数据
-        int now = DateKit.now();
+        long now = DateKit.now();
         ZenData example = ZenData.put("quadrant", "a");
-        example.add("owner", user.getUid());
-        example.add("start", String.valueOf(now));
-        example.add("title", "四象限工作法举例");
-        example.add("content", "<p>在考虑行事的先后顺序时，应先考虑事情的“轻重”，再考虑事情的“缓急”，也就是我们通常采用的“第二象限组织法”。"
+        example.set("owner", user.getUid());
+        example.set("start", String.valueOf(now));
+        example.set("title", "四象限工作法举例");
+        example.set("content", "<p>在考虑行事的先后顺序时，应先考虑事情的“轻重”，再考虑事情的“缓急”，也就是我们通常采用的“第二象限组织法”。"
                 + "</p><p>用时间管理的方法来探讨“急事”与“要事”的关系，请看四象限图：</p><p>1、第一象限是重要又急迫的事。" +
                 "</p><p>&nbsp; &nbsp; &nbsp; 举例：诸如应付难缠的客户、准时完成工作、紧急的工作汇报等等。</p><p>" +
                 "2、第二象限是重要但不紧急的事。</p><p>&nbsp; &nbsp; &nbsp; 举例：主要是与生活品质有关，包括长期的规划、" +

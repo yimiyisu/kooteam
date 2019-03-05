@@ -16,12 +16,9 @@ import com.zeto.kooteam.dingtalk.DingClient;
 import com.zeto.kooteam.service.EventBiz;
 import com.zeto.kooteam.service.domain.DingApp;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 public class DingTalkValidate {
 
@@ -113,32 +110,14 @@ public class DingTalkValidate {
         if (dingApp == null) {
             return;
         }
-        String profilepath = ZenEnvironment.getPath() + "/app.properties";
-        try {
-            File propFile = new File(profilepath);
-            if (!propFile.exists()) {
-                return;
-            }
-            Properties props = new Properties();
-            props.load(new FileInputStream(profilepath));
-            props.setProperty("dingName", dingApp.getName());
-            props.setProperty("dingHome", dingApp.getHomeUrl());
-            props.setProperty("dingCorpId", dingApp.getCorpId());
-            props.setProperty("dingAgentId", dingApp.getAgentId().toString());
-            props.setProperty("dingAppKey", dingApp.getAppKey());
-            props.setProperty("dingSecret", dingApp.getSecret());
-            OutputStream fos = new FileOutputStream(profilepath);
-            props.store(fos, "Ding Set");
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        ZenEnvironment.set("dingName", dingApp.getName());
-        ZenEnvironment.set("dingCorpId", dingApp.getCorpId());
-        ZenEnvironment.set("dingHome", dingApp.getHomeUrl());
-        ZenEnvironment.set("dingAgentId", dingApp.getAgentId().toString());
-        ZenEnvironment.set("dingAppKey", dingApp.getAppKey());
-        ZenEnvironment.set("dingSecret", dingApp.getSecret());
+        Map<String, String> params = new HashMap<>();
+        params.put("dingName", dingApp.getName());
+        params.put("dingCorpId", dingApp.getCorpId());
+        params.put("dingHome", dingApp.getHomeUrl());
+        params.put("dingAgentId", dingApp.getAgentId().toString());
+        params.put("dingAppKey", dingApp.getAppKey());
+        params.put("dingSecret", dingApp.getSecret());
+        ZenEnvironment.serialize(params);
         DingClient.init();
         EventBiz.employeeSync();
     }

@@ -1,8 +1,12 @@
 package com.zeto.kooteam.controller;
 
 import com.blade.ioc.annotation.Inject;
-import com.zeto.*;
+import com.zeto.ZenConditioner;
+import com.zeto.ZenData;
+import com.zeto.ZenResult;
+import com.zeto.ZenUserHelper;
 import com.zeto.annotation.AccessRole;
+import com.zeto.domain.ZenCondition;
 import com.zeto.domain.ZenUser;
 import com.zeto.driver.ZenStorageEngine;
 
@@ -37,8 +41,8 @@ public class Note {
     }
 
     public ZenResult graph(ZenData data, ZenUser user) {
-        ZenData params = ZenData.put("_id", data.get("filename"));
-        params.add("content", data.get("xml"));
+        ZenData params = ZenData.put("_id", data.get("filename"))
+                .set("content", data.get("xml"));
         zenStorageEngine.execute("patch/note", params, user);
         return ZenResult.success("保存成功！");
     }
@@ -49,9 +53,9 @@ public class Note {
         ZenResult result = zenStorageEngine.execute("put/note", data, user);
         if (docType.equals(data.get("type"))) {
             ZenData param = ZenData.put("noteId", result.get("_id")).
-                    add("uid", user.getUid()).
-                    add("op", user.getUid()).
-                    add("permission", "3");
+                    set("uid", user.getUid()).
+                    set("op", user.getUid()).
+                    set("permission", "3");
             zenStorageEngine.execute("put/noteUser", param, user);
         }
         return ZenResult.success().setData(result.getData());

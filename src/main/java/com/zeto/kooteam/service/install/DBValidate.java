@@ -6,18 +6,19 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.zeto.Zen;
 import com.zeto.ZenCache;
 import com.zeto.ZenData;
 import com.zeto.ZenResult;
 import com.zeto.domain.ZenAction;
 import com.zeto.kooteam.service.domain.AppConf;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class DBValidate {
     private static final String testTable = "k_test";
     private static final String[] errorDB = new String[]{"system", "mysql"};
@@ -46,7 +47,7 @@ public class DBValidate {
     }
 
     private static ZenResult testMysql(AppConf conf) {
-        String URL = "jdbc:mysql://" + conf.getHost() + ":" + conf.getPort() + "/" + conf.getDatabase();
+        String URL = "jdbc:mysql://" + conf.getHost() + ":" + conf.getPort() + "/" + conf.getDatabase() + "?serverTimezone=UTC";
         String sql = "show tables";
         Connection conn = null;
         try {
@@ -62,15 +63,16 @@ public class DBValidate {
             }
             rs.close();
         } catch (Exception e) {
-            Zen.getLoggerEngine().exception(e);
             conf.setDbCheck(false);
             ZenCache.set(AppConf.cacheKey, conf);
+            log.error("", e);
             return ZenResult.fail("数据库检查失败");
         } finally {
             if (conn != null) {
                 try {
                     conn.close();
                 } catch (SQLException e) {
+                    log.error("", e);
                     return ZenResult.error(e);
                 }
             }
@@ -115,7 +117,7 @@ public class DBValidate {
             }
             doc.drop();
         } catch (Exception e) {
-            Zen.getLoggerEngine().exception(e);
+            log.error("", e);
             return ZenResult.error(e);
         }
         return ZenResult.fail("数据库链接失败");

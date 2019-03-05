@@ -5,16 +5,13 @@ import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.request.OapiGettokenRequest;
 import com.dingtalk.api.response.OapiGettokenResponse;
 import com.google.common.base.Strings;
-import com.zeto.Zen;
 import com.zeto.ZenCache;
 import com.zeto.ZenEnvironment;
 import com.zeto.kooteam.service.domain.DingApp;
-import com.zeto.util.GsonUtil;
-
-import java.io.*;
-import java.util.Properties;
+import lombok.extern.slf4j.Slf4j;
 
 @Bean
+@Slf4j
 public class DingClient {
     // e app key
     //    private static final String appKey = "ding6yjcb4fqccevjq7x";
@@ -32,7 +29,7 @@ public class DingClient {
         if (dingApp != null) {
             return;
         }
-        if (ZenEnvironment.isNoSetup() && !isMerge()) {
+        if (ZenEnvironment.isNoSetup()) {
             return;
         }
         String dingName = ZenEnvironment.get("dingName");
@@ -49,53 +46,6 @@ public class DingClient {
         dingApp.setAppKey(appKey);
         dingApp.setSecret(ZenEnvironment.get("dingSecret"));
         dingApp.setAgentId(Long.valueOf(dingAgentId));
-    }
-
-    // 自动将kooteam.json迁移到app.properties中
-    private static boolean isMerge() {
-        String configPath = ZenEnvironment.getPath() + "/" + ZenEnvironment.getAppName() + ".json";// 文件配置路径
-        try {
-            File configFile = new File(configPath);
-            if (!configFile.exists()) {
-                return false;
-            }
-            InputStreamReader reader = new InputStreamReader(
-                    new FileInputStream(configFile)); // 建立一个输入流对象reader
-            BufferedReader br = new BufferedReader(reader); // 建立一个对象，它把文件内容转成计算机能读懂的语言
-            String line, result = "";
-            while ((line = br.readLine()) != null) {
-                result += line;
-            }
-            // 从配置文件中读取，恢复到app.properties中
-            dingApp = GsonUtil.parse(result, DingApp.class);
-            configFile.delete();
-
-            String profilepath = ZenEnvironment.getPath() + "/app.properties";
-            try {
-                File propFile = new File(profilepath);
-                if (!propFile.exists()) {
-                    return false;
-                }
-                Properties props = new Properties();
-                props.load(new FileInputStream(profilepath));
-                props.setProperty("mode", "4");
-                props.setProperty("dingDomain", dingApp.getName());
-                props.setProperty("dingAgentId", dingApp.getAgentId().toString());
-                props.setProperty("dingCorpId", dingApp.getAppKey());
-                OutputStream fos = new FileOutputStream(profilepath);
-                props.store(fos, "Kooteam Updated");
-                fos.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            // 重新初始化上下文
-            Zen.reload();
-            init();
-        } catch (Exception e) {
-            Zen.getLoggerEngine().exception(e);
-        }
-        return true;
     }
 
     public static DingApp info() {
@@ -121,7 +71,7 @@ public class DingClient {
             ZenCache.set(tokenCacheId, token, 110);// 缓存110分钟
             return token;
         } catch (Exception ex) {
-            Zen.getLoggerEngine().exception(ex);
+            log.error("", ex);
         }
         return null;
     }

@@ -6,6 +6,7 @@ import com.blade.kit.StringKit;
 import com.google.common.base.Strings;
 import com.zeto.*;
 import com.zeto.annotation.AccessRole;
+import com.zeto.domain.ZenCondition;
 import com.zeto.domain.ZenUser;
 import com.zeto.driver.ZenStorageEngine;
 import com.zeto.kooteam.dingtalk.service.DingDepartmentService;
@@ -79,7 +80,7 @@ public class User {
             List<ZenUser> users = ZenUserHelper.i().search(keyword, size);
             return ZenResult.success().setData(users);
         }
-        ZenCondition condition = ZenConditioner.And().eq("myId", user.getUid());
+        ZenCondition condition = ZenConditioner.And().eq("myId", user.getUid()).limit(10);
         //加入模糊查询条件
         if (!Strings.isNullOrEmpty(keyword)) {
             keyword = keyword.trim();
@@ -130,15 +131,15 @@ public class User {
     }
 
     private void addFriendData(String myId, ZenUser user) {
-        ZenData params = ZenData.put("userId", user.getUid());
-        params.add("myId", myId);
-        params.add("nick", user.getNick());
+        ZenData params = ZenData.put("userId", user.getUid())
+                .set("myId", myId)
+                .set("nick", user.getNick());
         zenStorageEngine.execute("put/friend", params, user);
     }
 
     private void deleteFriendData(String myId, String userId, ZenUser user) {
 
-        ZenData param = ZenData.put("myId", myId).add("userId", userId);
+        ZenData param = ZenData.put("myId", myId).set("userId", userId);
         ZenResult result = zenStorageEngine.execute("get/friend", param, user);
         if (result.isEmpty()) {
             return;

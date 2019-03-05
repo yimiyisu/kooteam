@@ -1,7 +1,6 @@
 package com.zeto.kooteam.dingtalk.service;
 
 import com.blade.ioc.annotation.Bean;
-import com.blade.ioc.annotation.Inject;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.request.OapiAuthScopesRequest;
 import com.dingtalk.api.request.OapiDepartmentListRequest;
@@ -10,17 +9,16 @@ import com.dingtalk.api.response.OapiAuthScopesResponse;
 import com.dingtalk.api.response.OapiDepartmentListResponse;
 import com.dingtalk.api.response.OapiUserListbypageResponse;
 import com.taobao.api.ApiException;
-import com.zeto.driver.ZenLoggerEngine;
 import com.zeto.kooteam.dingtalk.DingClient;
 import com.zeto.kooteam.dingtalk.domain.DingUserData;
 import com.zeto.kooteam.dingtalk.domain.DingUserResult;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+@Slf4j
 @Bean
 public class DingDepartmentService {
-    @Inject
-    private ZenLoggerEngine zenLoggerEngine;
 
     public DingUserResult selectByParent(Long departmentId) {
         DefaultDingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/department/list");
@@ -43,7 +41,7 @@ public class DingDepartmentService {
             }
             return result;
         } catch (ApiException e) {
-            zenLoggerEngine.exception(e);
+            log.error("", e);
         }
         return null;
     }
@@ -85,7 +83,7 @@ public class DingDepartmentService {
             OapiAuthScopesResponse response = client.execute(request, accessToken);
             return response;
         } catch (Exception e) {
-            zenLoggerEngine.exception(e);
+            log.error("", e);
         }
         return null;
     }
@@ -99,7 +97,7 @@ public class DingDepartmentService {
             OapiAuthScopesResponse response = client.execute(request, accessToken);
             return response;
         } catch (Exception e) {
-            zenLoggerEngine.exception(e);
+            log.error("", e);
         }
         return null;
     }

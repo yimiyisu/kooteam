@@ -9,8 +9,10 @@ import com.zeto.domain.ZenRole;
 import com.zeto.kooteam.service.domain.AppConf;
 import com.zeto.kooteam.service.install.DBValidate;
 
-import java.io.*;
-import java.util.Properties;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @AccessRole(ZenRole.NORMAL)
 public class Install {
@@ -60,30 +62,23 @@ public class Install {
             if (!propFile.exists()) {
                 Files.touch(propFile);
             }
-            Properties props = new Properties();
-            props.load(new FileInputStream(profilepath));
-            props.setProperty("env", "online");
-
+            Map<String, String> params = new HashMap<>();
             if (conf.isMysql()) {
-                props.setProperty("mode", "3");
-                props.setProperty("dbHost", "jdbc:mysql://" + conf.getHost() + ":" + conf.getPort() + "/" + conf.getDatabase());
-                props.setProperty("dbUser", conf.getUser());
-                props.setProperty("dbPasswd", conf.getPassword());
+                params.put("mode", "3");
+                params.put("dbHost", "jdbc:mysql://" + conf.getHost() + ":" + conf.getPort() + "/" + conf.getDatabase() + "?serverTimezone=UTC&characterEncoding=utf-8");
+                params.put("dbUser", conf.getUser());
+                params.put("dbPasswd", conf.getPassword());
             } else {
-                props.setProperty("mode", "4");
-                props.setProperty("mongoHost", conf.getHost());
-                props.setProperty("mongoDB", conf.getDatabase());
-                props.setProperty("mongoUser", conf.getUser());
-                props.setProperty("mongoPassword", conf.getPassword());
-                props.setProperty("mongoPort", conf.getPort());
+                params.put("mode", "4");
+                params.put("mongoHost", conf.getHost());
+                params.put("mongoDB", conf.getDatabase());
+                params.put("mongoUser", conf.getUser());
+                params.put("mongoPassword", conf.getPassword());
+                params.put("mongoPort", conf.getPort());
             }
-
-            OutputStream fos = new FileOutputStream(profilepath);
-            props.store(fos, "Kooteam Created");
-            fos.close();
+            ZenEnvironment.serialize(params);
             // 重新加载服务
 //            Zen.reload();
-//            EventBiz.employeeSync();// 同步企业账户
         } catch (IOException e) {
             e.printStackTrace();
         }

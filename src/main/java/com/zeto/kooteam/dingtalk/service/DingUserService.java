@@ -1,19 +1,17 @@
 package com.zeto.kooteam.dingtalk.service;
 
 import com.blade.ioc.annotation.Bean;
-import com.blade.ioc.annotation.Inject;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.request.OapiUserGetRequest;
 import com.dingtalk.api.response.OapiUserGetResponse;
 import com.taobao.api.ApiException;
-import com.zeto.driver.ZenLoggerEngine;
 import com.zeto.kooteam.dingtalk.DingClient;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Bean
 public class DingUserService {
 
-    @Inject
-    private ZenLoggerEngine zenLoggerEngine;
 
     public OapiUserGetResponse get(String dingId, String accessToken) {
         DefaultDingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get");
@@ -23,7 +21,7 @@ public class DingUserService {
         try {
             return client.execute(request, accessToken);
         } catch (ApiException e) {
-            zenLoggerEngine.exception(e);
+            log.error("", e);
         }
         return null;
     }

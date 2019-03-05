@@ -1,23 +1,21 @@
 package com.zeto.kooteam.dingtalk.service;
 
 import com.blade.ioc.annotation.Bean;
-import com.blade.ioc.annotation.Inject;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.request.OapiMicroappListRequest;
 import com.dingtalk.api.response.OapiMicroappListResponse;
 import com.taobao.api.ApiException;
 import com.zeto.ZenCache;
-import com.zeto.driver.ZenLoggerEngine;
 import com.zeto.kooteam.dingtalk.DingClient;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
 
+@Slf4j
 @Bean
 public class DingAppService {
-    @Inject
-    private ZenLoggerEngine zenLoggerEngine;
 
     private final static String appIdCache = "miniAppId";
 
@@ -45,7 +43,7 @@ public class DingAppService {
                         }
                     }
                 } catch (UnsupportedEncodingException e) {
-                    zenLoggerEngine.exception(e);
+                    log.error("", e);
                 }
             }
         }
@@ -59,7 +57,7 @@ public class DingAppService {
             OapiMicroappListResponse response = client.execute(req, DingClient.getToken());
             return response.getAppList();
         } catch (ApiException e) {
-            zenLoggerEngine.exception(e);
+            log.error("", e);
         }
         return null;
     }

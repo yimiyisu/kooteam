@@ -17,9 +17,11 @@ import com.zeto.domain.ZenUser;
 import com.zeto.kooteam.dingtalk.DingClient;
 import com.zeto.kooteam.service.domain.DingApp;
 import com.zeto.kooteam.service.eventbus.model.MessageModel;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Properties;
 
+@Slf4j
 public class MessageListener {
     private Producer producer = null;
     private static final String topic = "bridge";
@@ -30,8 +32,8 @@ public class MessageListener {
     @Subscribe
     public void execute(MessageModel model) {
         ZenData data = ZenData.put("from", model.getFrom()).
-                add("to", model.getTo()).
-                add("content", model.getContent());
+                set("to", model.getTo()).
+                set("content", model.getContent());
         // 保存消息记录
         Zen.getStorageEngine().execute("put/message", data, null);
         // 发送钉钉消息
@@ -74,7 +76,7 @@ public class MessageListener {
         try {
             OapiMessageCorpconversationAsyncsendV2Response response = client.execute(request, DingClient.getToken());
         } catch (ApiException e) {
-            Zen.getLoggerEngine().exception(e);
+            log.error("", e);
         }
     }
 
