@@ -1,0 +1,102 @@
+body {
+  background: url("//a.yimiyisu.com/kooteam/bg/3.jpg") fixed no-repeat #F4F7F9;
+  //padding-top: 70px;
+  background-size: cover;
+  font-size: 12px;
+}
+
+%grid-bg {
+  background: #fff url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2VlZWVlZSIgb3BhY2l0eT0iMC4zIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZWVlZWVlIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=') -1px -1px;
+}
+
+%shadow {
+  box-shadow: 1px 0 0 #e6e6e6, -1px 0 0 #e6e6e6, 0 1px 0 #e6e6e6, 0 -1px 0 #e6e6e6, 0 3px 13px rgba(0, 0, 0, 0.08);
+}
+
+#J_app, .z-container {
+  max-width: 1680px;
+  margin: 0 auto;
+  overflow-x: hidden;
+  padding-bottom: 30px;
+}
+
+.k-content {
+  margin: 10px 30px 30px 30px;
+  border: solid #f0f0f0 1px;
+  background: #fff;
+  min-height: 480px;
+}
+
+.k-footer {
+  text-align: center;
+  color: #333;
+
+  a, span {
+    color: #333;
+    margin-left: 6px;
+    padding-right: 6px;
+  }
+}
+
+a {
+  background-color: transparent;
+  text-decoration: none;
+  color: $link;
+
+  &:visited {
+    color: $link;
+  }
+}
+
+.k-prority {
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 8px;
+  overflow: hidden;
+  font-size: 16px;
+  width: 28px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  border-radius: .15rem;
+  color: #fff;
+
+  &.active:before {
+    font-weight: bold;
+    font-family: "zenFont";
+    content: "\e5ca" !important;
+  }
+
+  &.a {
+    background: #f80e15;
+
+    &:before {
+      content: "1";
+    }
+  }
+
+  &.b {
+    background: #E7C004;
+
+    &:before {
+      content: "2";
+    }
+  }
+
+  &.c {
+    background: #009fe3;
+
+    &:before {
+      content: "3";
+    }
+  }
+
+  &.d {
+    background: #79aa1c;
+
+    &:before {
+      content: "4";
+    }
+  }
+}
+

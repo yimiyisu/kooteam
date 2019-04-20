@@ -1,0 +1,34 @@
+.book {
+  max-width: 800px;
+  margin: 90px auto;
+  min-height: 680px;
+
+  h2 {
+    color: #333;
+  }
+
+  .chapter {
+    .chapter {
+      .item {
+        padding-left: 32px;
+      }
+    }
+  }
+
+  .item {
+    padding: 10px;
+    position: relative;
+    cursor: pointer;
+    border-bottom: 1px dashed #eee;
+
+    i {
+      color: #666;
+    }
+
+    &:hover {
+      background: #fafafa;
+      color: $primary;
+      border-color: #E6E9ED;
+    }
+  }
+}

@@ -110,7 +110,7 @@ public class DBValidate {
             Document bsonDocument = new Document();
             bsonDocument.append("name", conf.getDatabase());
             doc.insertOne(bsonDocument);
-            if (doc.count() > 0) {
+            if (doc.countDocuments() > 0) {
                 conf.setDbCheck(true);
                 ZenCache.set(AppConf.cacheKey, conf);
                 return ZenResult.success("MongoDB数据库链接成功").setAction(ZenAction.SILENT);

@@ -1,0 +1,33 @@
+.k-project-toolbar {
+  border-radius: .15rem 0 0 .15rem;
+  background-color: rgba(60, 60, 60, .9);
+  left: 0;
+  bottom: 0;
+  top: 0;
+  text-align: center;
+  width: 4rem;
+  color: #ccc;
+  overflow: hidden;
+  min-height: 680px;
+
+  i {
+    font-size: 1.5rem;
+  }
+
+  span {
+    font-size: 12px;
+    display: block;
+  }
+
+  div {
+    display: block;
+    text-align: center;
+    cursor: pointer;
+    padding: 12px 0 6px 0;
+
+    &:hover, &.active {
+      color: #fff;
+      background: #0285d7;
+    }
+  }
+}

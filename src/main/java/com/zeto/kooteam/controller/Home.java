@@ -4,7 +4,7 @@ import com.blade.kit.EncryptKit;
 import com.blade.mvc.http.Cookie;
 import com.zeto.ZenData;
 import com.zeto.ZenResult;
-import com.zeto.ZenUserHelper;
+import com.zeto.ZenUserKit;
 import com.zeto.annotation.AccessRole;
 import com.zeto.annotation.MethodType;
 import com.zeto.domain.ZenMethod;
@@ -37,7 +37,7 @@ public class Home {
 
     public ZenResult nick(ZenData data) {
         String uid = data.get("uid");
-        ZenUser user = ZenUserHelper.i().get(uid);
+        ZenUser user = ZenUserKit.get(uid);
         if (user == null) {
             return ZenResult.success().put("nick", "");
         }

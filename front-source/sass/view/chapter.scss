@@ -1,0 +1,16 @@
+.chapter {
+  color: #5C6975;
+  .folder {
+    z-index: 3;
+    position: absolute;
+    right: 6px;
+    top: 9px;
+    font-size: 14px;
+    &:before {
+      content: "\e5cf";
+    }
+    &.hide:before {
+      content: "\e5cc";
+    }
+  }
+}

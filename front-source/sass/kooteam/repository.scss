@@ -1,0 +1,329 @@
+.k-repository {
+  background: #fff;
+  margin: 0 15px;
+  min-height: 680px;
+  padding-bottom: 40px;
+
+  .z-row {
+    border-bottom: 1px solid #eee;
+    padding: 16px 0 8px 10px;
+    margin-bottom: 6px;
+
+    .h3 {
+      font-size: 18px;
+      border: 0;
+      height: 34px;
+      line-height: 34px;
+      font-weight: 500;
+    }
+  }
+
+  .guide {
+    height: 10px;
+    border: solid 1px #fff;
+
+    &.draghover {
+      background: #f0f0f0;
+      border: dotted #ddd 1px;
+    }
+  }
+
+  .doc-txt, .doc-graph, .doc-mind {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 15%;
+    font-size: 9px;
+    text-align: center;
+    line-height: 12px;
+    border: 1px solid;
+  }
+
+  .doc-txt {
+    border-color: #9a7aff;
+    color: #9a7aff;
+
+    &:before {
+      content: "文";
+    }
+  }
+
+  .doc-graph {
+    border-color: #ff7a7a;
+    color: #ff7a7a;
+
+    &:before {
+      content: "G";
+    }
+  }
+
+  .doc-mind {
+    border-color: #56baff;
+    color: #56baff;
+
+    &:before {
+      content: "M";
+    }
+  }
+
+  .group {
+    cursor: move;
+
+    .group {
+      padding-left: 14px;
+      background: url("//a.yimiyisu.com/tree.png") no-repeat -2px -2px;
+      margin-left: 12px;
+      border-left: 1px dotted #ddd;
+    }
+  }
+
+  .item {
+    line-height: 24px;
+    border: solid 1px #fff;
+    position: relative;
+
+    &:hover hr {
+      border-color: $link;
+    }
+
+    &.ui-draggable-dragging {
+      background: #fff;
+      border: 1px solid $primary !important;
+      border-radius: 2px;
+      width: 360px;
+      max-width: 450px;
+      overflow: hidden;
+      height: 32px;
+
+      .header {
+        cursor: move;
+      }
+
+      .title {
+        line-height: 30px;
+      }
+
+      .info, .tip, hr {
+        display: none !important;
+      }
+    }
+
+    &.draghover {
+      background: #f0f0f0;
+      border: dotted #ddd 1px;
+
+      .header, .info {
+        background: #f0f0f0;
+      }
+    }
+  }
+
+  .header {
+    display: inline-block;
+    position: relative;
+    background: #fff;
+    //padding-right: 8px;
+    padding: 0 8px;
+    cursor: pointer;
+  }
+
+  .tip {
+    display: inline-block;
+    position: relative;
+
+    .why {
+      color: #f80e15;
+    }
+
+    &:hover .do {
+      display: block;
+    }
+  }
+
+  .do {
+    @extend %shadow;
+    display: none;
+    position: absolute;
+    width: 140px;
+    z-index: 3;
+    background: #fff;
+    left: 0;
+    top: 0;
+
+    div {
+      background: #f2f2f2;
+      padding: 5px 12px;
+      color: #999;
+    }
+
+    span {
+      display: block;
+      padding: 5px 12px;
+
+      &:hover {
+        background: $primary;
+        color: #fff;
+      }
+    }
+  }
+
+  .title {
+    display: inline-block;
+    border-bottom: 1px solid transparent;
+    cursor: pointer;
+
+    &:hover {
+      border-bottom-color: $primary;
+    }
+  }
+
+  .folder {
+    color: #999;
+    z-index: 3;
+    position: absolute;
+    left: -8px;
+    top: 6px;
+    cursor: pointer;
+
+    &:before {
+      content: "\e5cf";
+    }
+
+    &.hide:before {
+      content: "\e5cc";
+    }
+  }
+
+  .info {
+    position: absolute;
+    background: #fff;
+    padding-left: 12px;
+
+    i {
+      cursor: pointer;
+      margin-right: 8px;
+    }
+
+    color: #666;
+    right: 0;
+    top: 0;
+  }
+
+  hr {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    top: 12px;
+    right: 0;
+    left: 20px;
+    height: 2px;
+    border-width: 0 0 1px 0;
+    border-bottom: dashed 1px #eee;
+  }
+}
+
+.k-repository-set {
+  position: fixed;
+  z-index: 20;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  .modal {
+    @extend %shadow;
+    width: 640px;
+    left: 50%;
+    top: 80px;
+    min-height: 400px;
+    margin-left: -320px;
+    position: absolute;
+    background: #fff;
+  }
+
+  h4 {
+    background: #eef1f4;
+    border-bottom: solid 1px #eaeaea;
+    margin-bottom: 20px;
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+
+  dl {
+    margin: 10px 40px 0 0;
+  }
+
+  .close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    cursor: pointer;
+  }
+
+  .z-6 {
+    text-align: center;
+    min-height: 42px;
+    line-height: 42px;
+  }
+
+  .z-18 {
+    position: relative;
+    line-height: 42px;
+  }
+
+  .search {
+    @extend %shadow;
+    position: absolute;
+    z-index: 7;
+    left: 0;
+    top: 0;
+    background: #fff;
+    padding: 10px;
+    width: 300px;
+  }
+
+  .action {
+    text-align: right;
+  }
+
+  .add {
+    margin-bottom: 12px;
+  }
+
+  .user {
+    width: 80px;
+    margin: 5px 0;
+    height: 60px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    text-align: center;
+
+    &:hover {
+      span {
+        display: block;
+      }
+    }
+
+    span {
+      position: absolute;
+      display: none;
+      top: 0;
+      right: 0;
+    }
+
+    img {
+      width: 30px;
+      border-radius: 50%;
+    }
+
+    strong {
+      color: #666;
+      display: block;
+      line-height: 0;
+    }
+  }
+
+}

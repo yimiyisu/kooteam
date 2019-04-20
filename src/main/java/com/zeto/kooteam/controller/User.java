@@ -36,7 +36,7 @@ public class User {
             }
         }
         // 两个人相互添加好友
-        ZenUser fromUser = ZenUserHelper.i().get(fromUid);
+        ZenUser fromUser = ZenUserKit.get(fromUid);
         if (fromUser == null) {
             return ZenResult.success();
         }
@@ -60,7 +60,7 @@ public class User {
             if (user.getUid().equals(id)) {
                 return ZenResult.fail("不能删除自己");
             }
-            ZenUserHelper.i().delete(id);
+            ZenUserKit.delete(id);
         }
         return ZenResult.success();
     }
@@ -77,10 +77,10 @@ public class User {
         int size = data.getInt("size", 10);
         // 本地应用，直接查询数据库
         if (!ZenEnvironment.isPersonCloud()) {
-            List<ZenUser> users = ZenUserHelper.i().search(keyword, size);
+            List<ZenUser> users = ZenUserKit.search(keyword, size);
             return ZenResult.success().setData(users);
         }
-        ZenCondition condition = ZenConditioner.And().eq("myId", user.getUid()).limit(10);
+        ZenCondition condition = ZenConditionKit.And().eq("myId", user.getUid()).limit(10);
         //加入模糊查询条件
         if (!Strings.isNullOrEmpty(keyword)) {
             keyword = keyword.trim();
@@ -95,7 +95,7 @@ public class User {
         ZenResult result;
         if (ZenEnvironment.isPersonCloud()) {
             result = zenStorageEngine.execute("select/friend", data, user);
-            ZenCondition condition = ZenConditioner.And().eq("myId", user.getUid());
+            ZenCondition condition = ZenConditionKit.And().eq("myId", user.getUid());
             total = zenStorageEngine.count("friend", condition);
         } else {
             result = zenStorageEngine.execute("select/user", data, user);
@@ -109,7 +109,7 @@ public class User {
             return ZenResult.fail("只有管理员才能添加用户");
         }
         String username = data.get("username");
-        if (ZenUserHelper.i().getByName(username) != null) {
+        if (ZenUserKit.getByName(username) != null) {
             return ZenResult.fail("添加失败，该用户名已存在！");
         }
         ZenUser newUser = new ZenUser();
@@ -118,12 +118,12 @@ public class User {
         newUser.setNick(data.get("nick"));
         newUser.setPwd(EncryptKit.md5(data.get("pwd")));
         newUser.setUkey("");
-        ZenUserHelper.i().insert(newUser);
+        ZenUserKit.insert(newUser);
         return ZenResult.success();
     }
 
     public ZenResult getById(ZenData data) {
-        ZenUser user = ZenUserHelper.i().get(data.get("uid"));
+        ZenUser user = ZenUserKit.get(data.get("uid"));
         if (user == null) {
             return ZenResult.success();
         }

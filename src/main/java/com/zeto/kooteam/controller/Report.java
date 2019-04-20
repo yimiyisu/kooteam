@@ -3,15 +3,17 @@ package com.zeto.kooteam.controller;
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.DateKit;
 import com.blade.kit.GsonKit;
-import com.zeto.ZenConditioner;
+import com.zeto.ZenConditionKit;
 import com.zeto.ZenData;
 import com.zeto.ZenResult;
-import com.zeto.ZenUserHelper;
+import com.zeto.ZenUserKit;
 import com.zeto.annotation.AccessRole;
 import com.zeto.domain.ZenUser;
 import com.zeto.driver.ZenStorageEngine;
 import com.zeto.kooteam.service.ReportService;
 import com.zeto.kooteam.service.domain.ReportDO;
+
+import java.util.Date;
 
 @AccessRole
 public class Report {
@@ -26,7 +28,7 @@ public class Report {
     // 我的周报
     public ZenResult my(ZenUser user, ZenData data) {
         ZenResult reports = zenStorageEngine.execute("select/myReport", data, user);
-        long total = zenStorageEngine.count("myReport", ZenConditioner.And().eq("uid", user.getUid()));
+        long total = zenStorageEngine.count("myReport", ZenConditionKit.And().eq("uid", user.getUid()));
         return ZenResult.success().put("data", reports.getData()).put("total", total);
     }
 
@@ -35,8 +37,8 @@ public class Report {
                 .execute("select/reportReader", data, user)
                 .getIds("reportId");
         ZenResult reports = zenStorageEngine.selectByIds(tableName, recieves);
-        reports = ZenUserHelper.selectByUids(reports, "uid");
-        long total = zenStorageEngine.count("reportReader", ZenConditioner.And().eq("uid", user.getUid()));
+        reports = ZenUserKit.selectByUids(reports, "uid");
+        long total = zenStorageEngine.count("reportReader", ZenConditionKit.And().eq("uid", user.getUid()));
         return reports.put("total", total);
     }
 
@@ -84,8 +86,8 @@ public class Report {
     public ZenResult save(ZenData data, ZenUser user) {
         ZenResult result;
         if (data.isEmptyPrimary()) {
-            String dateId = DateKit.toString("yyyy-MM-dd");
-            long count = zenStorageEngine.count(tableName, ZenConditioner.And()
+            String dateId = DateKit.toString(new Date(), "yyyy-MM-dd");
+            long count = zenStorageEngine.count(tableName, ZenConditionKit.And()
                     .eq("uid", user.getUid()).eq("dateId", dateId));
             if (count > 0) {
                 return ZenResult.fail(dateId + "汇报已经写，不要重复提交！");

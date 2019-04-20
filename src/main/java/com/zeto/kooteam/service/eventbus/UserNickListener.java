@@ -2,7 +2,7 @@ package com.zeto.kooteam.service.eventbus;
 
 import com.google.common.eventbus.Subscribe;
 import com.zeto.Zen;
-import com.zeto.ZenConditioner;
+import com.zeto.ZenConditionKit;
 import com.zeto.ZenData;
 import com.zeto.ZenEnvironment;
 import com.zeto.domain.ZenCondition;
@@ -21,7 +21,7 @@ public class UserNickListener {
             return;
         }
         ZenData params = ZenData.put("nick", model.getNick());
-        ZenCondition condition = ZenConditioner.And().eq("userId", model.getUid());
+        ZenCondition condition = ZenConditionKit.And().eq("userId", model.getUid());
         ZenStorageEngine zenStorageEngine = Zen.getStorageEngine();
         zenStorageEngine.update("friend", params, condition);
     }

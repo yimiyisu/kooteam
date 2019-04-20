@@ -1,0 +1,42 @@
+.k-user-search {
+  input[type="text"] {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+  &:focus {
+    outline: 0;
+  }
+  &.fixed {
+    position: absolute;
+    left: 0;
+    width: 240px;
+    z-index: 3;
+    background: #fff;
+    padding: 10px 20px;
+    border: 1px solid #eee;
+  }
+  input[type="checkbox"] {
+    display: none;
+  }
+  .item {
+    color: #666;
+    display: inline-block;
+    width: 60px;
+    height: 64px;
+    font-size: 12px;
+    overflow: hidden;
+    margin: 0 1% 1% 0;
+    padding: 5px 10px;
+    text-align: center;
+    cursor: pointer;
+    border: solid 1px #fff;
+    img {
+      width: 40px;
+      max-height: 40px;
+      border-radius: 50%;
+    }
+    &.selected {
+      border-color: $primary;
+    }
+  }
+}

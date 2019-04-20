@@ -6,7 +6,7 @@ import com.google.common.base.Strings;
 import com.google.common.eventbus.Subscribe;
 import com.zeto.ZenEnvironment;
 import com.zeto.ZenResult;
-import com.zeto.ZenUserHelper;
+import com.zeto.ZenUserKit;
 import com.zeto.domain.ZenUser;
 import com.zeto.kooteam.service.EventBiz;
 import com.zeto.kooteam.service.eventbus.model.MailMode;
@@ -108,7 +108,7 @@ public class MailListener {
         List<Map<String, Object>> readerList = GsonKit.parseListMap(readers);
         if (readerList != null) {
             for (Map<String, Object> item : readerList) {
-                ZenUser user = ZenUserHelper.i().get(item.get("_id").toString());
+                ZenUser user = ZenUserKit.get(item.get("_id").toString());
                 if (user != null && PatternKit.isEmail(user.getEmail())) {
                     mailMode.addTo(user.getEmail());
                 }

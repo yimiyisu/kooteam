@@ -1,0 +1,92 @@
+.k-doc {
+  margin: 0 15px;
+  border-radius: .15rem;
+  height: 100%;
+  min-height: 680px;
+
+  .new {
+    position: absolute;
+    right: 6px;
+    top: 8px;
+    cursor: pointer;
+    color: $primary;
+  }
+
+
+  .z-4 {
+    border-radius: .15rem 0 0 .15rem;
+    background: rgba(255, 255, 255, .8);
+    position: relative;
+
+    .el-button {
+      background: none;
+      border: none;
+
+      &:hover, &:active, &:focus {
+        background: none !important;
+        border: none;
+      }
+    }
+
+    i {
+      font-size: 1.2rem;
+      margin-top: -0.5rem;
+    }
+  }
+
+  .z-20 {
+    overflow: hidden;
+    background-color: #fff;
+    border-left: solid 15px #fff;
+    border-right: solid 15px #fff;
+    border-radius: 0 0.15rem .15rem 0;
+  }
+
+  .list {
+    overflow: auto;
+    height: calc(100% - 50px);
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: normal;
+    padding: .4rem 0 .4rem .6rem;
+    border-bottom: solid 1px #ddd;
+    position: relative;
+  }
+
+  .doc-item {
+    border-bottom: 1px solid #ddd;
+    padding: .6rem;
+    cursor: pointer;
+
+    span {
+      display: block;
+      color: #999;
+      font-size: 11px;
+      margin-top: .2rem;
+      position: relative;
+    }
+
+    .z-confirm {
+      position: relative;
+      top: -0.9rem;
+    }
+
+    .z-icon {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      color: #333;
+      display: none;
+    }
+
+    &:hover .z-icon {
+      display: block;
+    }
+
+    &:hover, &.active {
+      background-color: #fff;
+    }
+  }
+}

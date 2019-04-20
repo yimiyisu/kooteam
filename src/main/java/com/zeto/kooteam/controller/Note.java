@@ -1,10 +1,10 @@
 package com.zeto.kooteam.controller;
 
 import com.blade.ioc.annotation.Inject;
-import com.zeto.ZenConditioner;
+import com.zeto.ZenConditionKit;
 import com.zeto.ZenData;
 import com.zeto.ZenResult;
-import com.zeto.ZenUserHelper;
+import com.zeto.ZenUserKit;
 import com.zeto.annotation.AccessRole;
 import com.zeto.domain.ZenCondition;
 import com.zeto.domain.ZenUser;
@@ -20,7 +20,7 @@ public class Note {
         ZenResult result = zenStorageEngine.execute("select/noteUserByUid", data, user);
         String[] params = new String[]{"permission"};
         ZenResult notes = zenStorageEngine.selectByIds("note", "noteId", result, params);
-        ZenCondition zenCondition = ZenConditioner.And().eq("uid", user.getUid());
+        ZenCondition zenCondition = ZenConditionKit.And().eq("uid", user.getUid());
         long total = zenStorageEngine.count("noteUser", zenCondition);
         return ZenResult.success().put("data", notes.getData()).put("total", total);
     }
@@ -86,6 +86,6 @@ public class Note {
 
     public ZenResult users(ZenData data, ZenUser user) {
         ZenResult users = zenStorageEngine.execute("select/noteUser", data, user);
-        return ZenUserHelper.selectByUids(users, "uid");
+        return ZenUserKit.selectByUids(users, "uid");
     }
 }

@@ -1,0 +1,146 @@
+.k-header {
+  height: 50px;
+  background: $primary;
+  padding-top: 12px;
+  max-width: 1280px;
+  margin: 0 auto;
+  .z-row {
+    color: $initial;
+    height: 50px;
+    position: relative;
+    z-index: 2;
+    max-width: 1680px;
+    margin: 0 auto;
+  }
+  h2 {
+    font-size: 1.2rem;
+    height: 48px;
+    line-height: 54px;
+    display: inline-block;
+    width: 400px;
+    position: relative;
+    img {
+      width: 150px;
+      margin: 1rem 0 0 1rem;
+    }
+    span {
+      position: absolute;
+      font-size: 12px;
+      font-weight: normal;
+      top: 8px;
+      left: 160px;
+      color: rgba(255, 255, 255, 0.85);
+    }
+  }
+  .z-col-main {
+    position: relative;
+  }
+  .z-col-sub {
+    width: 500px;
+  }
+
+  dl {
+    position: absolute;
+    right: 20px;
+    top: 0;
+    font-size: 14px;
+  }
+  dd {
+    line-height: 50px;
+    color: $initial;
+    cursor: pointer;
+    margin-right: 1px;
+    //border-left: 1px solid $primary;
+    &:hover, &.active {
+      //background: darken($primary, 10%);
+    }
+  }
+  dt {
+    position: relative;
+    line-height: 50px;
+    cursor: pointer;
+    padding: 0 14px;
+    span {
+      vertical-align: text-top;
+      margin-left: 4px;
+      display: inline-block;
+    }
+    img {
+      width: 35px;
+      height: 35px;
+      line-height: 0;
+      border-radius: 50%;
+    }
+    &:hover {
+      ul {
+        display: block;
+      }
+    }
+    ul {
+      position: absolute;
+      display: none;
+      right: -10px;
+      top: 50px;
+      width: 150px;
+      padding: 10px 0;
+      box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.4);
+      background: $initial;
+      z-index: 9;
+      transition: all .3s linear;
+      li {
+        width: 100%;
+        line-height: 32px;
+        &:hover {
+          background: #f4f4f4;
+        }
+      }
+      a {
+        color: $textColor;
+        &:hover {
+          color: darken($primary, 5%);
+        }
+        &:visited {
+          color: #333;
+        }
+      }
+    }
+  }
+  a, span {
+    color: $initial;
+    cursor: pointer;
+    display: block;
+    padding: 0 15px;
+    &:visited {
+      color: $initial;
+    }
+    &:hover {
+      color: darken($initial, 5%);
+    }
+  }
+  .z-icon {
+    font-weight: bold;
+    margin-right: 6px;
+  }
+  .border {
+    padding-top: 6px;
+    margin-top: 6px;
+    border-top: 1px solid #eee;
+  }
+  .number {
+    background-color: #f20;
+    font-size: 0.75rem;
+    position: absolute;
+    top: -.5rem;
+    right: -1rem;
+    padding: 0.2rem;
+    border-radius: 50%;
+    color: #fff;
+    font-family: sans-serif, Serif;
+  }
+  ol {
+    margin: 20px 0 0 40px;
+    li {
+      margin-left: 40px;
+    }
+  }
+}

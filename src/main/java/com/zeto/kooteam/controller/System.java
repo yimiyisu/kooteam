@@ -116,7 +116,7 @@ public class System extends Base {
             return ZenResult.fail("两次密码输入不一致！");
         }
         String pwd = EncryptKit.md5(data.get("pwd"));
-        ZenUserHelper.i().changePassword(pwd, user.getUid());
+        ZenUserKit.changePassword(pwd, user.getUid());
         return ZenResult.success("修改成功！");
     }
 
@@ -133,13 +133,13 @@ public class System extends Base {
             model.setUid(user.getUid());
             model.setNick(nick);
             EventBiz.trigger(model);
-            ZenUserHelper.i().updateNick(nick, user.getUid());
+            ZenUserKit.updateNick(nick, user.getUid());
         }
         if (!Strings.isNullOrEmpty(email) && !email.equals(user.getEmail())) {
             if (!PatternKit.isEmail(email)) {
                 return ZenResult.fail("保存失败！邮箱格式输入错误！");
             }
-            ZenUserHelper.i().updateEmail(email, user.getUid());
+            ZenUserKit.updateEmail(email, user.getUid());
         }
         return zenStorageEngine.execute("patch/user", data, user);
     }

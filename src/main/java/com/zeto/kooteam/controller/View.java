@@ -1,7 +1,7 @@
 package com.zeto.kooteam.controller;
 
 import com.blade.ioc.annotation.Inject;
-import com.zeto.ZenConditioner;
+import com.zeto.ZenConditionKit;
 import com.zeto.ZenData;
 import com.zeto.ZenEnvironment;
 import com.zeto.ZenResult;
@@ -52,7 +52,7 @@ public class View {
         }
         // 1 私有文档
         if (type.equals(DocType.PRIVATE.getValue())) {
-            ZenCondition condition = ZenConditioner.And().eq("uid", user.getUid()).eq("noteId", parentId);
+            ZenCondition condition = ZenConditionKit.And().eq("uid", user.getUid()).eq("noteId", parentId);
             long count = zenStorageEngine.count("noteUser", condition);
             return count > 0;
         }
@@ -60,13 +60,13 @@ public class View {
         if (type.equals(DocType.COMPANY.getValue())) {
             // 只有是好友才能查看
             if (ZenEnvironment.isCloudApp()) {
-                return zenStorageEngine.count("friend", ZenConditioner.And().eq("myId", docUser).eq("userId", user.getUid())) > 0;
+                return zenStorageEngine.count("friend", ZenConditionKit.And().eq("myId", docUser).eq("userId", user.getUid())) > 0;
             }
         }
 
         // 4 项目文档
         if (type.equals(DocType.PROJECT.getValue())) {
-            return zenStorageEngine.count("projectUser", ZenConditioner.And().eq("projectId", parentId).eq("userId", user.getUid())) > 0;
+            return zenStorageEngine.count("projectUser", ZenConditionKit.And().eq("projectId", parentId).eq("userId", user.getUid())) > 0;
         }
         return false;
     }

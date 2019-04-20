@@ -1,9 +1,6 @@
 package com.zeto.kooteam.service.eventbus;
 
-import com.aliyun.openservices.ons.api.Message;
-import com.aliyun.openservices.ons.api.ONSFactory;
-import com.aliyun.openservices.ons.api.Producer;
-import com.aliyun.openservices.ons.api.PropertyKeyConst;
+
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.request.OapiMessageCorpconversationAsyncsendV2Request;
 import com.dingtalk.api.response.OapiMessageCorpconversationAsyncsendV2Response;
@@ -11,19 +8,16 @@ import com.google.common.eventbus.Subscribe;
 import com.taobao.api.ApiException;
 import com.zeto.Zen;
 import com.zeto.ZenData;
-import com.zeto.ZenEnvironment;
-import com.zeto.ZenUserHelper;
+import com.zeto.ZenUserKit;
 import com.zeto.domain.ZenUser;
 import com.zeto.kooteam.dingtalk.DingClient;
 import com.zeto.kooteam.service.domain.DingApp;
 import com.zeto.kooteam.service.eventbus.model.MessageModel;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Properties;
 
 @Slf4j
 public class MessageListener {
-    private Producer producer = null;
     private static final String topic = "bridge";
     private static final String tag = "kooteam";
 
@@ -42,14 +36,11 @@ public class MessageListener {
             return;
         }
 
-        // 云端发送微服务消息
-        if (ZenEnvironment.isCloudApp()) {
-            metaQ(data);
-        }
+
     }
 
     private void dingTalk(MessageModel messageModel) {
-        ZenUser to = ZenUserHelper.i().get(messageModel.getTo());
+        ZenUser to = ZenUserKit.get(messageModel.getTo());
         DefaultDingTalkClient client = new DefaultDingTalkClient(apiURL);
         DingApp app = DingClient.info();
 
@@ -84,36 +75,4 @@ public class MessageListener {
 
     }
 
-    private void metaQ(ZenData data) {
-        byte[] content = data.toJSON().getBytes();
-        Message message = new Message();
-        // 日常不发送metaq消息
-        if (ZenEnvironment.isDaily()) {
-            return;
-        }
-        message.setTopic(topic);
-        message.setBody(content);
-        message.setTag(tag);
-        // 发送盘古消息，暂停-只支持模版消息
-//        this.getProducer().sendOneway(message);
-    }
-
-    private Producer getProducer() {
-        if (producer != null) {
-            return producer;
-        }
-        Properties properties = new Properties();
-        properties.put(PropertyKeyConst.AccessKey, ZenEnvironment.get("aliyunKey"));
-        properties.put(PropertyKeyConst.SecretKey, ZenEnvironment.get("aliyunSecret"));
-        if (ZenEnvironment.isDaily()) {
-            properties.put(PropertyKeyConst.ProducerId, "PID-zen-test");
-        } else {
-            properties.put(PropertyKeyConst.ProducerId, "PID_bridge");
-        }
-        properties.setProperty(PropertyKeyConst.SendMsgTimeoutMillis, "3000");
-        properties.put(PropertyKeyConst.ONSAddr, ZenEnvironment.get("ons"));
-        Producer producer = ONSFactory.createProducer(properties);
-        producer.start();
-        return producer;
-    }
 }

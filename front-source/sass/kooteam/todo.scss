@@ -1,0 +1,154 @@
+.k-todo {
+  margin: 0 15px;
+  min-height: 680px;
+
+  .k-thing {
+    margin-top: -1px;
+  }
+
+  .block {
+    height: 280px;
+    overflow: auto;
+    background-color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 30px;
+  }
+
+  .z-12 {
+    //margin-bottom: 20px;
+    height: 50%;
+    overflow: hidden;
+
+    .empty {
+      margin: 20px auto;
+      text-align: center;
+    }
+  }
+
+  .a, .c {
+    .header, .block {
+      margin-right: 10px;
+    }
+  }
+
+  .b, .d {
+    .header, .block {
+      margin-left: 10px;
+    }
+  }
+
+  .a {
+    //background: #f80e15;
+    .header {
+      background: rgba(248, 14, 21, .6);
+    }
+
+    .flag {
+      color: darken($todo_red, 25%);
+    }
+  }
+
+  .b {
+    .header {
+      background: rgba(236, 196, 2, .7);
+    }
+
+    .flag {
+      color: darken($todo_yellow, 30%);
+    }
+  }
+
+  .c {
+    //background: #009fe3;
+    .header {
+      background: rgba(0, 159, 227, .7);
+    }
+
+    .flag {
+      color: darken($todo_blue, 30%);
+    }
+  }
+
+  .d {
+    //background: #79AA1C;
+    .header {
+      background: rgba(121, 170, 28, .7);
+    }
+
+    .flag {
+      color: darken($todo_green, 30%);
+    }
+  }
+
+  .header {
+    color: #efefef;
+    padding: 5px;
+    border-radius: .1rem .1rem 0 0;
+
+    .flag {
+      margin-right: .5rem;
+    }
+
+    .z-col {
+      width: 7.5rem;
+      line-height: 33px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .z-1 {
+      position: relative;
+
+      &.active {
+        input {
+          display: block;
+        }
+
+        i:before {
+          content: "\e14c";
+        }
+      }
+    }
+
+    .close {
+      position: absolute;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      right: 5px;
+      top: 8px;
+      z-index: 2;
+
+      &:before {
+        content: "\e145";
+      }
+    }
+
+    label {
+      display: block;
+      height: 32px;
+      cursor: pointer;
+      margin-right: 40px;
+    }
+
+    input {
+      display: none;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: .15rem;
+      border: 0;
+      outline: 0;
+      width: 100%;
+      height: 32px;
+      overflow: hidden;
+      color: #000;
+      padding-left: 6px;
+    }
+  }
+}
+
+.k-todo-owner {
+  position: relative;
+
+  .nick {
+    cursor: pointer;
+  }
+}

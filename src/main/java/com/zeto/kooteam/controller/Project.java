@@ -2,10 +2,10 @@ package com.zeto.kooteam.controller;
 
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.DateKit;
-import com.zeto.ZenConditioner;
+import com.zeto.ZenConditionKit;
 import com.zeto.ZenData;
 import com.zeto.ZenResult;
-import com.zeto.ZenUserHelper;
+import com.zeto.ZenUserKit;
 import com.zeto.annotation.AccessRole;
 import com.zeto.dal.domain.UserFrom;
 import com.zeto.domain.ZenCondition;
@@ -43,7 +43,7 @@ public class Project {
         String[] dingUsers = data.getParameters("dingUsers");
         if (dingUsers != null) {
             for (String dingUid : dingUsers) {
-                ZenUser dingUser = ZenUserHelper.i().getByDingUid(dingUid, UserFrom.DINGTALK);
+                ZenUser dingUser = ZenUserKit.getByDingUid(dingUid, UserFrom.DINGTALK);
                 if (dingUser == null || dingUser.getUid().equals(user.getUid())) {
                     continue;
                 }
@@ -91,7 +91,7 @@ public class Project {
 
     // 项目包含的任务
     public ZenResult things(ZenUser user, ZenData data) {
-        ZenCondition condition = ZenConditioner.And().eq("projectId", data.get("id"));
+        ZenCondition condition = ZenConditionKit.And().eq("projectId", data.get("id"));
         String type = data.get("type");
         ZenResult result = ZenResult.success();
         if (type.equals("unfinish")) {
@@ -124,7 +124,7 @@ public class Project {
             ids = new String[dingUsers.length];
             ZenUser dingUser;
             for (int i = 0; i < dingUsers.length; i++) {
-                dingUser = ZenUserHelper.i().getByDingUid(dingUsers[i], UserFrom.DINGTALK);
+                dingUser = ZenUserKit.getByDingUid(dingUsers[i], UserFrom.DINGTALK);
                 if (dingUser != null) {
                     ids[i] = dingUser.getUid();
                 }
@@ -164,7 +164,7 @@ public class Project {
 
     public ZenResult members(ZenData data, ZenUser user) {
         ZenResult members = zenStorageEngine.execute("select/projectUserByProjectId", data, user);
-        return ZenUserHelper.selectByUids(members);
+        return ZenUserKit.selectByUids(members);
     }
 
     // 转交
@@ -297,7 +297,7 @@ public class Project {
         }
 
         long now = DateKit.now();
-        ZenCondition condition = ZenConditioner.And().
+        ZenCondition condition = ZenConditionKit.And().
                 eq("projectId", projectId).
                 greater("end", 0).
                 lesser("end", now);

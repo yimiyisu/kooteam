@@ -1,0 +1,48 @@
+.container {
+  margin-top: 50px;
+  min-height: 680px;
+  //text-rendering: optimizespeed;
+  display: flex;
+  align-items: stretch;
+  //align-content: flex-start;
+  //flex-flow: row wrap;
+  &.bg {
+    @extend %grid-bg;
+    overflow: hidden;
+    max-height: 720px;
+  }
+
+  .wrap {
+    margin: 1rem 0;
+  }
+
+  .content {
+    margin: 20px 30px 60px 330px;
+    flex: 1;
+    overflow: hidden;
+    //overflow-x: hidden;
+  }
+
+  @media screen and (max-width: $mobile) {
+    .nav {
+      display: none;
+      min-width: 60% !important;
+    }
+    .content {
+      margin-left: 20px !important;
+    }
+  }
+}
+
+.serial {
+  display: inline-block;
+  margin-right: 3px;
+
+  span:after {
+    content: ":";
+  }
+
+  i:after {
+    content: ".";
+  }
+}

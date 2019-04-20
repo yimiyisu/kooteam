@@ -47,7 +47,7 @@ public class Login {
 
     // 账号，密码验证
     public ZenResult checkPwd(ZenData data) {
-        ZenUser user = ZenUserHelper.i().getByName(data.get("user"));
+        ZenUser user = ZenUserKit.getByName(data.get("user"));
         if (user == null) {
             return ZenResult.fail(error);
         }
@@ -60,7 +60,7 @@ public class Login {
             return ZenResult.fail(error);
         }
         // 更新ukey
-        user = ZenUserHelper.i().updateUkey(user.getUid());
+        user = ZenUserKit.updateUkey(user.getUid());
         return setCookie(user);
     }
 
@@ -103,7 +103,7 @@ public class Login {
             // 非日常环境，自动更新用ukey
             if (!checkId.contains(dailyPrefix)) {
                 updateCookie = true;
-                zenUser = ZenUserHelper.i().updateUkey(zenUser.getUid());
+                zenUser = ZenUserKit.updateUkey(zenUser.getUid());
             }
             String cacheId = loginPrefix + checkId;
             ZenCache.setToUnit(cacheId, zenUser);
@@ -138,7 +138,7 @@ public class Login {
         String uid = cookie.get("uid"),
                 ukey = cookie.get("ukey");
         if (uid != null && ukey != null) {
-            ZenUser user = ZenUserHelper.i().get(uid);
+            ZenUser user = ZenUserKit.get(uid);
             if (user != null && ukey.equals(user.getUkey())) {
                 ZenResult profile = zenStorageEngine.execute("get/userById", ZenData.put("_id", uid), user);
                 return profile;

@@ -1,0 +1,74 @@
+.k-thing {
+  border-radius: .1rem;
+  //background-color: #fff;
+  border: dotted 1px rgba(153, 153, 153, .25);
+  padding: 0 .6rem;
+  height: 2.5rem;
+  color: #222;
+  cursor: pointer;
+  line-height: 2.5rem;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+  align-content: flex-start;
+  flex-flow: row wrap;
+
+  &.ui-draggable-dragging {
+    width: 400px;
+    background: #fff;
+    z-index: 10;
+  }
+
+  &.draghover {
+    background: $primary;
+    color: #fff;
+
+    label {
+      color: #fff;
+    }
+  }
+
+  &:hover {
+    background-color: #fff;
+  }
+
+  label {
+    color: #444;
+    width: 1.4rem;
+    cursor: pointer;
+  }
+
+  i:before {
+    content: "\e835";
+  }
+
+  &.finish {
+    color: #999;
+
+    div {
+      text-decoration: line-through;
+    }
+
+    i {
+      color: #999;
+
+      &:before {
+        content: "\e5ca";
+      }
+    }
+  }
+
+  div {
+    flex: 1;
+    cursor: pointer;
+    overflow: hidden;
+    line-height: 36px;
+  }
+
+  span {
+    width: 40px;
+    color: $todo_red;
+    font-size: 12px;
+    margin-left: .5rem;
+  }
+}

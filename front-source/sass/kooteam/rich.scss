@@ -1,0 +1,36 @@
+.k-rich {
+  box-sizing: border-box;
+
+  .tox .tox-toolbar {
+    background: #fff !important;
+    border-bottom: 1px solid #eee;
+  }
+}
+
+.k-rich-content {
+  background: #f9f9f9;
+  padding-bottom: 60px;
+  overflow: auto;
+
+  img {
+    margin: 0 5px;
+    vertical-align: middle;
+    max-width: 800px;
+  }
+
+  .title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .content {
+    @extend %shadow;
+    min-height: 480px;
+    background: #fff;
+    margin: 1% 11%;
+    padding: 30px 60px;
+    font-size: 14px;
+    border: 1px solid transparent;
+  }
+}

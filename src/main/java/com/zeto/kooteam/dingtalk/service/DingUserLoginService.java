@@ -9,7 +9,7 @@ import com.dingtalk.api.response.OapiUserGetResponse;
 import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
 import com.google.common.base.Strings;
 import com.taobao.api.ApiException;
-import com.zeto.ZenUserHelper;
+import com.zeto.ZenUserKit;
 import com.zeto.dal.domain.UserFrom;
 import com.zeto.domain.ZenUser;
 import com.zeto.driver.ZenStorageEngine;
@@ -45,7 +45,7 @@ public class DingUserLoginService {
             if (unionId == null) {
                 return null;
             }
-            user = ZenUserHelper.i().getByUnionId(unionId, UserFrom.DINGTALK);
+            user = ZenUserKit.getByUnionId(unionId, UserFrom.DINGTALK);
             if (user == null) {
                 user = this.addUser(unionId);
             }
@@ -66,7 +66,7 @@ public class DingUserLoginService {
         user.setUkey(uid);
         user.setDingUid(dingUser.getDingId());
         user.setUnionId(unionId);
-        ZenUserHelper.i().insert(user);
+        ZenUserKit.insert(user);
         String avatar = dingUser.getAvatar();
         if (!Strings.isNullOrEmpty(avatar)) {
             uploaderService.avator(dingUser.getAvatar(), uid);

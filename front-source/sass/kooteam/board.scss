@@ -1,0 +1,232 @@
+.k-board {
+  margin: 0 15px;
+
+  .z-col {
+    width: 4rem;
+    position: relative;
+  }
+
+  .z-1 {
+    overflow-y: hidden;
+    overflow-x: auto;
+  }
+}
+
+.k-board-add {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  background: #eee;
+  padding-bottom: 10px;
+  z-index: 3;
+  cursor: default;
+  border-bottom: 1px solid #ddd;
+
+  .prority {
+    margin: 10px 0 0 10px;
+
+    .title {
+      display: inline-block;
+      overflow: hidden;
+      height: 20px;
+      line-height: 20px;
+    }
+  }
+
+  .owner {
+    margin: 10px 0 0 10px;
+    position: relative;
+  }
+
+  .avator {
+    cursor: pointer;
+
+    span {
+      vertical-align: text-bottom;
+    }
+
+    line-height: 25px;
+    height: 25px;
+    vertical-align: bottom;
+    overflow: hidden;
+    display: inline-block;
+
+    img {
+      width: 25px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+  }
+
+  .k-user-search {
+    @extend %shadow;
+    position: absolute;
+    z-index: 3;
+    top: 10px;
+    left: 20px;
+    right: 20px;
+    background: #fff;
+  }
+
+  .btns {
+    text-align: right;
+    margin: 12px 10px 0 0;
+  }
+
+  textarea {
+    border: 0;
+    background: #fff;
+    width: 270px;
+    height: 30px;
+    padding: 10px;
+    resize: none;
+    font-size: 14px;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+}
+
+.k-board-detail {
+  display: flex;
+  width: 1900px;
+  height: 100%;
+
+  .k-board-column {
+    display: flex;
+    height: 100%;
+  }
+
+  .header {
+    position: relative;
+  }
+
+  .h4 {
+    padding: 5px 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #666;
+    height: 32px;
+    position: relative;
+    cursor: move;
+
+    input {
+      width: 245px;
+      padding: 6px;
+      font-weight: normal;
+      font-size: .8rem;
+      color: #333;
+      border: solid 1px $primary;
+
+      &:focus {
+        outline: 0;
+      }
+    }
+
+    .plus {
+      margin-left: 6px;
+      font-size: 14px;
+      color: $primary;
+    }
+
+    .do {
+      position: absolute;
+      right: 10px;
+      top: 8px;
+    }
+  }
+
+  .k-thing {
+    margin-bottom: -1px;
+    overflow: hidden;
+  }
+
+  .things {
+    min-height: 360px;
+    width: 290px;
+  }
+
+  .action {
+    position: absolute;
+    width: 60px;
+    background: #fff;
+    font-size: 12px;
+    padding: 10px 10px 0 10px;
+    right: 0;
+    top: 0;
+
+    &:focus {
+      outline: 0;
+    }
+
+    span {
+      display: block;
+      margin-bottom: 10px;
+      cursor: pointer;
+
+      &:hover {
+        color: $primary;
+      }
+    }
+  }
+
+  .column {
+    width: 290px;
+    margin-left: 20px;
+    padding-bottom: 20px;
+    border-radius: .15rem;
+    background: rgba(255, 255, 255, .9);
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    &.draghover {
+      background: #ccc;
+    }
+
+    .empty {
+      margin: 20px;
+      text-align: center;
+    }
+  }
+
+  .add {
+    width: 290px;
+    margin-left: 20px;
+
+    .wrap {
+      background: #f0f0f0;
+      padding: 20px;
+      border-radius: .15rem;
+    }
+
+    .tip {
+      font-size: 16px;
+      color: #666;
+      cursor: pointer;
+
+      &:hover {
+        color: $primary;
+      }
+    }
+
+    input {
+      width: 230px;
+      height: 32px;
+      padding: 5px;
+      margin-bottom: 10px;
+      border: solid 1px #ddd;
+      border-radius: 0.15rem;
+
+      &:focus {
+        border-color: $primary;
+        outline: 0;
+      }
+    }
+
+    .btn {
+      text-align: right;
+    }
+  }
+}

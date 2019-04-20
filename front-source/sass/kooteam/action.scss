@@ -1,0 +1,25 @@
+.k-action {
+  position: absolute;
+  right: 20px;
+  top: 4px;
+  .category {
+    border: solid 1px $primary;
+    border-radius: .1rem;
+    li {
+      padding: .1rem .6rem;
+      cursor: pointer;
+      background: #fff;
+      &.active, &:hover {
+        background-color: $primary;
+        color: #fff;
+        a {
+          color: #fff;
+        }
+      }
+      & + li {
+        border-left: $primary 1px solid;
+      }
+    }
+  }
+}
+

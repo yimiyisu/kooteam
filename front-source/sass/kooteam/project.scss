@@ -1,0 +1,203 @@
+.k-project {
+  margin-left: 30px;
+  min-height: 680px;
+
+  .project-card {
+    background: rgba(255, 255, 255, .9);
+    height: 240px;
+    overflow: hidden;
+    width: 31%;
+    border-radius: .1rem;
+    margin: 0 2% 40px 0;
+    position: relative;
+  }
+
+  .empty {
+    color: #999;
+    margin: 12px;
+  }
+
+  .header {
+    //background: #F7F7FB;
+    background: #fff;
+    cursor: pointer;
+    border-bottom: 1px solid #efefef;
+    padding-bottom: 20px;
+    //box-shadow: 0 3px 4px -2px rgba(0, 0, 0, .16);
+    &:hover {
+      background: $primary;
+
+      h3 {
+        color: #fff;
+      }
+
+      .more {
+        color: #fff;
+      }
+
+      .z-12 {
+        color: #fff;
+
+        strong {
+          color: #fff;
+        }
+      }
+    }
+
+    .z-12 {
+      text-align: center;
+      color: #999;
+
+      strong {
+        display: block;
+        font-size: 32px;
+        color: $primary;
+      }
+    }
+
+    .z-12 + .z-12 {
+      border-left: 1px solid #e8e8e8;
+    }
+  }
+
+  h3 {
+    height: 40px;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 0 10px;
+    line-height: 40px;
+  }
+
+  .op {
+    position: absolute;
+    right: 12px;
+    top: 8px;
+    font-size: 12px;
+
+    &:hover {
+      ul {
+        display: block;
+      }
+    }
+
+    ul {
+      display: none;
+      background: #fff;
+      width: 80px;
+      position: absolute;
+      right: -12px;
+      top: -9px;
+    }
+
+    span {
+      text-align: left;
+      display: block;
+    }
+
+    .el-button {
+      padding: 6px 12px;
+      color: #666;
+      font-weight: initial;
+
+      &:hover {
+        color: #0285d7;
+        border-color: #fff;
+      }
+    }
+
+    .z-execute {
+      padding: 6px 12px;
+      text-align: center;
+    }
+
+    li {
+      border-top: dotted 1px #ccc;
+      color: #666;
+      cursor: pointer;
+
+      &:hover {
+        color: $primary;
+      }
+    }
+
+    i {
+      color: #666;
+    }
+  }
+
+  .z-8 {
+    text-align: center;
+    color: #999;
+    cursor: pointer;
+
+    &:hover {
+      color: #333;
+
+      .doc {
+        color: darken(#ff7a7a, 15%);
+      }
+
+      .member {
+        color: darken(#764df8, 15%);
+      }
+
+      .set {
+        color: darken(#ffca65, 15%);
+      }
+    }
+
+    .doc {
+      color: #ff7a7a;
+    }
+
+    .member {
+      color: #764df8;
+    }
+
+    .set {
+      color: #ffca65;
+    }
+
+    i {
+      display: block;
+      font-size: 24px;
+      margin: 12px 0;
+    }
+  }
+
+  .new {
+    align-items: stretch;
+    height: 170px;
+    overflow: hidden;
+
+    .z-8 {
+      padding: 16px 0;
+      border-right: 1px solid #f1f1f1;
+      color: #666;
+
+      &:hover {
+        color: $primary;
+      }
+    }
+
+    .z-icon {
+      font-size: 36px;
+    }
+
+    li {
+      height: 32px;
+      line-height: 32px;
+      overflow: hidden;
+      margin: 0 12px;
+      border-bottom: dotted 1px #ccc;
+      color: #666;
+      padding-left: 1px;
+      list-style: inside circle;
+
+      &:hover {
+        color: darken($primary, 5%);
+        cursor: pointer;
+      }
+    }
+  }
+}

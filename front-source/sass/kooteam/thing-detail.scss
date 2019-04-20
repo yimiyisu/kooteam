@@ -1,0 +1,154 @@
+.k-thing-detail-bg {
+
+  .header {
+    padding: .6rem 0;
+    background: #eef1f4;
+    border-bottom: solid 1px #eaeaea;
+
+    .button {
+      height: 32px;
+      border-radius: 20px;
+      border: solid 1px #e0e0e0;
+      color: #666;
+      background: #fff;
+      display: inline-block;
+      line-height: 32px;
+      padding: 0 16px;
+      margin-left: 1rem;
+      cursor: pointer;
+
+      &:hover {
+        color: $primary;
+        border-color: $primary;
+      }
+    }
+  }
+
+  .form {
+    padding: 5px 0;
+    width: 95%;
+
+    dl {
+      display: inline-block;
+      width: 49%;
+    }
+  }
+
+  .wrap {
+    flex: 1;
+    overflow: auto;
+    background: #f9f9fa;
+  }
+
+  .title {
+    width: 100%;
+    padding: 0;
+    border: 0;
+    font-size: 18px;
+    height: 52px;
+    background: #fff;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  .describe {
+    margin-bottom: 14px;
+
+    textarea {
+      display: none;
+    }
+  }
+
+  dl {
+    margin-bottom: 12px;
+  }
+
+  dd {
+    min-width: 200px;
+    position: relative;
+
+    label {
+      cursor: pointer;
+    }
+  }
+
+  dt {
+    width: 80px;
+    text-align: right;
+    padding-right: 12px;
+    color: #999;
+
+    .z-icon {
+      margin-right: 6px;
+    }
+  }
+
+  .clock {
+    position: relative;
+    display: inline-block;
+
+    &:hover {
+      ul {
+        display: block;
+      }
+    }
+
+    span {
+      display: inline-block;
+      background: #fff;
+      padding: 6px 12px;
+      border: 1px solid #ddd;
+      border-radius: .15rem;
+      margin-right: 6px;
+
+      i {
+        margin-left: 8px;
+        cursor: pointer;
+      }
+    }
+
+    ul {
+      display: none;
+      position: absolute;
+      z-index: 3;
+      background: #fff;
+      left: 0;
+      padding: 12px 4px;
+      top: 26px;
+      width: 300px;
+      border: 1px solid #eee;
+      border-radius: .15rem;
+
+      li {
+        cursor: pointer;
+        padding: 4px 14px;
+        width: 100px;
+        color: #999;
+
+        &:hover, &.active {
+          color: $primary;
+        }
+      }
+    }
+  }
+
+  .dialog-header {
+    margin-top: -35px;
+  }
+
+  .dialog-content {
+    height: 560px;
+    overflow: auto;
+    margin-top: 10px;
+
+    .editor-content {
+      width: 95%;
+    }
+  }
+
+  .k-comment-post {
+    width: 95%;
+  }
+}

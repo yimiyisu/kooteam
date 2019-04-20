@@ -1,0 +1,81 @@
+.z-mind {
+  height: 800px;
+  position: relative;
+  overflow: hidden;
+
+  &:focus {
+    outline: 0;
+  }
+
+  .k-mind-map {
+    position: relative;
+    min-height: 1600px;
+
+    svg {
+      cursor: move;
+    }
+
+    .root {
+      background: #f40;
+      width: 120px;
+      font-weight: bold;
+      height: 40px;
+      text-align: center;
+      color: #fff;
+      line-height: 40px;
+
+      &.active {
+        outline: solid 2px #f40;
+      }
+    }
+  }
+}
+
+.k-flow {
+  overflow: hidden;
+  position: relative;
+  height: 800px;
+
+  .canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  .shape {
+    position: relative;
+    text-align: center;
+    width: 60px;
+    line-height: 60px;
+    cursor: pointer;
+    height: 80px;
+
+    &:hover {
+      .path {
+        fill: #E6E9ED;
+      }
+    }
+
+    .svg {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .path {
+      fill: #fff;
+      stroke-width: 1px;
+    }
+  }
+}
+
+.k-graph {
+  min-width: 800px;
+  width: 100%;
+  min-height: 640px;
+  height: 100%;
+}
