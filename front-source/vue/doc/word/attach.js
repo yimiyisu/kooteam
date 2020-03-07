@@ -60,8 +60,6 @@ export default function ($, Simditor) {
                         return req;
                     },
                     error: function (reback) {
-                        console.log(reback);
-                        debugger
                     }
                 });
             });

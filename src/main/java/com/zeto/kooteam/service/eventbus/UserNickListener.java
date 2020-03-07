@@ -20,7 +20,7 @@ public class UserNickListener {
         if (!ZenEnvironment.isPersonCloud()) {
             return;
         }
-        ZenData params = ZenData.put("nick", model.getNick());
+        ZenData params = ZenData.create("nick", model.getNick());
         ZenCondition condition = ZenConditionKit.And().eq("userId", model.getUid());
         ZenStorageEngine zenStorageEngine = Zen.getStorageEngine();
         zenStorageEngine.update("friend", params, condition);

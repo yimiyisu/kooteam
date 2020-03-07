@@ -1,0 +1,33 @@
+.k-my {
+  .el-drawer__body {
+    margin-top: -40px;
+  }
+
+  .el-drawer__close-btn {
+    z-index: 30;
+  }
+
+  .el-tabs__item {
+    color: #666 !important;
+  }
+}
+
+.k-my-setting {
+  .skin {
+    width: 192px;
+    height: 120px;
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+
+  .skin img {
+    width: 192px;
+    height: 120px;
+  }
+}
+
+.k-my-set {
+  height: 600px;
+  overflow: auto;
+}

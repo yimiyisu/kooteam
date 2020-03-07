@@ -3,11 +3,10 @@
         <div class="doc-item" v-for="(item,idx) in data" :class="{'active':current===item._id}"
              @click="select(item,$event)" :key="item._id">{{item.title}}<span>
                 {{item._id|idate}}
-                <z-execute type="text" tip="确定删除吗？" :action="'/note/remove.do?_id=' +item._source"
-                           :destory="{'index':idx,'parent':data}" class="z-icon hover">&#xe5c9;</z-execute>
+            <z-confirm type="text" tip="确定删除吗？" :destory="{'index':idx,'parent':data}" @click="remove(item)"
+                       class="z-icon hover">&#xe5c9;</z-confirm>
             </span>
         </div>
-        <z-pager v-if="total>10" type="simple" :total="list.total" target="list"></z-pager>
     </div>
 </template>
 <script>
@@ -20,7 +19,7 @@
             }
         },
         mounted: function () {
-            $.http(null, "/note/my.do", function (reback) {
+            $.get(null, "/note/my.do", function (reback) {
                 let result = reback.data;
                 this.data = result.data;
                 this.total = reback.total;
@@ -33,7 +32,7 @@
         },
         methods: {
             remove(item) {
-                $.http({_id: item._source}, '/note/remove.do?_id=', (reback) => {
+                $.get({_id: item._source}, '/note/remove.do', (reback) => {
                     if (reback.action === 0) {
                         for (let i = 0; i < this.data.length; i++) {
                             if (this.data[i]._source === item._source) {
@@ -65,7 +64,7 @@
                     return false;
                 }
                 this.current = rid;
-                $.http({_id: rid}, "/get/note.json", function (reback) {
+                $.get({_id: rid}, "/get/note.json", function (reback) {
                     this.$parent.value = reback.data;
                 }, this);
                 return true;

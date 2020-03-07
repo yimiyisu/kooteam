@@ -1,5 +1,5 @@
 <template>
-    <div class="wrap">
+    <div class="wrap k-my-setting">
         <div v-for="i in imgs" class="skin" :class="{'active':i===def}" @click="select(i)">
             <img :src="'//a.yimiyisu.com/kooteam/bg/'+i+'.jpg'"/>
         </div>

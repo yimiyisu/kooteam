@@ -1,13 +1,14 @@
 <template>
-    <div class="k-todo z-row">
-        <Quadrant v-for="item in data" :key="item.tag" :data="item" :now="now"></Quadrant>
-    </div>
+    <z-row :gutter="20" v-if="isInit">
+        <Quadrant v-for="item in data" :key="item.tag" :height="height" :data="item" :now="now"></Quadrant>
+    </z-row>
 </template>
 <script>
     import Quadrant from "./quadrant"
 
     export default {
-        data: function () {
+        props: ["things"],
+        data() {
             return {
                 data: [{
                     tag: "a",
@@ -27,37 +28,62 @@
                     sons: []
                 }],
                 now: 0,
-                showDetail: false
+                height: 200,
+                isInit: false
             }
         },
         components: {Quadrant},
-        mounted: function () {
-            this.load();
+        created() {
             let date = new Date();
             this.now = date.getTime() % 1000;
+            this.resize();
+            $.on("thingUpdate", this.thingChange);
+            window.addEventListener("resize", this.resize);
+            if (!this.things || this.things.length === 0) {
+                return;
+            }
+            let item, quadrant, i = 0, things = this.things;
+            for (; i < things.length; i++) {
+                item = things[i];
+                quadrant = this.getQuadrant(item.quadrant);
+                if (quadrant) {
+                    quadrant.sons.push(item);
+                }
+            }
+        },
+        destroyed: function () {
+            $.off("thingUpdate");
+            window.removeEventListener('resize', this.resize);
         },
         methods: {
-            load: function () {
-                $.http(null, "/thing/latest.do", function (reback) {
-                    let result = reback.data, item, quadrant;
-                    if (!result) {
+            thingChange(thing, action) {
+                let quadrant = this.getQuadrant(thing.quadrant);
+                if (!quadrant) {
+                    return;
+                }
+                let things = quadrant.sons;
+                for (let i = 0; i < things.length; i++) {
+                    if (things[i]._id === thing._id) {
+                        if (action === "remove") {
+                            things.splice(i, 1);
+                        } else {
+                            things[i][action] = thing[action];
+                        }
                         return;
                     }
-                    for (let i = 0; i < result.length; i++) {
-                        item = result[i];
-                        quadrant = this.getQuadrant(item.quadrant);
-                        if (quadrant) {
-                            quadrant.sons.push(item);
-                        }
-                    }
-                }, this);
+                }
             },
-            getQuadrant: function (tag) {
-                let quadrant;
+            resize() {
+                let height = parseInt(($("body").height() - 180) / 2);
+                height > this.height && (this.height = height);
+                this.isInit = true;
+            },
+            getQuadrant(quadrant) {
+                let data;
                 for (let i = 0; i < 4; i++) {
-                    quadrant = this.data[i];
-                    if (quadrant.tag === tag) {
-                        return quadrant;
+                    data = this.data[i];
+                    if (data.tag === quadrant) {
+                        return data;
                     }
                 }
                 return null;

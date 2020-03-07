@@ -56,7 +56,7 @@
         },
         methods: {
             initEditor: function () {
-                $.lib(["/tinymce/tinymce.min.js"], this.init);
+                $.lib(["tinymce/tinymce.min.js"], this.init);
             },
             init: function () {
                 let that = this;

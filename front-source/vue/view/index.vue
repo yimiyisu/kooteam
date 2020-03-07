@@ -1,6 +1,6 @@
 <template>
     <div v-if="loaded">
-        <Header :title="navTitle" :logo="logo"></Header>
+        <Header :title="title" :logo="logo"></Header>
         <Chapter class="book" v-if="article.type===4" :data="nav.sons"></Chapter>
         <Content v-else :tree="nav.sons" :isnav="showNav" :current="article._id" :data="article"></Content>
     </div>
@@ -15,27 +15,28 @@
     export default {
         components: {Header, Content, Chapter, Preview},
         props: ["logo"],
-        data: function () {
+        data() {
             return {
                 loaded: false,
                 data: {},
                 navTitle: "",
                 nav: {sons: []},
+                title: "",
                 showNav: false,
                 article: {}
             };
         },
-        mounted: function () {
+        mounted() {
             let id = this.getId(), that = this;
             if (!id) {
                 return;
             }
             this.loadData(id);
-            this.$parent.$on("toggle", function (id) {
+            $.on("toggle", function (id) {
                 that.toggle(id);
             });
 
-            this.$parent.$on("load", function (val) {
+            $.on("load", function (val) {
                 that.loadData(val);
                 let url = "/view.html?id=" + val;
                 that.showNav = false;
@@ -48,7 +49,7 @@
             }
         },
         methods: {
-            loadData: function (id) {
+            loadData(id) {
                 let that = this;
                 if (!id) {
                     return;
@@ -57,14 +58,17 @@
                 if (that.nav.sons && that.nav.sons.length > 0) {
                     params["only"] = true;
                 }
-                $.http(params, "/view/content.do", function (reback) {
+                $.post(params, "/view/content.do", function (reback) {
                     if (reback.hasError) {
-                        return alert(reback.message);
+                        return $.notice(reback.message, "error");
                     }
-                    let data = reback.data;
-                    that.article = data;
+                    let data = reback.data, that = this;
 
+                    that.article = data;
                     if (data.type === 4) {
+                        if (!data.content) {
+                            return $.notice("该文章无内容", "error");
+                        }
                         that.nav = JSON.parse(data.content);
                         that.navTitle = data.title;
                     } else if (!that.nav.sons || that.nav.sons.length === 0) {
@@ -73,6 +77,10 @@
                         }
                         that.navTitle = data.navTitle;
                     }
+                    if (that.navTitle !== data.title) {
+                        that.title = that.navTitle + " - " + data.title;
+                    }
+
                     that.loaded = true;
                     let width = $(window).width();
                     if (width > 768) {
@@ -96,9 +104,9 @@
                             });
                         });
                     });
-                });
+                }, this);
             },
-            toggle: function (id, data) {
+            toggle(id, data) {
                 if (!data) {
                     data = this.nav.sons;
                 }
@@ -117,7 +125,7 @@
                 }
                 return false;
             },
-            getId: function () {
+            getId() {
                 let link = location.search.substring(1);
                 let pairs = link.split("&");
                 for (let i = 0; i < pairs.length; i++) {

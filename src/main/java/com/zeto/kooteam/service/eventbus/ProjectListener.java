@@ -1,5 +1,6 @@
 package com.zeto.kooteam.service.eventbus;
 
+import com.blade.mvc.WebContext;
 import com.google.common.eventbus.Subscribe;
 import com.zeto.Zen;
 import com.zeto.ZenConditionKit;
@@ -14,14 +15,16 @@ public class ProjectListener {
 
     @Subscribe
     public void execute(ProjectModel model) {
+        WebContext.create(model.getSite());
         ZenStorageEngine storageEngine = Zen.getStorageEngine();
         ZenCondition unfinishCon = ZenConditionKit.And().eq("projectId", model.getProjectId()).eq("status", 0);
         long unfinish = storageEngine.count(thingTable, unfinishCon);
 
         ZenCondition finishedCon = ZenConditionKit.And().eq("projectId", model.getProjectId()).eq("status", 1);
         long finished = storageEngine.count(thingTable, finishedCon);
-        ZenData params = ZenData.put("_id", model.getProjectId()).
-                set("unfinish", unfinish + "").set("finished", finished + "");
+        ZenData params = ZenData.create("_id", model.getProjectId()).
+                put("unfinish", unfinish + "").put("finished", finished + "");
         storageEngine.execute(executor, params, null);
+        WebContext.remove();
     }
 }

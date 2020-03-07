@@ -4,8 +4,8 @@ import com.blade.ioc.annotation.Inject;
 import com.zeto.ZenConditionKit;
 import com.zeto.ZenData;
 import com.zeto.ZenResult;
-import com.zeto.ZenUserKit;
 import com.zeto.annotation.AccessRole;
+import com.zeto.domain.ZenAction;
 import com.zeto.domain.ZenCondition;
 import com.zeto.domain.ZenUser;
 import com.zeto.driver.ZenStorageEngine;
@@ -15,14 +15,14 @@ public class Note {
     @Inject
     private ZenStorageEngine zenStorageEngine;
 
-    //  我的文库
+    // 我的文库
     public ZenResult my(ZenData data, ZenUser user) {
         ZenResult result = zenStorageEngine.execute("select/noteUserByUid", data, user);
         String[] params = new String[]{"permission"};
         ZenResult notes = zenStorageEngine.selectByIds("note", "noteId", result, params);
         ZenCondition zenCondition = ZenConditionKit.And().eq("uid", user.getUid());
         long total = zenStorageEngine.count("noteUser", zenCondition);
-        return ZenResult.success().put("data", notes.getData()).put("total", total);
+        return ZenResult.success().put("list", notes.getData()).setTotal((int) total);
     }
 
     public ZenResult get(ZenData data, ZenUser user) {
@@ -30,21 +30,18 @@ public class Note {
         if (note.isEmpty()) {
             return ZenResult.success();
         }
-        ZenResult extend = zenStorageEngine.extend("note", data.get("_id"));
-        note.put("content", extend.get("content"));
+        // ZenResult extend = zenStorageEngine.extend("note", data.get("_id"));
+        // note.put("content", extend.get("content"));
         return note;
     }
 
     public ZenResult patch(ZenData data, ZenUser user) {
         zenStorageEngine.execute("patch/note", data, user);
-        return ZenResult.success().setData("保存成功");
-    }
-
-    public ZenResult graph(ZenData data, ZenUser user) {
-        ZenData params = ZenData.put("_id", data.get("filename"))
-                .set("content", data.get("xml"));
-        zenStorageEngine.execute("patch/note", params, user);
-        return ZenResult.success("保存成功！");
+        ZenResult result = ZenResult.success("保存成功");
+        if (data.contains("title")) {
+            result.put("title", data.get("title"));
+        }
+        return result.setAction(ZenAction.SILENT);
     }
 
     private static final String docType = "4";
@@ -52,10 +49,8 @@ public class Note {
     public ZenResult add(ZenData data, ZenUser user) {
         ZenResult result = zenStorageEngine.execute("put/note", data, user);
         if (docType.equals(data.get("type"))) {
-            ZenData param = ZenData.put("noteId", result.get("_id")).
-                    set("uid", user.getUid()).
-                    set("op", user.getUid()).
-                    set("permission", "3");
+            ZenData param = ZenData.create("noteId", result.get("_id")).put("uid", user.getUid()).put("op", user.getUid())
+                    .put("permission", "3");
             zenStorageEngine.execute("put/noteUser", param, user);
         }
         return ZenResult.success().setData(result.getData());
@@ -82,10 +77,5 @@ public class Note {
         }
         zenStorageEngine.execute("put/noteUser", data, user);
         return ZenResult.success("添加成功");
-    }
-
-    public ZenResult users(ZenData data, ZenUser user) {
-        ZenResult users = zenStorageEngine.execute("select/noteUser", data, user);
-        return ZenUserKit.selectByUids(users, "uid");
     }
 }

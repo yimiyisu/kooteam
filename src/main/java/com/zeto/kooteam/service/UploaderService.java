@@ -25,7 +25,7 @@ public class UploaderService {
         }
         String webPath = String.format("/avator/%s/%s/",
                 uid.substring(0, 4), uid.substring(4, 6));
-        String path = ZenEnvironment.getPath() + "/res" + webPath;
+        String path = ZenEnvironment.getPath() + "/upload" + webPath;
 
         File dir = new File(path);
         if (!dir.isDirectory()) {
@@ -42,7 +42,7 @@ public class UploaderService {
                 relPath = "/upload/" + String.format("%s/%s", id.substring(0, 4), id.substring(4, 6)),
                 fileName = "/" + id.substring(6) + "." + ext;
 
-        String pyPath = ZenEnvironment.getPath() + "/res" + relPath;
+        String pyPath = ZenEnvironment.getPath() + relPath;
         File dir = new File(pyPath);
         if (!dir.isDirectory()) {
             dir.mkdirs();
@@ -52,7 +52,21 @@ public class UploaderService {
     }
 
     public String file(byte[] data, String id, String ext) {
-        return null;
+        if (data == null) {
+            return null;
+        }
+        String webPath = String.format("/%s/%s/",
+                id.substring(0, 4), id.substring(4, 6));
+        String path = ZenEnvironment.getPath() + "/upload" + webPath;
+
+        File dir = new File(path);
+        if (!dir.isDirectory()) {
+            dir.mkdirs();
+        }
+        String fileName = id.substring(6) + "." + ext;
+        path += fileName;
+        this.save(data, path);
+        return "/upload" + webPath + fileName;
     }
 
     private void save(byte[] data, String path) {

@@ -1,21 +1,19 @@
 <template>
     <div class="k-board-add">
-        <textarea type="text" maxlength="60" v-model="title" placeholder="请输入要处理的任务"></textarea>
-        <div class="owner">负责人：
-            <div class="avator" @click.stop="userShow">
-                <z-avator :uid="uid"></z-avator>
-                <span>{{nick}}</span>
+        <div class="action" @click="show" v-show="!isAdd">
+            <i class="ft icon">&#xe857;</i>添加待办
+        </div>
+        <div class="wrap" v-show="isAdd">
+            <z-input type="textarea" v-model="title" autosize placeholder="请输入要处理的事项" @keyup.native="keyup"/>
+            <div class="prority">
+                <label v-for="item in prorityData" :title="item.title" @click="select(item,$event)"
+                       :class="'k-prority-add '+item.key"></label>
+                <div class="btns">
+                    <z-button size="mini" type="primary" @click="save">添加任务</z-button>
+                    <!--                    <i class="ft icon" @click="save">&#xe798;</i>-->
+                    <i class="ft icon" @click="close">&#xe710;</i>
+                </div>
             </div>
-            <k-user-search @blur="userBlur" my="true" v-model="owner" v-if="isShow"></k-user-search>
-        </div>
-        <div class="prority">
-            <span class="title">优先级：</span>
-            <label v-for="item in prorityData" @click="select(item,$event)"
-                   :class="'k-prority '+item.key"></label>
-        </div>
-        <div class="btns">
-            <z-button plain size="mini" @click="close">取消</z-button>
-            <z-button plain type="primary" size="mini" @click="save">保存</z-button>
         </div>
     </div>
 </template>
@@ -28,44 +26,49 @@
         data: function () {
             return {
                 title: "",
-                owner: null,
                 uid: "",
-                nick: "",
-                prority: "",
-                prorityData: prorityData,
-                isShow: false
-            }
-        },
-        watch: {
-            owner: function (val) {
-                this.nick = val.nick;
-                this.uid = val.userId;
-                this.isShow = false;
+                prority: "b",
+                isAdd: false,
+                prorityData: prorityData
             }
         },
         mounted: function () {
-            this.nick = "我自己";
             this.uid = zen.user.id;
-            this.$parent.$parent.$on("hideUserSearch", this.userBlur);
         },
         methods: {
-            userShow: function () {
-                this.isShow = true;
+            show() {
+                this.isAdd = true;
+                this.$nextTick(_ => {
+                    let el = $("textarea", this.$el).el;
+                    el[0].focus();
+                });
             },
-            userBlur: function () {
-                if (!this.isShow) {
-                    return;
-                }
-                this.isShow = false;
+            close() {
+                this.isAdd = false;
             },
             select: function (val, evt) {
                 if (val.key === this.prority) {
                     return;
                 }
                 this.prority = val.key;
-                $(".k-prority", this.$el).removeClass("active");
+                $(".k-prority-add", this.$el).removeClass("active");
                 let target = $(evt.currentTarget);
                 target.addClass("active");
+            },
+            keyup(event) {
+                let code = event.keyCode;
+                if (code === 13) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    this.save();
+                    this.$nextTick(_ => {
+                        this.title = "";
+                    })
+                }
+                if (code === 27) {
+                    event.preventDefault();
+                    // return this.close();
+                }
             },
             save: function () {
                 if (!this.title) {
@@ -81,18 +84,13 @@
                 if (this.prority) {
                     param.quadrant = this.prority;
                 }
-                if (this.owner) {
-                    param.owner = this.owner.uid;
-                }
-                $.http(param, "/thing/put.do", function (reback) {
-                    let data = reback.data, columns = parent.columns;
+                $.post(param, "/thing/put.do", function (reback) {
+                    let data = reback.data;
                     param._id = data._id;
+                    this.title = "";
                     this.$emit('changeCategory', param);
-                    this.close();
+                    // this.close();
                 }, this);
-            },
-            close: function () {
-                this.$parent.isAddThing = false;
             }
         }
     }

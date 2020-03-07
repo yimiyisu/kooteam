@@ -12,7 +12,7 @@ import com.zeto.domain.ZenUser;
 import com.zeto.driver.ZenStorageEngine;
 import com.zeto.kooteam.service.domain.DocType;
 
-@AccessRole(ZenRole.NORMAL)
+@AccessRole(ZenRole.ANONYMITY)
 // 文档查看
 public class View {
     @Inject
@@ -25,8 +25,6 @@ public class View {
         if (content.isEmpty()) {
             return ZenResult.fail(error);
         }
-        ZenResult extend = zenStorageEngine.extend("note", data.get("_id"));
-        content.put("content", extend.get("content"));
         if (content.getLong("type") == 4L || data.contains("only")) {
             return content;
         }
@@ -36,7 +34,7 @@ public class View {
         if (!checkPermission(nav.get("permision"), user, parentId, nav.get("uid"))) {
             return ZenResult.fail(error);
         }
-        ZenResult navContent = zenStorageEngine.extend("note", parentId);
+        ZenResult navContent = zenStorageEngine.get("note", parentId);
         content.put("nav", navContent.get("content"));
         content.put("navTitle", nav.get("title"));
         return content;
@@ -50,12 +48,6 @@ public class View {
         if (user == null) {
             return false;
         }
-        // 1 私有文档
-        if (type.equals(DocType.PRIVATE.getValue())) {
-            ZenCondition condition = ZenConditionKit.And().eq("uid", user.getUid()).eq("noteId", parentId);
-            long count = zenStorageEngine.count("noteUser", condition);
-            return count > 0;
-        }
         // 3 企业内部文档
         if (type.equals(DocType.COMPANY.getValue())) {
             // 只有是好友才能查看
@@ -68,6 +60,10 @@ public class View {
         if (type.equals(DocType.PROJECT.getValue())) {
             return zenStorageEngine.count("projectUser", ZenConditionKit.And().eq("projectId", parentId).eq("userId", user.getUid())) > 0;
         }
-        return false;
+
+        // 私有文档权限判断
+        ZenCondition condition = ZenConditionKit.And().eq("uid", user.getUid()).eq("noteId", parentId);
+        long count = zenStorageEngine.count("noteUser", condition);
+        return count > 0;
     }
 }

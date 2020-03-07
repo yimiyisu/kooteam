@@ -1,27 +1,24 @@
 <template>
-    <div v-show="data.status !== 2" class="k-thing" :class="{finish:data.status}" @click="detail"
+    <div v-show="data.status !== 2" class="k-thing" :class="{finish:data.status}" @dblclick="dblclick" @click="detail"
          :data-id="data._id">
         <label @click.stop="doFinish" :data-id="data._id">
             <i class="z-icon"></i>
         </label>
         <div>{{data.title}}</div>
-        <span v-if="data.finish<now">延期{{data.finish|time}}</span>
+        <span v-if="data.finish<current">延期{{data.finish|time}}</span>
     </div>
 </template>
 <script>
-
+    let now = new Date();
+    now = now.getTime() % 1000;
     export default {
         props: ["data", "now"],
+        computed: {
+            current() {
+                return this.now || now;
+            }
+        },
         methods: {
-            sync: function (value) {
-                let item = this.data;
-                if (value._id !== item._id) {
-                    return;
-                }
-                if (item.title !== value.title) {
-                    item.title = value.title;
-                }
-            },
             doFinish: function (evt) {
                 let cls = "finish",
                     id = this.data._id, status;
@@ -38,17 +35,24 @@
                     status: status,
                     projectId: this.data.projectId
                 };
-                $.http(param, "/thing/patch.do", function () {
+                $.post(param, "/thing/patch.do", function () {
                     this.data["status"] = status;
                     let parent = this.$parent;
                     if (parent.sort) {
                         parent.sort(id, status);
                     }
+                    let content = status ? "完成了任务" : "取消了完成";
+                    $.post({thingId: id, content: content}, '/put/thingLog.json', function (reback) {
+
+                    });
                 }, this);
             },
             detail: function () {
-                $.on("thingUpdate", this.sync);
                 $.emit("thingDetail", this.data._id);
+            },
+            dblclick(evt) {
+                evt.preventDefault();
+                evt.stopPropagation();
             }
         }
     }

@@ -1,6 +1,10 @@
 .k-rich {
-  box-sizing: border-box;
-
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 36px;
+  overflow: scroll;
   .tox .tox-toolbar {
     background: #fff !important;
     border-bottom: 1px solid #eee;

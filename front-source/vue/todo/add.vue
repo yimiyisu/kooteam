@@ -1,5 +1,5 @@
 <template>
-    <z-dialog title="添加待办" size="size" :visible.sync="visible">
+    <z-dialog title="添加待办" :visible.sync="visible">
         <z-input
                 type="textarea"
                 placeholder="请输入待办内容"
@@ -20,7 +20,6 @@
                     <div class="user-info" @click="show">
                         {{user.nick}}
                     </div>
-                    <k-user-search v-if="isShow" @blur="blur" fixed="true" my="true" v-model="user"></k-user-search>
                 </div>
             </div>
         </div>
@@ -74,7 +73,6 @@
                 this.isShow = false;
             },
             submit: function () {
-                debugger;
                 if (!this.title) {
                     return alert("待办内容不能为空");
                 }
@@ -97,7 +95,7 @@
                 if (this.$parent.projectId) {
                     data.projectId = this.$parent.projectId;
                 }
-                $.http(data, "/thing/put.do", function (reback) {
+                $.post(data, "/thing/put.do", function (reback) {
                     data._id = reback.data._id;
                     this.$parent.addThing(data);
                     this.close();

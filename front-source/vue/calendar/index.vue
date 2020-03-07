@@ -1,5 +1,5 @@
 <template>
-    <div style="margin: 20px">
+    <div class="k-calendar">
         <div id='calendar'></div>
         <k-todo-add :value="eventData" :visible="isShow" :is-cal="true"></k-todo-add>
     </div>
@@ -18,7 +18,7 @@
             }
         },
         mounted: function () {
-            $.lib(["/calendar/main.min.js", "/calendar/interaction/min.js", "/calendar/daygrid/min.js", "/calendar/timegrid/min.js"], this.init);
+            $.lib(["calendar/main.min.js", "calendar/interaction/min.js", "calendar/daygrid/min.js", "calendar/timegrid/min.js"], this.init);
             $.on("thingUpdate", this.update);
         },
         methods: {
@@ -66,7 +66,7 @@
                 if (event.event.end) {
                     data.end = event.event.end.getTime() / 1000;
                 }
-                $.http(data, "/thing/patch.do", function (reback) {
+                $.post(data, "/thing/patch.do", function (reback) {
                 }, this);
             },
             update: function (thing) {
@@ -93,7 +93,6 @@
             addThing: function (data) {
                 if (data) {
                     let result = Util.convert(data);
-                    console.log(result);
                     this.calendar.addEvent(result);
                 } else {
                     this.calendar.unselect();

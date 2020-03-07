@@ -1,10 +1,10 @@
 .k-thing {
   border-radius: .1rem;
   //background-color: #fff;
-  border: dotted 1px rgba(153, 153, 153, .25);
+  margin-top: -1px;
   padding: 0 .6rem;
-  height: 2.5rem;
-  color: #222;
+  height: 38px;
+  color: #444;
   cursor: pointer;
   line-height: 2.5rem;
   overflow: hidden;
@@ -28,12 +28,8 @@
     }
   }
 
-  &:hover {
-    background-color: #fff;
-  }
-
   label {
-    color: #444;
+    color: #666;
     width: 1.4rem;
     cursor: pointer;
   }

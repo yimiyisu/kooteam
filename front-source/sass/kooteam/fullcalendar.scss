@@ -149,7 +149,7 @@ a[data-goto]:hover {
 }
 
 .fc-row table {
-  /* don't put left/right border on anything within a fake row.
+  /* don't create left/right border on anything within a fake row.
      the outer tbody will worry about this */
   border-left: 0 hidden transparent;
   border-right: 0 hidden transparent;
@@ -225,13 +225,13 @@ temporary rendered events).
 
 .fc-row .fc-content-skeleton td,
 .fc-row .fc-mirror-skeleton td {
-  /* don't put a border between events and/or the day number */
+  /* don't create a border between events and/or the day number */
   border-bottom: 0;
 }
 
 .fc-row .fc-content-skeleton tbody td,
 .fc-row .fc-mirror-skeleton tbody td {
-  /* don't put a border between event cells */
+  /* don't create a border between event cells */
   border-top: 0;
 }
 
@@ -885,7 +885,7 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
   /* don't force a min-height on rows (for DayGrid) */
   .fc tbody .fc-row {
     height: auto !important;
-    /* undo height that JS set in distributeHeight */
+    /* undo height that JS put in distributeHeight */
     min-height: 0 !important;
     /* undo the min-height from each view's specific stylesheet */
   }
@@ -1175,7 +1175,7 @@ Docs & License: https://fullcalendar.io/
 }
 
 .fc-time-grid table {
-  /* don't put outer borders on slats/bg/content/etc */
+  /* don't create outer borders on slats/bg/content/etc */
   border: 0 hidden transparent;
 }
 
@@ -1342,7 +1342,7 @@ be a descendant of the grid when it is being dragged.
 
 .fc-time-grid-event.fc-short .fc-time,
 .fc-time-grid-event.fc-short .fc-title {
-  /* put the time and title on the same line */
+  /* create the time and title on the same line */
   display: inline-block;
   vertical-align: top;
 }

@@ -1,14 +1,14 @@
 <template>
     <div class="header z-row">
         <div class="z-col">
-            <i class="z-icon flag">&#xe153;</i>{{name}}
+            <i class="ft icon flag">&#xe753;</i>{{name}}
         </div>
         <div class="z-1" :class="{'active':active}">
             <label @click="show(1)">
-                <z-input type="text" maxlength="200" width="100%" @blur="hide" @keyup.native="keyup"
+                <z-input type="text" maxlength="200" width="100%" @keyup.native="keyup"
                          v-model="text" placeholder="请在这里输入需要处理的事项"></z-input>
             </label>
-            <i class="z-icon close" @click="show(0)"></i>
+            <i class="ft icon close" @click="show(0)"></i>
         </div>
     </div>
 </template>
@@ -23,20 +23,10 @@
             }
         },
         methods: {
-            stop: function (e) {
-                e.stopPropagation();
-            },
             hide: function () {
                 this.active = false;
-                this.isBlur = true;
-                this.$nextTick(function () {
-                    this.isBlur = false;
-                });
             },
             show: function (type) {
-                // if (this.active || this.isBlur) {
-                //     return this.isBlur = false;
-                // }
                 if (type === 0) {
                     this.active = !this.active;
                 } else {
@@ -45,7 +35,6 @@
                 if (this.active) {
                     this.$nextTick(function () {
                         this.$el.querySelector('input').focus();
-                        //$("input", this.$el).focus();
                     });
                 }
             },
@@ -53,23 +42,27 @@
                 e.stopPropagation();
                 e.preventDefault();
                 let code = e.keyCode;
-                if (code === 13) {
-                    let data = {};
-                    let title = this.text;
-                    if (!title) {
-                        return;
-                    }
-                    data["title"] = title;
-                    data["quadrant"] = this.quadrant;
-                    $.http(data, "/thing/put.do", function (reback) {
-                        let resultData = reback.data;
-                        data._id = resultData._id;
-                        let tempStatus = resultData.status;
-                        data.status = parseInt(tempStatus);
-                        this.$parent.data.sons.unshift(data);
-                        this.text = "";
-                    }, this);
+                if (code === 27) {
+                    return this.hide();
                 }
+                if (code !== 13) {
+                    return;
+                }
+                let data = {};
+                let title = this.text;
+                if (!title) {
+                    return;
+                }
+                data["title"] = title;
+                data["quadrant"] = this.quadrant;
+                $.post(data, "/thing/put.do", function (reback) {
+                    let resultData = reback.data;
+                    data._id = resultData._id;
+                    let tempStatus = resultData.status;
+                    data.status = parseInt(tempStatus);
+                    this.$emit("finish", data);
+                    this.text = "";
+                }, this);
             }
         }
     }

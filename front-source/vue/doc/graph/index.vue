@@ -1,38 +1,31 @@
 <template>
     <div class="k-graph">
-        <iframe id="J_graphIframe" src="/doc/flow.html"></iframe>
+        <iframe @load="sendData" src="/doc/flow.html"></iframe>
     </div>
 </template>
 <script>
     export default {
-        props: ["value"],
+        name: "graph",
+        props: ["value", "type"],
         watch: {
             value: function () {
-                this.changeData();
+                if (this.type + '' !== "5") {
+                    return;
+                }
+                this.sendData();
             }
         },
         mounted: function () {
             let that = this;
+            // 接受文件修改
             window.addEventListener('message', function (ev) {
-                let data = ev.data;
-                if (data.type === "graphLoad") {
-                    that.changeData();
-                }
-                if (data.type === "xmlsave") {
-                    that.$parent.tip("保存完成");
-                }
+                that.$parent.updateContent(ev.data);
             }, false);
         },
         methods: {
-            changeData: function () {
-                let iframe = document.getElementById("J_graphIframe");
-                let val = this.value;
-                let params = {
-                    type: "load",
-                    content: val.content,
-                    id: val._id
-                };
-                iframe.contentWindow.postMessage(params, "/");
+            sendData: function () {
+                let iframe = this.$el.getElementsByTagName("iframe");
+                iframe[0].contentWindow.postMessage(this.value, "/");
             }
         }
     }

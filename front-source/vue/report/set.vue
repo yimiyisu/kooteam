@@ -48,7 +48,7 @@
             }
         },
         mounted: function () {
-            $.http(null, "/report/config.do", function (reback) {
+            $.post(null, "/report/config.do", function (reback) {
                 this.config = reback.data;
             }, this);
         },
@@ -56,7 +56,7 @@
             save: function () {
                 let data = new FormData();
                 data.append("report", JSON.stringify(this.config));
-                $.http({report: JSON.stringify(this.config)}, "/report/set.do", function (reback) {
+                $.post({report: JSON.stringify(this.config)}, "/report/put.do", function (reback) {
                     $.action(reback);
                 }, this);
 
@@ -69,7 +69,7 @@
                             name: 'report',
                             pull: "clone",
                             revertClone: true,
-                            put: false // Do not allow items to be put into this list
+                            put: false // Do not allow items to be create into this list
                         },
                         animation: 150,
                         sort: false
@@ -94,7 +94,6 @@
                         },
                         onEnd: function (/**Event*/evt) {
                             let itemEl = evt.item;  // dragged HTMLElement
-                            console.log(itemEl);
                             // evt.to;    // target list
                             // evt.from;  // previous list
                             // evt.oldIndex;  // element's old index within old parent

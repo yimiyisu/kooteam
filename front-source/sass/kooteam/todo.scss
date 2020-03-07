@@ -1,59 +1,51 @@
+$todoBorderRadius: 4px;
 .k-todo {
   margin: 0 15px;
-  min-height: 680px;
-
-  .k-thing {
-    margin-top: -1px;
-  }
-
   .block {
-    height: 280px;
-    overflow: auto;
-    background-color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 30px;
-  }
-
-  .z-12 {
-    //margin-bottom: 20px;
-    height: 50%;
     overflow: hidden;
-
+    background: #f5f6f7;
+    border-radius: 0 0 $todoBorderRadius $todoBorderRadius;
+  }
+  .k-thing {
+    border: dotted 1px rgba(153, 153, 153, .25);
+    background: #fff;
+    &:hover {
+      color: #000;
+      background: #f8f8f8;
+    }
+  }
+  .el-col-12 {
+    border-radius: $todoBorderRadius;
     .empty {
       margin: 20px auto;
       text-align: center;
     }
   }
-
-  .a, .c {
-    .header, .block {
-      margin-right: 10px;
-    }
+  .a, .b {
+    margin-bottom: 20px;
   }
 
-  .b, .d {
-    .header, .block {
-      margin-left: 10px;
-    }
-  }
+  //.a, .c {
+  //  .header, .block {
+  //    margin-right: 10px;
+  //  }
+  //}
+  //
+  //.b, .d {
+  //  .header, .block {
+  //    margin-left: 10px;
+  //  }
+  //}
 
   .a {
-    //background: #f80e15;
     .header {
-      background: rgba(248, 14, 21, .6);
-    }
-
-    .flag {
-      color: darken($todo_red, 25%);
+      background: rgba(248, 14, 21, .5);
     }
   }
 
   .b {
     .header {
-      background: rgba(236, 196, 2, .7);
-    }
-
-    .flag {
-      color: darken($todo_yellow, 30%);
+      background: rgba(236, 196, 2, .5);
     }
   }
 
@@ -62,10 +54,6 @@
     .header {
       background: rgba(0, 159, 227, .7);
     }
-
-    .flag {
-      color: darken($todo_blue, 30%);
-    }
   }
 
   .d {
@@ -73,24 +61,19 @@
     .header {
       background: rgba(121, 170, 28, .7);
     }
-
-    .flag {
-      color: darken($todo_green, 30%);
-    }
   }
 
   .header {
     color: #efefef;
-    padding: 5px;
-    border-radius: .1rem .1rem 0 0;
-
+    padding: 2px 5px 4px 5px;
+    border-radius: $todoBorderRadius $todoBorderRadius 0 0;
     .flag {
-      margin-right: .5rem;
+      margin: 0 5px;
     }
 
     .z-col {
       width: 7.5rem;
-      line-height: 33px;
+      line-height: 28px;
       font-weight: bold;
       font-size: 14px;
     }
@@ -104,7 +87,7 @@
         }
 
         i:before {
-          content: "\e14c";
+          content: "\e710";
         }
       }
     }
@@ -114,20 +97,20 @@
       color: #fff;
       font-size: 1rem;
       cursor: pointer;
-      right: 5px;
-      top: 8px;
+      right: 8px;
+      top: 5px;
       z-index: 2;
 
       &:before {
-        content: "\e145";
+        content: "\e740";
       }
     }
 
     label {
       display: block;
-      height: 32px;
+      height: 28px;
       cursor: pointer;
-      margin-right: 40px;
+      margin-right: 32px;
     }
 
     input {
@@ -137,18 +120,31 @@
       border: 0;
       outline: 0;
       width: 100%;
-      height: 32px;
+      height: 30px;
       overflow: hidden;
       color: #000;
       padding-left: 6px;
     }
   }
+
 }
 
 .k-todo-owner {
   position: relative;
+  margin-left: 4px;
 
   .nick {
     cursor: pointer;
+  }
+}
+
+.k-quard-list {
+  li {
+    height: 30px;
+    cursor: pointer;
+  }
+
+  .active {
+    color: #1F65D6;
   }
 }

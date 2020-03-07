@@ -44,7 +44,7 @@
         components: {Editor, Toolbar},
         mounted: function () {
             // this.docId = $.getParam("docId");
-            // $.http({_id: this.docId}, "/extend/note.json", function (reback) {
+            // $.post({_id: this.docId}, "/get/noteContent.json", function (reback) {
             //     if (reback.data) {
             //         let content = reback.data.content;
             //         if (content !== null && content !== "" && content !== undefined) {
@@ -109,7 +109,7 @@
                 if (option === "render") { // 当改变节点的长宽时，全部重新刷新，其余的已经局部刷新
                     Render.init(this.data, this.r);
                 }
-                // $.http(params, "/note/patch.do", function () {
+                // $.post(params, "/note/patch.do", function () {
                 // }, this);
             }
         }

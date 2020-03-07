@@ -1,13 +1,15 @@
 <template>
-    <div class="z-12" :class="data.tag">
-        <Title :quadrant="data.tag" :name="data.title"></Title>
-        <div class="block" :data-id="data.tag">
+    <z-col :span="12" :class="data.tag">
+        <Title :quadrant="data.tag" @finish="unshift" :name="data.title"></Title>
+        <z-scrollbar class="block" :height="height" :data-id="data.tag">
+            <!--<div class="block" :data-id="data.tag">-->
             <z-draggable :list="data.sons" group="things" @add="add" @end="end">
                 <Thing v-for="item in data.sons" :data="item" :now="now" :key="item._id"></Thing>
             </z-draggable>
             <div v-if="!data.sons||data.sons.length===0" class="empty">恭喜你！已完成了所有待办</div>
-        </div>
-    </div>
+            <!--</div>-->
+        </z-scrollbar>
+    </z-col>
 </template>
 <script>
     import Title from "./title"
@@ -15,7 +17,7 @@
     import ThingsUtil from "../util/things"
 
     export default {
-        props: ["data", "now"],
+        props: ["data", "now", "height"],
         components: {Title, Thing},
         data: function () {
             return {
@@ -58,8 +60,11 @@
                     param.order = parseInt((nextObj.order + pervObj.order) / 2);
                 }
 
-                $.http(param, "/thing/patch.do", function (reback) {
+                $.post(param, "/thing/patch.do", function (reback) {
                 }, this);
+            },
+            unshift(item) {
+                this.data.sons.unshift(item);
             },
             sort: function (id, status) {
                 ThingsUtil.sort(id, status, this.data.sons);

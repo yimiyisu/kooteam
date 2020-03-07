@@ -1,37 +1,30 @@
-<!--添加成员页面   可被删除-->
 <template>
-    <div class="k-todo-owner">
-        <span class="nick" @click.stop="show">{{name}}</span>
-    </div>
+    <dl class="z-left">
+        <dt><i class="ft icon h2">&#xe903;</i>负责人：</dt>
+        <dd class="k-todo-owner">
+            <span class="nick">{{name}}</span>
+        </dd>
+    </dl>
 </template>
 <script>
     export default {
-        props: ["value", "nick"],
+        name: "detailOwner",
         data: function () {
             return {
+                thing: null,
                 name: ""
             }
         },
-        watch: {
-            nick: function (val) {
-                if (val) {
-                    this.name = val;
-                }
-            }
-        },
+        inject: ["getThing", "log"],
         mounted: function () {
-            let owner = this.value.owner;
+            let thing = this.getThing();
+            let owner = thing.owner;
             if (owner === zen.user.id) {
                 return this.name = "我自己";
             }
-            $.http({uid: owner}, "/user/getById.do", function (reback) {
-                this.name = reback.data.nick;
+            $.get({uid: owner}, "/zeto/nick.do", function (reback) {
+                this.name = reback.data;
             }, this);
-        },
-        methods: {
-            show: function () {
-                this.$emit('changeUser', true);
-            }
         }
     }
 </script>

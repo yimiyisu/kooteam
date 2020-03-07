@@ -1,6 +1,6 @@
 <template>
     <ul class="z-left category">
-        <li><a href="/app/home.htm">日</a></li>
+        <li><a href="/app/home.xhtm">日</a></li>
         <li @click="click('agenda')" :class="{'active':type==='agendaWeek'}">周</li>
         <li @click="click('agendaWeek')" :class="{'active':type==='agenda'}">月</li>
     </ul>

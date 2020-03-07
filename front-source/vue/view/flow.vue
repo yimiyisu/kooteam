@@ -12,7 +12,7 @@
 
     export default {
         props: ["value", "readonly"],
-        data: function () {
+        data() {
             return {
                 nodes: {},// svg的节点缓存
                 lines: {},// svg的线条缓存
@@ -29,16 +29,16 @@
             }
         },
         watch: {
-            value: function () {
+            value() {
                 this.init();
             }
         },
-        mounted: function () {
+        mounted() {
             $.lib(["/raphael.min.js"], this.init);
             $(".canvas", this.$el).draggable();
         },
         methods: {
-            init: function () {
+            init() {
                 let content = this.value.content;
                 if (content) {
                     this.data = JSON.parse(content);

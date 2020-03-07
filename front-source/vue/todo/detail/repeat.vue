@@ -28,6 +28,7 @@
 </template>
 <script>
     export default {
+        name: "detailRepeat",
         props: ["value"],
         data: function () {
             return {

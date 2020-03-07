@@ -5,21 +5,21 @@
 </template>
 <script>
     export default {
-        data: function () {
+        data() {
             return {
                 src: "//a.yimiyisu.com/s.gif",
                 isShow: false
             }
         },
-        mounted: function () {
+        mounted() {
             $.on("imgPreview", function (img) {
                 this.src = img;
                 this.isShow = true;
             });
         },
         methods: {
-            hide: function () {
-                this.showImg = false;
+            hide() {
+                this.isShow = false;
             }
         }
     }

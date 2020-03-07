@@ -9,7 +9,6 @@ import com.mongodb.client.MongoDatabase;
 import com.zeto.ZenCache;
 import com.zeto.ZenData;
 import com.zeto.ZenResult;
-import com.zeto.domain.ZenAction;
 import com.zeto.kooteam.service.domain.AppConf;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
@@ -58,7 +57,7 @@ public class DBValidate {
             if (rs.next()) {
                 System.out.println(rs.getString(1));
                 // 矫正数据库编码
-                sql = "alter database `" + conf.getDatabase() + "` default character set utf8 COLLATE utf8_unicode_ci;";
+                sql = "alter database `" + conf.getDatabase() + "` default character set utf8mb4 COLLATE utf8mb4_unicode_ci;";
                 ps.executeUpdate(sql);
             }
             rs.close();
@@ -79,7 +78,7 @@ public class DBValidate {
         }
         conf.setDbCheck(true);
         ZenCache.set(AppConf.cacheKey, conf);
-        return ZenResult.success("MySQL测试成功").setAction(ZenAction.SILENT);
+        return ZenResult.success("MySQL测试成功");
     }
 
     // 校验数据库链接
@@ -113,7 +112,7 @@ public class DBValidate {
             if (doc.countDocuments() > 0) {
                 conf.setDbCheck(true);
                 ZenCache.set(AppConf.cacheKey, conf);
-                return ZenResult.success("MongoDB数据库链接成功").setAction(ZenAction.SILENT);
+                return ZenResult.success("MongoDB数据库链接成功");
             }
             doc.drop();
         } catch (Exception e) {

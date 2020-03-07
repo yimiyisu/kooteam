@@ -135,7 +135,7 @@
                     _id: this.value._id,
                     content: JSON.stringify(this.data),
                 };
-                $.http(params, "/note/patch.do", function (reback) {
+                $.post(params, "/note/patch.do", function (reback) {
                     this.$parent.tip(reback.data);
                 }, this, 4);
             }

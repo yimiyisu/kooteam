@@ -1,15 +1,19 @@
 <template>
-    <div class="clock">
-        <span v-if="selected.length===0">待设置</span>
-        <span v-for="(item,idx) in selected" :key="item">{{options[item].name}}</span>
-        <ul>
-            <li v-for="op in options" :class="{'active':op.checked}" @click="select(op.value)">{{op.name}}</li>
-        </ul>
-    </div>
+    <dl class="z-left">
+        <dt>
+            <i class="ft icon h2">&#xe6b1;</i>提醒设置：
+        </dt>
+        <dd class="k-todo-clock">
+            <span v-if="selected.length===0">待设置</span>
+            <span v-for="(item,idx) in selected" class="selected" :key="item">{{options[item].name}}</span>
+        </dd>
+    </dl>
+
+
 </template>
 <script>
     export default {
-        props: ["value"],
+        inject: ["getThing"],
         data: function () {
             return {
                 selected: [],
@@ -23,7 +27,7 @@
             }
         },
         mounted: function () {
-            this.thing = this.value;
+            this.thing = this.getThing();
             if (!this.thing.remind) {
                 return this.selected = [];
             }
@@ -32,8 +36,6 @@
         },
         methods: {
             select: function (val) {
-                console.log(val);
-                console.log(this.selected);
                 if (this.selected.indexOf(val) === -1) {
                     this.selected.push(val);
                 } else {
@@ -43,10 +45,6 @@
                         }
                     }
                 }
-                // 去掉了jquery的 inArray 改用了indexOf
-                // if ($.inArray(val, this.selected) < 0) {
-                //
-                // }
                 this.emit();
             },
             checkStatus: function () {

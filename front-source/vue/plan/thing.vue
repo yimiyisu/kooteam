@@ -54,7 +54,7 @@
                 }
                 this.data.start = start;
                 this.data.end = (width / span) * second + start;
-                $.http(this.data, "/thing/patch.do", function () {
+                $.post(this.data, "/thing/patch.do", function () {
                 }, this);
             }
         }

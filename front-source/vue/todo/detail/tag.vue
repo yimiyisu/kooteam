@@ -31,6 +31,7 @@
     import Colors from "../../util/colors"
 
     export default {
+        name: "detailTag",
         props: ["value"],
         data: function () {
             return {

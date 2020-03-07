@@ -38,7 +38,7 @@
             },
             save: function () {
                 if (!this.title) {
-                    return alert("名称不能为空");
+                    return $.notice("名称不能为空", "error");
                 }
                 let parent = this.$parent;
                 parent.rndId++;

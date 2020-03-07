@@ -1,11 +1,17 @@
 .k-thing-comment {
-  border-top: 1px solid #e8e8e8;
+  margin-top: 20px;
   min-height: 240px;
-  padding: 10px 20px;
+  padding-bottom: 60px;
+  position: relative;
 
-  .header {
-    padding: 10px 6px !important;
-    margin-bottom: 6px;
+  .avator {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  .nick {
+    color: #333;
   }
 
   .empty {
@@ -18,107 +24,75 @@
     }
   }
 
-  .delete {
+  .red {
     display: none;
-    color: #f40;
-    cursor: pointer;
+  }
+  .el-col-2 {
+    text-align: center;
   }
 
-  .z-row {
-    color: #8c8c8c;
+  .el-col-6 {
+    text-align: right;
+  }
+  .info {
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
 
-    span {
-      margin-left: 8px;
+  .log {
+    border-bottom: 1px #DDE2EE solid;
+    margin: 0 0 4px 28px;
+    padding-top: 16px;
+    .time {
+      font-size: 12px;
+      margin: 6px 0;
     }
   }
 
-  .z-16 {
-    text-align: right;
-  }
-
-  .comment {
-    position: relative;
-    padding: 10px;
-    font-size: 12px;
-
+  .content {
+    border-bottom: 1px #DDE2EE solid;
+    margin: 20px 0 0 28px;
+    padding-bottom: 6px;
     &:hover {
-      .delete {
+      .red {
         display: inline-block;
       }
     }
-
-    .content {
-      color: #333;
-      margin: 0;
-    }
   }
 
-  .attachment {
-    padding: 4px 10px 4px;
-
-    li {
-      padding: 10px 40px;
-      background: #fff;
-      border: 1px solid #eaeaea;
-      border-radius: 2px;
-      margin: 10px 0;
-      position: relative;
+  .post {
+    position: absolute;
+    margin-top: 16px;
+    bottom: 0;
+    left: 26px;
+    right: 0;
+    label, .face {
+      width: 30px;
+      line-height: 36px;
+      cursor: pointer;
+      font-size: 16px;
 
       &:hover {
-        span {
-          display: none;
-        }
-
-        i {
-          display: block;
-        }
+        color: $primary;
       }
     }
 
-    span, i {
-      position: absolute;
-      right: 5px;
-      top: 2px;
-      color: #999;
+    .face {
+      text-align: right;
     }
 
-    i {
-      display: none;
-    }
-  }
-}
+    .input {
+      width: 586px;
+      background: #fff;
+      height: 24px;
+      padding: 6px 8px;
+      border: 1px solid #ddd;
+      color: #666;
 
-.k-comment-post {
-  padding: 10px;
-  background: #eef1f4;
-  display: flex;
-  border-radius: 0 .1rem .1rem 0;
-
-  label, .face {
-    width: 30px;
-    line-height: 36px;
-    cursor: pointer;
-    font-size: 16px;
-
-    &:hover {
-      color: $primary;
-    }
-  }
-
-  .face {
-    text-align: right;
-  }
-
-  .input {
-    flex: 1;
-    background: #fff;
-    height: 24px;
-    padding: 6px 8px;
-    border: 1px solid #ddd;
-    color: #666;
-
-    &:focus {
-      outline: 0;
+      &:focus {
+        outline: 0;
+      }
     }
   }
 }
+

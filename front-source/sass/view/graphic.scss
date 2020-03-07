@@ -74,8 +74,10 @@
 }
 
 .k-graph {
-  min-width: 800px;
-  width: 100%;
-  min-height: 640px;
-  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 40px;
+  right: 0;
+  z-index: 2;
 }

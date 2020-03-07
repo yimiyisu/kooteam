@@ -1,3 +1,5 @@
-import Login from "./wap/login"
+import DingTalk from "./wap/dingTalk"
+import WechatEnterprise from "./wap/wechatEnterprise"
 
-Vue.component("k-login", Login);
+Vue.component("k-dingtalk", DingTalk);
+Vue.component("k-wechat", WechatEnterprise);

@@ -78,7 +78,7 @@ public class Report {
     }
 
     public ZenResult set(ZenData data, ZenUser user) {
-        ZenData params = ZenData.put("report", data.get("report"));
+        ZenData params = ZenData.create("report", data.get("report"));
         zenStorageEngine.execute("patch/userReport", params, user);
         return ZenResult.success("更新完成");
     }
@@ -92,8 +92,8 @@ public class Report {
             if (count > 0) {
                 return ZenResult.fail(dateId + "汇报已经写，不要重复提交！");
             }
-            data.set("dateId", dateId);
-            data.set("status", "0");
+            data.put("dateId", dateId);
+            data.put("status", "0");
             // 同步到用户的mail信息
             result = zenStorageEngine.execute("put/myReport", data, user);
         } else {
@@ -112,7 +112,7 @@ public class Report {
             config.setWeekMail(data.get("mails"));
             config.setWeekTo(data.get("readers"));
         }
-        ZenData params = ZenData.put("report", GsonKit.stringify(config));
+        ZenData params = ZenData.create("report", GsonKit.stringify(config));
         zenStorageEngine.execute("patch/userReport", params, user);
         return result.setMessage("保存成功");
     }

@@ -1,100 +1,96 @@
 <template>
-    <z-dialog class="k-repository-set" title="知识库权限设置" :visible.sync="isShow">
-        <z-form label-width="100px;">
-            <z-field label="阅读权限">
-                <z-radio v-model="def">
+    <z-button plain size="small" @click="show">
+        <slot></slot>
+        <z-dialog class="k-repository-set" size="small" title="知识库权限设置" @close="close" v-if="isShow" visible>
+            <z-form>
+                <z-radio label="阅读权限" @change="change" v-model="def">
                     <var value="1">私有文库</var>
                     <var value="3">同事开放</var>
                     <var value="2">完全开放</var>
                 </z-radio>
-            </z-field>
-            <z-field label="编辑人员">
-                <z-button type="primary" size="small" @click="showSearch">添加用户</z-button>
-                <div v-show="searchTag" class="search">
-                    <k-user-search v-model="current"></k-user-search>
-                    <div class="action">
-                        <z-button size="small" @click="cancel">取消</z-button>
-                        <z-button size="small" type="primary" @click="select">确定</z-button>
+                <z-field label="用户列表">
+                    <z-employee :max="1" popover @finish="addUser">
+                        <z-button plain>添加用户</z-button>
+                    </z-employee>
+                    <div class="user" v-for="uid in users" :key="uid">
+                        <z-nick :uid="uid"></z-nick>
+                        <i class="ft icon hover" @click="remove(uid)">&#xe6c2;</i>
                     </div>
-                </div>
-            </z-field>
-            <z-field>
-                <div class="user" v-for="user in users" :key="user._id">
-                    <z-avator :uid="user._id"></z-avator>
-                    <strong>{{user.nick}}</strong>
-                    <span @click="remove(user)" class="z-icon hover">&#xe5c9;</span>
-                </div>
-            </z-field>
-        </z-form>
-    </z-dialog>
+                </z-field>
+            </z-form>
+        </z-dialog>
+    </z-button>
 </template>
 <script>
     export default {
-        props: ["note", "permision"],
+        props: ['note', 'permision'],
         data: function () {
             return {
-                def: "1",
+                def: '1',
                 users: [],
                 current: {},
                 searchTag: false,
-                isShow: false,
-            }
+                isShow: false
+            };
         },
-        watch: {
-            def: function () {
-                let param = {
-                    _id: this.note,
-                    permision: this.def
-                };
-                $.http(param, "/note/patch.do", function (reback) {
-                    this.$parent.chapterData.public = param.permision;
-                }, this);
-            }
-        },
-        mounted: function () {
-            this.$nextTick(function () {
-                $.on("docSet", this.show);
-            });
+        created() {
+            this.def = this.$parent.data.permision;
         },
         methods: {
-            show(opt) {
-                this.isShow = opt;
-                this.def = this.permision;
+            change(val) {
+                let param = {
+                    _id: this.note,
+                    permision: val
+                };
+                $.post(param, '/note/patch.do', function (reback) {
+                    this.$parent.data.permision = param.permision;
+                }, this);
+            },
+            show() {
+                this.isShow = true;
                 this.loadData();
             },
-            cancel: function () {
-                this.searchTag = false;
-            },
-            select: function () {
+            addUser(uid) {
                 let param = {
                     noteId: this.note,
                     permision: 2,
-                    uid: this.current.uid
+                    uid: uid
                 };
                 if (!param.uid) {
                     return;
                 }
-                $.http(param, "/note/addUser.do", function (reback) {
-                    this.searchTag = false;
-                    this.loadData();
+                $.post(param, '/note/addUser.do', function (reback) {
+                    this.users.unshift(param.uid);
                 }, this);
             },
-            showSearch: function () {
-                this.searchTag = true;
+            remove(uid) {
+                $.get({uid: uid, noteId: this.note}, '/note/removeUser.do', _ => {
+                    this.users.forEach((current, idx) => {
+                        if (current === uid) {
+                            this.users.splice(idx, 1);
+                        }
+                    })
+                });
             },
             close: function () {
-                this.$parent.showSet = false;
-            },
-            remove: function (user) {
-                $.http({_id: user._id, noteId: this.note}, "/note/removeUser.do", function (reback) {
-                    this.loadData();
-                }, this);
+                this.isShow = false;
             },
             loadData: function () {
-                $.http({noteId: this.note}, "/note/users.do", function (reback) {
-                    this.users = reback.data;
-                }, this);
+                $.get(
+                    {noteId: this.note},
+                    '/select/noteUser.json',
+                    function (reback) {
+                        let data = reback.data;
+                        if (!data) {
+                            return;
+                        }
+                        data.forEach((user) => {
+                            this.users.push(user.uid);
+                        });
+                    },
+                    this
+                );
             }
         }
-    }
+    };
 </script>

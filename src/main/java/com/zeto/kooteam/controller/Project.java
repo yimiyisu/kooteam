@@ -2,19 +2,23 @@ package com.zeto.kooteam.controller;
 
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.DateKit;
+import com.blade.kit.GsonKit;
 import com.zeto.ZenConditionKit;
 import com.zeto.ZenData;
 import com.zeto.ZenResult;
 import com.zeto.ZenUserKit;
 import com.zeto.annotation.AccessRole;
-import com.zeto.dal.domain.UserFrom;
 import com.zeto.domain.ZenCondition;
+import com.zeto.domain.ZenRole;
 import com.zeto.domain.ZenUser;
 import com.zeto.driver.ZenStorageEngine;
 import com.zeto.kooteam.service.EventBiz;
 import com.zeto.kooteam.service.domain.ProjectStat;
 import com.zeto.kooteam.service.eventbus.model.MessageModel;
 import com.zeto.kooteam.service.eventbus.model.MessageType;
+
+import java.util.List;
+import java.util.Map;
 
 @AccessRole
 public class Project {
@@ -24,31 +28,32 @@ public class Project {
 
     // 我的项目
     public ZenResult my(ZenUser user, ZenData data) {
-        data.set("userId", user.getUid());
+        data.put("userId", user.getUid());
         ZenResult source = zenStorageEngine.execute("select/projectUserByUserId", data, user);
+        long total = zenStorageEngine.count("projectUser", ZenConditionKit.And().eq("userId", data.get("userId")));
         ZenResult projects = zenStorageEngine.selectByIds("project", "projectId", source);
-        return source.setData(projects.getData());
+        return ZenResult.success().put("list", projects.getData()).setTotal((int) total);
     }
 
     // 创建项目
     public ZenResult create(ZenUser user, ZenData data) {
-        data.set("owner", user.getUid());
+        data.put("owner", user.getUid());
         ZenResult result = zenStorageEngine.execute("put/project", data, user);
         String projectId = result.get("_id");
         // 创建者为负责人
-        ZenData param = ZenData.put("userId", user.getUid()).
-                set("projectId", projectId).set("role", "5");
+        ZenData param = ZenData.create("userId", user.getUid()).
+                put("projectId", projectId).put("role", "5");
         zenStorageEngine.execute("put/projectUser", param, user);
         // 手机端项目成员添加
         String[] dingUsers = data.getParameters("dingUsers");
         if (dingUsers != null) {
             for (String dingUid : dingUsers) {
-                ZenUser dingUser = ZenUserKit.getByDingUid(dingUid, UserFrom.DINGTALK);
+                ZenUser dingUser = ZenUserKit.getByUnionId(dingUid, ZenRole.DING);
                 if (dingUser == null || dingUser.getUid().equals(user.getUid())) {
                     continue;
                 }
-                param = ZenData.put("userId", dingUser.getUid()).
-                        set("projectId", projectId).set("role", "1");
+                param = ZenData.create("userId", dingUser.getUid()).
+                        put("projectId", projectId).put("role", "1");
                 zenStorageEngine.execute("put/projectUser", param, user);
             }
         }
@@ -69,9 +74,17 @@ public class Project {
     public ZenResult faviList(ZenUser user) {
         ZenData param = new ZenData();
         if (!param.contains("size")) {
-            param.set("size", "5");
+            param.put("size", "5");
         }
         ZenResult result = zenStorageEngine.execute("select/projectFaviByUid", param, user);
+        return zenStorageEngine.selectByIds("project", "projectId", result);
+    }
+
+    // 参与的项目
+    public ZenResult joinList(ZenUser user) {
+        ZenData param = ZenData.create("userId", user.getUid());
+
+        ZenResult result = zenStorageEngine.execute("select/projectUserByUserId", param, user);
         return zenStorageEngine.selectByIds("project", "projectId", result);
     }
 
@@ -81,9 +94,8 @@ public class Project {
         if (project.isEmpty()) {
             return ZenResult.fail("工程不存在");
         }
-        ZenResult boardData = zenStorageEngine.extend("project", projectId);
-        project.put("board", boardData.get("board"));
-        ZenData param = ZenData.put("projectId", projectId).set("size", "200");
+        project.put("board", project.get("board"));
+        ZenData param = ZenData.create("projectId", projectId).put("size", "200");
         ZenResult thingsData = zenStorageEngine.execute("select/thingByProjectId", param, user);
         project.put("things", thingsData.getData());
         return project;
@@ -118,35 +130,37 @@ public class Project {
         if (!projectInfo.isSuccess()) {
             return projectInfo;
         }
-        String[] dingUsers = data.getParameters("dingUsers"), ids;
+        String[] dingUsers = data.getParameters("dingUsers");
+        List<Map<String, Object>> ids = GsonKit.parseListMap("");
         if (dingUsers != null) {
             // 钉钉用户ID，转成系统用户ID
-            ids = new String[dingUsers.length];
+            //ids = new String[dingUsers.length];
             ZenUser dingUser;
             for (int i = 0; i < dingUsers.length; i++) {
-                dingUser = ZenUserKit.getByDingUid(dingUsers[i], UserFrom.DINGTALK);
+                dingUser = ZenUserKit.getByUnionId(dingUsers[i], ZenRole.DING);
                 if (dingUser != null) {
-                    ids[i] = dingUser.getUid();
+                    // ids[i] = dingUser.getUid();
                 }
             }
         } else {
-            ids = data.getParameters("ids");
+            ids = GsonKit.parseListMap(data.get("ids"));
+            //  ids = data.getParameters("ids");
         }
-        if (ids == null || ids.length == 0) {
+        if (ids == null || ids.size() == 0) {
             return ZenResult.fail("请先选择好友");
         }
 
-        for (String uid : ids) {
-            ZenData param = ZenData.put("userId", uid);
-            param.set("projectId", projectId);
-            param.set("userId", uid);
+        for (Map<String, Object> uid : ids) {
+            ZenData param = ZenData.create("userId", uid);
+            param.put("projectId", projectId);
+            param.put("userId", uid.get("uid"));
             ZenResult checkData = zenStorageEngine.execute("get/projectUserByProjectIdUid", param, user);
             if (!checkData.isEmpty()) {// 每个用户只能添加一次
                 continue;
             }
-            param.set("role", role);
+            param.put("role", role);
             message = user.getNick() + "已经把你加入到项目[" + projectInfo.get("title") + "]成员中";
-            EventBiz.sendMessage(new MessageModel(user.getUid(), uid, message, projectId, MessageType.PROJECT));
+            //EventBiz.sendMessage(new MessageModel(user.getUid(), uid.get("uid"), message, projectId, MessageType.PROJECT));
             zenStorageEngine.execute("put/projectUser", param, user);
         }
         return ZenResult.success("添加成功");
@@ -174,11 +188,11 @@ public class Project {
         if (!result.isSuccess()) {
             return result;
         }
-        ZenData params = ZenData.put("owner", data.get("userId")).set("_id", data.get("_id"));
+        ZenData params = ZenData.create("owner", data.get("userId")).put("_id", data.get("_id"));
         zenStorageEngine.execute("patch/project", params, user);
 
         // 删除负责人项目权限
-        params = ZenData.put("projectId", result.get("_id")).set("userId", user.getUid());
+        params = ZenData.create("projectId", result.get("_id")).put("userId", user.getUid());
         zenStorageEngine.execute("delete/projectUserWidthProject", params, user);
 
         String message = user.getNick() + "已把[" + result.get("title") + "]项目负责人角色转交给你";
@@ -193,7 +207,7 @@ public class Project {
         if (!result.isSuccess()) {
             return result;
         }
-        ZenData params = ZenData.put("projectId", data.get("_id"));
+        ZenData params = ZenData.create("projectId", data.get("_id"));
         result = zenStorageEngine.execute("count/thingByProjectId", params, user);
         if (result.getLong() > 0) {
             return ZenResult.fail("该项目中存在未完成任务，不能删除");
@@ -206,17 +220,17 @@ public class Project {
 
     // 退出
     public ZenResult quit(ZenData data, ZenUser user) {
-        data.set("userId", user.getUid());
+        data.put("userId", user.getUid());
         ZenResult result = zenStorageEngine.execute("get/projectUserByProjectIdUid", data, user);
         if (result.isEmpty()) {
             ZenResult.success("退出完成");
         }
-        ZenData param = ZenData.put("projectId", data.get("projectId"));
+        ZenData param = ZenData.create("projectId", data.get("projectId"));
         ZenResult project = zenStorageEngine.execute("get/projectById", param, user);
         if (user.getUid().equals(project.get("owner"))) {
             ZenResult.fail("项目负责人，只能转交项目");
         }
-        param = ZenData.put("_id", result.get("_id"));
+        param = ZenData.create("_id", result.get("_id"));
         zenStorageEngine.execute("delete/projectUser", param, user);
         return ZenResult.success("退出成功");
     }
@@ -227,7 +241,7 @@ public class Project {
             return ZenResult.fail("项目不存在");
         }
 
-        ZenData param = ZenData.put("_id", projectUser.get("projectId"));
+        ZenData param = ZenData.create("_id", projectUser.get("projectId"));
         ZenResult project = zenStorageEngine.execute("get/projectById", param, user);
 
         if (project.isEmpty()) {
@@ -243,7 +257,7 @@ public class Project {
     }
 
     private ZenResult checkOnwer(ZenUser user, String projectId) {
-        ZenResult result = zenStorageEngine.execute("get/projectById", ZenData.put("_id", projectId), user);
+        ZenResult result = zenStorageEngine.execute("get/projectById", ZenData.create("_id", projectId), user);
         if (result.isEmpty()) {
             return ZenResult.fail("项目不存在");
         }
@@ -256,7 +270,7 @@ public class Project {
     // 获取项目章节
     public ZenResult chapter(ZenData data, ZenUser user) {
         String projectId = data.get("id");
-        ZenData params = ZenData.put("_id", projectId);
+        ZenData params = ZenData.create("_id", projectId);
         ZenResult projectInfo = zenStorageEngine.execute("get/projectById", params, user);
         String title = projectInfo.get("title");
         ZenResult extend = zenStorageEngine.extend("note", projectId);
@@ -267,12 +281,12 @@ public class Project {
             if (extend.isEmpty()) {
                 doc = extend.get("doc");
             }
-            params.set("permision", "4")
-                    .set("isProject", "1")
-                    .set("title", title)
-                    .set("type", "4")
-                    .set("content", doc)
-                    .set("parentId", projectId);
+            params.put("permision", "4")
+                    .put("isProject", "1")
+                    .put("title", title)
+                    .put("type", "4")
+                    .put("content", doc)
+                    .put("parentId", projectId);
             zenStorageEngine.execute("put/note", params, user);
         }
         return extend.put("title", title);
@@ -287,7 +301,7 @@ public class Project {
     // 项目统计
     public ZenResult stat(ZenData data, ZenUser user) {
         String projectId = data.get("id");
-        ZenData param = ZenData.put("_id", projectId);
+        ZenData param = ZenData.create("_id", projectId);
         ZenResult project = zenStorageEngine.execute("get/projectById", param, user);
         ProjectStat stat = new ProjectStat();
         stat.setFinished(project.getLong("finished"));

@@ -13,12 +13,12 @@
 <script>
     export default {
         props: ["title", "logo"],
-        data: function () {
+        data() {
             return {
                 isFull: false
             }
         },
-        mounted: function () {
+        mounted() {
             let that = this;
             // 监听快捷键全屏操作，并同步到内部状态里
             window.onresize = function () {
@@ -39,14 +39,14 @@
             }
         },
         methods: {
-            toggle: function (e) {
+            toggle(e) {
                 e.stopPropagation();
                 this.$parent.showNav = !this.$parent.showNav;
             },
-            home: function () {
+            home() {
                 // window.location.href = "/view.html?id=" + this.parent;
             },
-            full: function () {
+            full() {
                 this.isFull = !this.isFull;
                 if (this.isFull) {
                     let el = document.documentElement;

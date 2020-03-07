@@ -25,7 +25,7 @@
             win.mxLoadStylesheets = false;
             win.mxBasePath = "/";
             win.mxConstants = {};
-            $.lib(["/mx/mxClient.js", "/mx/viewer.js"], this.render);
+            $.lib(["mx/mxClient.js", "mx/viewer.js"], this.render);
         },
         methods: {
             render: function () {
@@ -48,12 +48,14 @@
                 }
             },
             draw: function () {
-                if (!this.value.content) {
+                let content = this.value.content;
+                if (!content) {
                     return;
                 }
-                let xmlDocument = mxUtils.parseXml(this.value.content);
-                let codec = new mxCodec(xmlDocument);
-                let graph = new Graph(this.$el, null, null, null, this.themes);
+                content = Graph.decompress(content);
+                let xmlDocument = mxUtils.parseXml(content),
+                    codec = new mxCodec(xmlDocument),
+                    graph = new Graph(this.$el);
                 graph.centerZoom = true;
                 graph.setTooltips(false);
                 graph.setEnabled(false);

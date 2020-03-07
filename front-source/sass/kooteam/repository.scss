@@ -1,8 +1,6 @@
 .k-repository {
   background: #fff;
   margin: 0 15px;
-  min-height: 680px;
-  padding-bottom: 40px;
 
   .z-row {
     border-bottom: 1px solid #eee;
@@ -56,6 +54,15 @@
       content: "G";
     }
   }
+  .doc-floder {
+    color: #777;
+    &:before {
+      content: "\e882";
+    }
+    &.lap:before {
+      content: "\e87e";
+    }
+  }
 
   .doc-mind {
     border-color: #56baff;
@@ -68,7 +75,7 @@
 
   .group {
     cursor: move;
-
+    padding-right: 10px;
     .group {
       padding-left: 14px;
       background: url("//a.yimiyisu.com/tree.png") no-repeat -2px -2px;
@@ -177,23 +184,6 @@
     }
   }
 
-  .folder {
-    color: #999;
-    z-index: 3;
-    position: absolute;
-    left: -8px;
-    top: 6px;
-    cursor: pointer;
-
-    &:before {
-      content: "\e5cf";
-    }
-
-    &.hide:before {
-      content: "\e5cc";
-    }
-  }
-
   .info {
     position: absolute;
     background: #fff;
@@ -223,106 +213,26 @@
 }
 
 .k-repository-set {
-  position: fixed;
-  z-index: 20;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-
-  .modal {
-    @extend %shadow;
-    width: 640px;
-    left: 50%;
-    top: 80px;
-    min-height: 400px;
-    margin-left: -320px;
-    position: absolute;
-    background: #fff;
-  }
-
-  h4 {
-    background: #eef1f4;
-    border-bottom: solid 1px #eaeaea;
-    margin-bottom: 20px;
-    font-size: 14px;
-    padding: 10px 16px;
-  }
-
-  dl {
-    margin: 10px 40px 0 0;
-  }
-
-  .close {
-    position: absolute;
-    top: 12px;
-    right: 16px;
-    cursor: pointer;
-  }
-
-  .z-6 {
-    text-align: center;
-    min-height: 42px;
-    line-height: 42px;
-  }
-
-  .z-18 {
-    position: relative;
-    line-height: 42px;
-  }
-
-  .search {
-    @extend %shadow;
-    position: absolute;
-    z-index: 7;
-    left: 0;
-    top: 0;
-    background: #fff;
-    padding: 10px;
-    width: 300px;
-  }
-
-  .action {
-    text-align: right;
-  }
-
-  .add {
-    margin-bottom: 12px;
-  }
-
   .user {
     width: 80px;
-    margin: 5px 0;
-    height: 60px;
+    height: 26px;
     display: inline-block;
     position: relative;
-    cursor: pointer;
     overflow: hidden;
     text-align: center;
+    margin-right: .6rem;
 
     &:hover {
-      span {
+      .ft {
         display: block;
       }
     }
 
-    span {
+    .ft {
       position: absolute;
       display: none;
       top: 0;
       right: 0;
-    }
-
-    img {
-      width: 30px;
-      border-radius: 50%;
-    }
-
-    strong {
-      color: #666;
-      display: block;
-      line-height: 0;
     }
   }
 

@@ -1,9 +1,13 @@
 package com.zeto.kooteam.service;
 
+import com.blade.mvc.WebContext;
 import com.google.common.base.Strings;
 import com.google.common.eventbus.AsyncEventBus;
 import com.zeto.domain.ZenUser;
-import com.zeto.kooteam.service.eventbus.*;
+import com.zeto.kooteam.service.eventbus.MailListener;
+import com.zeto.kooteam.service.eventbus.MessageListener;
+import com.zeto.kooteam.service.eventbus.ProjectListener;
+import com.zeto.kooteam.service.eventbus.UserNickListener;
 import com.zeto.kooteam.service.eventbus.model.EmployeeModel;
 import com.zeto.kooteam.service.eventbus.model.MailMode;
 import com.zeto.kooteam.service.eventbus.model.MessageModel;
@@ -19,7 +23,6 @@ public class EventBiz {
         eventBus.register(new ProjectListener());
         eventBus.register(new UserNickListener());
         eventBus.register(new MessageListener());
-        eventBus.register(new EmployeeListener());
         eventBus.register(new MailListener());
     }
 
@@ -44,6 +47,7 @@ public class EventBiz {
         }
         ProjectModel model = new ProjectModel();
         model.setProjectId(projectId);
+        model.setSite(WebContext.get().getZenSite());
         eventBus.post(model);
     }
 

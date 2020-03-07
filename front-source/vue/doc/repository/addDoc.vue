@@ -5,12 +5,7 @@
                 <z-input width="340px" type="text" v-model="title"></z-input>
             </z-field>
             <z-field label="文档类型">
-                <z-radio type="button" v-model="type">
-                    <var value="1">文本</var>
-                    <var value="2">脑图</var>
-                    <var value="5">流程图</var>
-                    <var value="4">目录</var>
-                </z-radio>
+                <z-radio type="button" v-model="type" :data="types"></z-radio>
             </z-field>
         </z-form>
         <div slot="footer" class="dialog-footer">
@@ -30,11 +25,10 @@
                 title: "",
                 item: {},
                 types: [
-                    {value: 1, title: "文本"},
-                    {value: 2, title: "脑图"},
-                    // {value: 3, title: "流程图"},
-                    {value: 5, title: "流程图"},
-                    {value: 4, title: "目录"}
+                    {value: 1, text: "文本"},
+                    {value: 2, text: "脑图"},
+                    {value: 5, text: "流程图"},
+                    {value: 4, text: "目录"}
                 ],
             }
         },
@@ -58,24 +52,22 @@
                     chapterId: this.item.id,
                     parentId: this.parent
                 };
-                // 是否是工程ID
-                if (this.$parent.pid) {
-                    item.isProject = "1";
-                }
                 // 新建目录
                 if (this.type === 4) {
                     let params = {
                         event: "edit",
                         link: "folder",
+                        type: this.type,
                         data: this.item.id,
                         uid: zen.user.id,
+                        status: true,
                         title: this.title
                     };
                     // 同步标题
                     $.emit("chapterEvt", params);
                     return this.toggle();
                 }
-                $.http(item, url, function (reback) {
+                $.post(item, url, function (reback) {
                     let data = reback.data;
                     let params = {
                         event: "edit",
@@ -87,9 +79,11 @@
                     };
                     // 同步标题
                     $.emit("chapterEvt", params);
-
                     this.title = "";
                     this.toggle();
+                    if (this.type === 4) {
+                        return;
+                    }
                     params = {
                         event: "doc",
                         data: data._id

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <i @click="click" class="z-icon search-icon hover">&#xe8b6;</i>
+        <i @click="click" class="ft icon search-icon hover">&#xe7ae;</i>
         <div class="search-dialog" v-show="show"></div>
     </div>
 </template>

@@ -1,17 +1,20 @@
 <template>
     <div class="describe">
-        <textarea></textarea>
-        <!--<div class="k-attach">-->
-        <!--<i class="z-icon hover" v-tip="'关联文档'">&#xe2bc;</i>-->
-        <!--<i class="z-icon hover" v-tip="'添加附件'">&#xe2c3;</i>-->
-        <!--</div>-->
+        <z-row>
+            <z-col :span="1"><i class="ft icon">&#xe75e;</i></z-col>
+            <z-col :span="23">
+                <div class="title"><strong>描述</strong></div>
+                <textarea placeholder="添加详细描述..." @change="change" v-model="value.content"></textarea>
+            </z-col>
+        </z-row>
     </div>
 </template>
 <script>
     import Config from "../../util/config"
 
     export default {
-        props: ["content"],
+        name: "detailDescribe",
+        props: ["value", "type"],
         data: function () {
             return {
                 thing: null,
@@ -23,9 +26,19 @@
             //     this.init, null, this);
         },
         methods: {
+            change() {
+                let url = '/thing/patch.do';
+                if (this.type === 1) {
+                    url = "/patch/archive.json"
+                }
+                $.post({
+                    content: this.value.content,
+                    _id: this.value._id
+                }, url, (reback) => {
+                })
+            },
             init: function () {
                 let domain = Config.uploadDomain();
-                // Simditor.locale = 'zh-CN';
                 let toolbar = ['title', 'bold', 'italic', 'underline', 'strikethrough', 'fontScale', 'color', 'ol', 'ul', 'blockquote', 'code', 'table', 'link', 'image', 'hr', 'alignment'];
                 this.editor = new Simditor({
                     textarea: $("textarea", this.$el),
@@ -60,6 +73,7 @@
                     that.localEmit = true;
                     that.$parent.item.content = that.editor.getValue();
                 });
+
             }
         }
     }

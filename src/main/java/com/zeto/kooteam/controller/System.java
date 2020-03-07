@@ -2,23 +2,26 @@ package com.zeto.kooteam.controller;
 
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.EncryptKit;
+import com.blade.kit.GsonKit;
 import com.blade.kit.PatternKit;
 import com.blade.mvc.http.Request;
 import com.google.common.base.Strings;
 import com.zeto.*;
 import com.zeto.annotation.AccessRole;
 import com.zeto.annotation.MethodType;
-import com.zeto.domain.ZenAction;
 import com.zeto.domain.ZenMethod;
+import com.zeto.domain.ZenRole;
 import com.zeto.domain.ZenUser;
 import com.zeto.driver.ZenStorageEngine;
-import com.zeto.kooteam.dingtalk.DingClient;
+import com.zeto.kit.ConfigKit;
+import com.zeto.kit.driver.ConfigOptionVO;
 import com.zeto.kooteam.service.EventBiz;
+import com.zeto.kooteam.service.auth.AuthService;
 import com.zeto.kooteam.service.eventbus.MailListener;
 import com.zeto.kooteam.service.eventbus.model.UserNickModel;
-import com.zeto.kooteam.service.install.DingTalkValidate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @AccessRole
@@ -26,19 +29,22 @@ public class System extends Base {
     @Inject
     private ZenStorageEngine zenStorageEngine;
 
+    @Inject
+    private AuthService authService;
+
     public ZenResult my(ZenUser user) {
         if (user == null) {
             return ZenResult.success();
         }
-        ZenData param = ZenData.put("_id", user.getUid());
+        ZenData param = ZenData.create("_id", user.getUid());
         ZenResult profile = zenStorageEngine.execute("get/userById", param, user);
         if (profile.isEmpty()) {
-            param = ZenData.put("_id", user.getUid());
-            param.set("nick", user.getNick());
-            param.set("email", user.getEmail());
-            param.set("home", "todo/home.htm");
-            param.set("skin", "3");
-            param.set("calendar", "month");
+            param = ZenData.create("_id", user.getUid());
+            param.put("nick", user.getNick());
+            param.put("email", user.getEmail());
+            param.put("home", "todo/home.htm");
+            param.put("skin", "3");
+            param.put("calendar", "month");
             zenStorageEngine.execute("put/user", param, user);
             return zenStorageEngine.execute("get/userById", param, user);
         }
@@ -50,33 +56,37 @@ public class System extends Base {
     }
 
     public ZenResult profile(ZenUser user) {
-        ZenData param = ZenData.put("_id", user.getUid());
+        ZenData param = ZenData.create("_id", user.getUid());
         return zenStorageEngine.execute("get/userById", param, user);
     }
 
     public ZenResult getConfig(Request request) {
-        ZenResult result = ZenResult.success().
-                put("mailHost", ZenEnvironment.get("mailHost")).
-                put("mailPort", ZenEnvironment.get("mailPort")).
-                put("mailUser", ZenEnvironment.get("mailUser"));
-        String domain = request.header("Origin");
-        result.put("isDingInited", DingClient.isInited()).put("appName", domain);
-        return result;
+        ConfigKit.selectByApp("kooteam");
+        List<ConfigOptionVO> config = ConfigKit.getGroup("account");
+        Map<String, Object> data = GsonKit.parseMap("");
+        for (ConfigOptionVO optionVO : config) {
+            data.put(optionVO.getKey(), optionVO.getValue());
+        }
+        return ZenResult.success().setData(data);
     }
 
-    public ZenResult ding(ZenData data, ZenUser user, Request request) {
-        // 查询状态
-        ZenResult checkResult = checkRoot(user);
-        if (checkResult != null) {
-            return checkResult;
+    public ZenResult platformConfig(ZenData data, ZenUser user) {
+        if (!user.hasTag(ZenRole.ADMIN)) {
+            return ZenResult.success("没有操作权限");
         }
-        boolean status = DingTalkValidate.check(data.get("appKey"), data.get("appSecret"), data.get("appName"), data.get("corpId"));
-        if (status) {
-            DingTalkValidate.Serialize();
-            return ZenResult.success("配置成功").refresh();
-        }
-        return ZenResult.fail("钉钉配置信息校验失败");
+        Map<String, Object> config = GsonKit.parseMap(data.toJSON());
+        List<ConfigOptionVO> configList = GsonKit.parseList("[]", ConfigOptionVO.class);
+        config.forEach((key, value) -> {
+            ConfigOptionVO optionVO = new ConfigOptionVO();
+            optionVO.setKey(key);
+            optionVO.setValue(value.toString());
+            configList.add(optionVO);
+        });
+        ConfigKit.setByApp("kooteam", "account", configList);
+        authService.init();
+        return ZenResult.success("保存成功");
     }
+
 
     public ZenResult mail(ZenData data, ZenUser user) {
         ZenResult checkResult = checkRoot(user);
@@ -104,7 +114,7 @@ public class System extends Base {
         config.put("mailPassword", mailPassword);
         ZenEnvironment.serialize(config);
         MailListener.test();
-        return ZenResult.success("保存成功，请检查" + mailUser + "账户测试邮件").setAction(ZenAction.SILENT);
+        return ZenResult.success("保存成功，请检查" + mailUser + "账户测试邮件");
     }
 
     public ZenResult password(ZenData data, ZenUser user) {

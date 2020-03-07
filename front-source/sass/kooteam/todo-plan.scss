@@ -1,5 +1,19 @@
 .k-todo-plan {
   position: relative;
+
+  .el-input__inner {
+    border: none;
+    background: none;
+    top: -7px;
+    position: relative;
+    padding-left: 15px !important;
+  }
+
+  .el-input__prefix {
+    top: -5px;
+    left: -8px;
+  }
+
   .calendar {
     @extend %shadow;
     position: absolute;
@@ -8,14 +22,17 @@
     left: 0;
     background: #fff;
   }
+
   .day {
     display: inline-block;
     position: relative;
     margin-left: -1px;
+
     &:hover ul {
       display: block;
     }
   }
+
   .modal {
     span {
       padding: 0 14px;
@@ -24,11 +41,13 @@
       font-weight: normal;
       border-left: 1px solid #e6e6e6;
       margin-right: -1px;
+
       &.active {
         color: $primary;
         font-weight: bold;
       }
     }
+
     ul {
       display: none;
       position: absolute;
@@ -36,28 +55,34 @@
       top: 0;
       background: #fff;
       z-index: 3;
+
       li {
         padding: 5px 14px;
         cursor: pointer;
         width: 24px;
+
         &:hover, &.active {
           color: $primary;
         }
       }
     }
   }
+
   .z-row {
     margin-top: 10px;
     padding-bottom: 10px;
     border-bottom: solid 1px #e6e6e6;
     width: 310px;
   }
+
   .operator {
     text-align: right;
     margin-right: 10px;
   }
+
   .weeks, .days {
     margin: 0 10px;
+
     span {
       display: inline-block;
       text-align: center;
@@ -72,11 +97,13 @@
       //  color: #fff;
       //}
     }
+
     .active {
       background: $primary;
       color: #fff;
     }
   }
+
   .weeks {
     span {
       width: 48px;
@@ -84,6 +111,7 @@
       margin: 0 14px 14px 0;
     }
   }
+
   .days {
     span {
       width: 28px;
@@ -91,6 +119,7 @@
       margin: -1px 0 0 -1px;
     }
   }
+
   .repeat-time {
     input {
       height: 28px;
@@ -98,27 +127,33 @@
       padding: 2px;
     }
   }
+
   .repeat-time, .repeat-type {
     margin: 10px 14px;
     color: #999;
+
     span {
       margin-left: 1rem;
       color: #333;
     }
   }
+
   .repeat-type {
     span {
       position: relative;
       display: inline-block;
+
       &.active {
         color: $primary;
       }
+
       &:hover {
         ul {
           display: block;
         }
       }
     }
+
     ul {
       width: 60px;
       display: none;
@@ -127,9 +162,11 @@
       top: 6px;
       background: #fff;
       z-index: 3;
+
       li {
         padding: 4px 14px;
         cursor: pointer;
+
         &:hover, &.active {
           color: $primary;
         }

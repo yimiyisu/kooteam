@@ -1,15 +1,32 @@
 <template>
     <div class="tip">
-        <i class="doc-txt" v-if="type===1" v-tip="'文本文档'"></i>
-        <i class="doc-mind" v-if="type===2" v-tip="'思维导图'"></i>
-        <i class="doc-graph" v-if="type===3" v-tip="'流程图'"></i>
-        <i class="doc-graph" v-if="type===5" v-tip="'流程图'"></i>
-
-        <i class="z-icon why" v-if="!type" v-tip="'此文档尚未创建'">&#xe8fd;</i>
+        <z-tooltip v-if="number==='1'" content="文本文档">
+            <i class="doc-txt"></i>
+        </z-tooltip>
+        <z-tooltip v-if="number==='2'" content="思维导图">
+            <i class="doc-mind"></i>
+        </z-tooltip>
+        <z-tooltip v-if="number==='5'" content="流程图">
+            <i class="doc-graph"></i>
+        </z-tooltip>
+        <z-tooltip v-if="number==='4'" content="文件夹">
+            <i class="doc-floder ft icon" :class="{'lap':!value.status}"></i>
+        </z-tooltip>
+        <z-tooltip v-if="!number" content="此文档尚未创建">
+            <i class="ft icon why">&#xe76e;</i>
+        </z-tooltip>
     </div>
 </template>
 <script>
     export default {
-        props: ["type"]
+        props: ["value"],
+        computed: {
+            number() {
+                if (!this.value || !this.value.type) {
+                    return '';
+                }
+                return this.value.type + '';
+            }
+        }
     }
 </script>

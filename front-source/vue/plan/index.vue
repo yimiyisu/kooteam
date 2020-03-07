@@ -43,7 +43,7 @@
         mounted: function () {
             // this.things = this.value;
             this.projectId = $.getParam("id");
-            $.http({"projectId": this.projectId}, "/select/thingByprojectId.json", function (reback) {
+            $.post({"projectId": this.projectId}, "/select/thingByprojectId.json", function (reback) {
                 if (reback.data) {
                     this.things = reback.data.data;
                 }

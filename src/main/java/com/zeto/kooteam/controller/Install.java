@@ -5,6 +5,7 @@ import com.google.common.base.Strings;
 import com.google.common.io.Files;
 import com.zeto.*;
 import com.zeto.annotation.AccessRole;
+import com.zeto.domain.ZenAction;
 import com.zeto.domain.ZenRole;
 import com.zeto.kooteam.service.domain.AppConf;
 import com.zeto.kooteam.service.install.DBValidate;
@@ -14,7 +15,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@AccessRole(ZenRole.NORMAL)
+@AccessRole(ZenRole.ANONYMITY)
 public class Install {
 
 
@@ -27,7 +28,7 @@ public class Install {
     }
 
     public ZenResult checkDB(ZenData data) {
-        return DBValidate.check(data);
+        return DBValidate.check(data).setAction(ZenAction.SILENT);
     }
 
     public ZenResult save(ZenData data) {
@@ -36,7 +37,7 @@ public class Install {
         }
         String pwd = data.get("pwd");
         if (Strings.isNullOrEmpty(pwd)) {
-            return ZenResult.fail("管理员不能为空");
+            return ZenResult.fail("管理员密码不能为空");
         }
         AppConf conf = ZenCache.get(AppConf.cacheKey, AppConf.class);
         if (conf == null) {
@@ -63,19 +64,10 @@ public class Install {
                 Files.touch(propFile);
             }
             Map<String, String> params = new HashMap<>();
-            if (conf.isMysql()) {
-                params.put("mode", "3");
-                params.put("dbHost", "jdbc:mysql://" + conf.getHost() + ":" + conf.getPort() + "/" + conf.getDatabase() + "?serverTimezone=UTC&characterEncoding=utf-8");
-                params.put("dbUser", conf.getUser());
-                params.put("dbPasswd", conf.getPassword());
-            } else {
-                params.put("mode", "4");
-                params.put("mongoHost", conf.getHost());
-                params.put("mongoDB", conf.getDatabase());
-                params.put("mongoUser", conf.getUser());
-                params.put("mongoPassword", conf.getPassword());
-                params.put("mongoPort", conf.getPort());
-            }
+            params.put("mode", "3");
+            params.put("dbHost", "jdbc:mysql://" + conf.getHost() + ":" + conf.getPort() + "/" + conf.getDatabase() + "?serverTimezone=UTC&characterEncoding=utf-8");
+            params.put("dbUser", conf.getUser());
+            params.put("dbPasswd", conf.getPassword());
             ZenEnvironment.serialize(params);
             // 重新加载服务
 //            Zen.reload();

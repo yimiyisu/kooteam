@@ -1,41 +1,65 @@
 <template>
-    <div class="k-doc z-row">
-        <div class="z-4">
+    <z-row class="k-doc" type="flex" justify="space-between">
+        <z-col :span="4">
             <h3>我的知识库
-                <z-wicket type="text" class="new" size="small" view="J_new" action="/note/add.do" title="新建知识库"><i
-                        class="z-icon hover">&#xe145;</i></z-wicket>
+                <z-wicket type="text" class="search" size="small" view="J_new" action="/note/add.do" title="新建知识库"><i
+                        class="ft icon hover">&#xe7ae;</i></z-wicket>
             </h3>
-            <Tree></Tree>
-        </div>
-        <div class="z-20">
-            <Editor v-if="content" :data="chapterData" :summary="content"></Editor>
-        </div>
-    </div>
+            <z-scrollbar :height="-150">
+                <z-list url="/note/my.do" id="J_docList" :callback="callback">
+                    <template #default="item">
+                        <div class="doc-item" :class="{'active':current._id===item._id}"
+                             @click="select(item,$event)" :key="item._id">{{item.title}}
+                            <div class="time">
+                                {{item._id|idate}}
+                                <z-execute type="text" tip="确定删除吗？"
+                                           :action="'/note/remove.do?_id='+item._source"><i class="ft icon">&#xe8f8;</i>
+                                </z-execute>
+                            </div>
+                        </div>
+                    </template>
+                </z-list>
+            </z-scrollbar>
+        </z-col>
+        <z-col :span="20">
+            <Editor v-if="content" :data="current" :summary="content"></Editor>
+        </z-col>
+    </z-row>
 </template>
 <script>
-    import Editor from "./repository/editor"
+    import Editor from "./repository/index"
     import Config from "./repository/config"
-    import Tree from "./tree"
 
     export default {
         data: function () {
             return {
-                chapterData: {},
                 content: null,
-                value: null,
+                current: null
             }
         },
-        watch: {
-            value: function (val) {
-                if (!val) {
+        components: {Editor},
+        created() {
+            $.on("docSave", this.save);
+        },
+        destory() {
+            $.off("docSave");
+        },
+        methods: {
+            select: function (item) {
+                if (this.current && this.current._id === item._id) {
                     return;
                 }
-                this.chapterData = val;
-                this.loadContent(val._id, Config.initData());
-            }
-        },
-        components: {Editor, Tree},
-        methods: {
+                this.current = item;
+                this.loadContent(item._id, Config.initData());
+                let href = $.setParam("rid", item._id);
+                window.history.replaceState(null, null, href);
+            },
+            callback(data) {
+                if (data.total === 0) {
+                    return;
+                }
+                this.select(data.list[0]);
+            },
             save: function (result, content, later) {
                 if (!result) {
                     return false;
@@ -44,20 +68,18 @@
                     later = 3;
                 }
                 let param = {
-                    _id: this.chapterData._id,
+                    _id: this.current._id,
                     content: JSON.stringify(content)
                 };
-                $.http(param, "/note/patch.do", function (reback) {
-                    if (reback.action === 0) {
-                        $.notice(reback.data, "success");
-                    }
+                $.post(param, "/note/patch.do", function (reback) {
+                    $.notice("保存成功！", "success")
                 }, this, later);
             },
             loadContent: function (chapterId, defData) {
                 if (!chapterId) {
                     return;
                 }
-                $.http({_id: chapterId}, "/extend/note.json", function (reback) {
+                $.post({_id: chapterId}, "/get/noteContent.json", function (reback) {
                     let data = reback.data;
                     if (data.content) {
                         this.content = JSON.parse(data.content);

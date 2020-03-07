@@ -1,87 +1,73 @@
-.k-board {
-  margin: 0 15px;
-
-  .z-col {
-    width: 4rem;
-    position: relative;
-  }
-
-  .z-1 {
-    overflow-y: hidden;
-    overflow-x: auto;
-  }
-}
-
 .k-board-add {
-  position: absolute;
+  //position: absolute;
+  background: #ebecf0;
+  position: sticky;
   left: 0;
-  top: 0;
   right: 0;
-  background: #eee;
-  padding-bottom: 10px;
-  z-index: 3;
-  cursor: default;
-  border-bottom: 1px solid #ddd;
+  bottom: 0;
 
-  .prority {
-    margin: 10px 0 0 10px;
-
-    .title {
-      display: inline-block;
-      overflow: hidden;
-      height: 20px;
-      line-height: 20px;
-    }
-  }
-
-  .owner {
-    margin: 10px 0 0 10px;
-    position: relative;
-  }
-
-  .avator {
+  .action {
     cursor: pointer;
+    font-size: 16px;
+    width: 90%;
+    margin: 10px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    color: #666;
 
-    span {
-      vertical-align: text-bottom;
-    }
-
-    line-height: 25px;
-    height: 25px;
-    vertical-align: bottom;
-    overflow: hidden;
-    display: inline-block;
-
-    img {
-      width: 25px;
-      border-radius: 50%;
+    i {
       margin-right: 6px;
     }
+
+    &:hover {
+      background: rgba(9, 30, 66, .08);
+      color: #172b4d;
+    }
   }
 
-  .k-user-search {
-    @extend %shadow;
-    position: absolute;
-    z-index: 3;
-    top: 10px;
-    left: 20px;
-    right: 20px;
-    background: #fff;
+  .wrap {
+    margin: 8px 6px 0 6px;
+    background-color: #fff;
+    color: #091e42;
+    border-top: 1px solid #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    box-shadow: 0 1px 0 rgba(9, 30, 66, .25);
   }
 
-  .btns {
-    text-align: right;
-    margin: 12px 10px 0 0;
+  .prority {
+    background: #F4F5F7;
+    border-radius: 0 0 3px 3px;
+    padding-top: 6px;
+    position: relative;
+    padding-left: 8px;
+    height: 29px;
+
+    .btns {
+      position: absolute;
+      right: 8px;
+      bottom: 3px;
+    }
+
+    .icon {
+      font-size: 18px;
+      display: inline-block;
+      cursor: pointer;
+      margin-left: 6px;
+      color: #999;
+
+      &:hover {
+        color: #222;
+      }
+    }
   }
 
   textarea {
     border: 0;
-    background: #fff;
-    width: 270px;
-    height: 30px;
-    padding: 10px;
     resize: none;
+    margin: 6px 0;
     font-size: 14px;
+    width: 256px;
 
     &:focus {
       outline: 0;
@@ -90,9 +76,8 @@
 }
 
 .k-board-detail {
-  display: flex;
-  width: 1900px;
-  height: 100%;
+  margin: 0 15px;
+  border-radius: .15rem;
 
   .k-board-column {
     display: flex;
@@ -101,6 +86,26 @@
 
   .header {
     position: relative;
+
+    .do {
+      cursor: pointer;
+      margin: 6px;
+
+      &:hover {
+        cursor: $primary;
+      }
+    }
+  }
+
+  .el-popover__reference {
+    position: absolute;
+    right: 8px;
+    cursor: pointer;
+    top: 4px;
+
+    &:hover {
+      color: $primary;
+    }
   }
 
   .h4 {
@@ -138,95 +143,101 @@
     }
   }
 
-  .k-thing {
-    margin-bottom: -1px;
-    overflow: hidden;
-  }
-
-  .things {
-    min-height: 360px;
-    width: 290px;
-  }
-
-  .action {
-    position: absolute;
-    width: 60px;
-    background: #fff;
-    font-size: 12px;
-    padding: 10px 10px 0 10px;
-    right: 0;
-    top: 0;
-
-    &:focus {
-      outline: 0;
+  .thing {
+    margin: 8px 11px 0 9px;
+    background-color: #fff;
+    border-left: 2px solid #fff;
+    color: #091e42;
+    padding: 6px 8px 2px;
+    border-radius: 3px;
+    cursor: pointer;
+    box-shadow: 0 1px 0 rgba(9, 30, 66, .25);
+    &.a {
+      border-color: #f80e15;
     }
 
-    span {
-      display: block;
-      margin-bottom: 10px;
-      cursor: pointer;
+    &.b {
+      border-color: #BF9F03;
+    }
 
-      &:hover {
-        color: $primary;
-      }
+    &.c {
+      border-color: #009fe3;
+    }
+
+    &.d {
+      border-color: #79aa1c;
+    }
+    &:hover {
+      color: #091e42;
+      background: #F4F5F7;
+    }
+    .more {
+      position: relative;
+      line-height: 30px;
+      height: 30px;
+    }
+    .z-avatar {
+      position: absolute;
+      right: 0;
+      bottom: 2px;
     }
   }
-
   .column {
-    width: 290px;
-    margin-left: 20px;
-    padding-bottom: 20px;
+    width: 300px;
+    margin-right: 15px;
     border-radius: .15rem;
-    background: rgba(255, 255, 255, .9);
-    overflow-x: hidden;
-    overflow-y: auto;
+    flex: 1;
+    //background: rgba(235, 236, 240, .9);
+    background-color: #ebecf0;
+    overflow: hidden;
+    position: relative;
 
     &.draghover {
       background: #ccc;
     }
-
     .empty {
       margin: 20px;
       text-align: center;
     }
   }
+}
 
-  .add {
-    width: 290px;
-    margin-left: 20px;
+.k-prority-add {
+  margin-right: 8px;
+  margin-top: 4px;
+  text-align: center;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  padding-left: 2px;
+  cursor: pointer;
+  font-family: "zenicon";
 
-    .wrap {
-      background: #f0f0f0;
-      padding: 20px;
-      border-radius: .15rem;
-    }
+  &.a {
+    background: #f80e15;
+  }
 
-    .tip {
-      font-size: 16px;
-      color: #666;
-      cursor: pointer;
+  &.b {
+    background: #BF9F03;
+  }
 
-      &:hover {
-        color: $primary;
-      }
-    }
+  &.c {
+    background: #009fe3;
+  }
 
-    input {
-      width: 230px;
-      height: 32px;
-      padding: 5px;
-      margin-bottom: 10px;
-      border: solid 1px #ddd;
-      border-radius: 0.15rem;
+  &.d {
+    background: #79aa1c;
+  }
 
-      &:focus {
-        border-color: $primary;
-        outline: 0;
-      }
-    }
+  &.active:before {
+    content: "\e6d9";
+    position: absolute;
+    left: 3px;
+    top: -1px;
+  }
 
-    .btn {
-      text-align: right;
-    }
+  &.active {
+    color: #fff;
+    position: relative;
   }
 }

@@ -34,7 +34,7 @@ public class ReportService {
             }
         }
         addReaders(content.get("readers"), _id);
-        ZenData params = ZenData.put("_id", _id).set("status", "1");
+        ZenData params = ZenData.create("_id", _id).put("status", "1");
         zenStorageEngine.execute("patch/myReport", params, user);
         MailMode mailMode = new MailMode();
         mailMode.setData(content);
@@ -62,7 +62,7 @@ public class ReportService {
             title = user.getNick() + "的日报";
         }
         ZenResult result = ZenResult.success().put("title", title).put("dateId", dateId);
-        ZenData param = ZenData.put("end", end).set("start", start);
+        ZenData param = ZenData.create("end", end).put("start", start);
         List<Map<String, Object>> things = zenStorageEngine.execute("select/thingByStartAndUid", param, user).getListWidthMap();
         if (things == null || things.size() == 0) {
             return result;
@@ -70,9 +70,9 @@ public class ReportService {
         String done = "", undone = "";
         for (Map<String, Object> item : things) {
             if (item.get("status").equals(1)) {
-                done += "<li>" + item.get("title") + "</li>";
-            } else {
                 undone += "<li>" + item.get("title") + "</li>";
+            } else {
+                done += "<li>" + item.get("title") + "</li>";
             }
         }
         if (done.equals("")) {
@@ -108,7 +108,7 @@ public class ReportService {
             return;
         }
         for (Map<String, Object> item : current) {
-            ZenData params = ZenData.put("reportId", id).set("uid", item.get("_id"));
+            ZenData params = ZenData.create("reportId", id).put("uid", item.get("_id"));
             zenStorageEngine.execute("put/reportReader", params, null);
         }
     }

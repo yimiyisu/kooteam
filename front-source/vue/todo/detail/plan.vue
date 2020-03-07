@@ -1,8 +1,9 @@
 <template>
     <div class="k-todo-plan">
-        <label @click="show">
-            {{text}}
-        </label>
+        <z-date type="datetime" v-model="text" :clearable="false"></z-date>
+        <!--        <label @click="show">-->
+        <!--            {{text}}-->
+        <!--        </label>-->
         <div class="calendar" v-show="isShow">
             <div class="z-row">
                 <div class="z-12 modal">
@@ -35,6 +36,7 @@
     import Repeat from "./repeat"
 
     export default {
+        name: "detailPlan",
         props: ["value"],
         data: function () {
             return {
@@ -69,7 +71,7 @@
         },
         methods: {
             show: function () {
-                $.lib(["/flatpickr2/flatpickr.min.css", "/flatpickr2/flatpickr.min.js"],
+                $.lib(["flatpickr2/flatpickr.min.css", "flatpickr2/flatpickr.min.js"],
                     this.init, null, this);
             },
             submit: function () {

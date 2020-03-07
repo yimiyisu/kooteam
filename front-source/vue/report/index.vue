@@ -1,16 +1,16 @@
 <template>
     <z-dialog
             custom-class="k-report"
-            :visible.sync="isShow"
-            width="80%" top="20px">
+            v-if="isShow"
+            width="80%" top="20px" @close="close">
         <Writer v-if="type==='new'||type==='edit'" :data="report"></Writer>
-        <!--<Set v-if="type==='set'"></Set>-->
+        <!--<Set v-if="type==='put'"></Set>-->
         <Preview v-if="type==='view'" :data="report"></Preview>
     </z-dialog>
 </template>
 <script>
     import Preview from "./view"
-    // import Set from "./set"
+    // import Set from "./put"
     import Writer from "./writer"
 
     export default {
@@ -32,7 +32,7 @@
                     this.report = {_id: "", type: "1", title: "", readers: "", mails: ""};
                 }
                 if (id) {
-                    $.http({_id: id}, "/report/detail.do", function (reback) {
+                    $.post({_id: id}, "/report/detail.do", function (reback) {
                         this.report = reback.data;
                         this.isShow = true;
                     }, this);

@@ -44,6 +44,7 @@
     display: inline-block;
     width: 160px;
     height: 50px;
+    line-height: 50px;
     text-align: center;
     font-weight: normal;
     cursor: pointer;
@@ -91,5 +92,12 @@
     border: 5px solid #fff;
     border-radius: 10px;
     width: 100%;
+  }
+}
+
+.qr {
+  text-align: center;
+  img {
+    margin: 0 auto;
   }
 }

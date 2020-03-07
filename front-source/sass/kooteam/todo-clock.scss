@@ -1,0 +1,16 @@
+.k-todo-clock {
+  line-height: 32px;
+
+  .selected {
+    margin-right: 5px;
+  }
+
+  li {
+    margin-right: 10px;
+    cursor: pointer;
+
+    &.active {
+      color: #1F65D6;
+    }
+  }
+}

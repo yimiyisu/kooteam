@@ -1,16 +1,12 @@
 <template>
-    <div class="z-1">
-        <div class="k-board-detail" @click="hideUserSearch">
-            <z-draggable class="k-board-column" :list="columns" @end="save">
-                <Column v-for="data in columns" :now="now" :data="data" :key="data.tag+projectId"></Column>
-            </z-draggable>
-            <Add></Add>
-        </div>
-    </div>
+    <z-scrollbar v-if="width>0" :viewHeight="-100" :viewWidth="width">
+        <z-draggable class="k-board-column" :list="columns" @end="save">
+            <Column v-for="column in columns" :columns="columns" :now="now" :data="column" :key="column.tag"/>
+        </z-draggable>
+    </z-scrollbar>
 </template>
 <script>
     import Column from "./column"
-    import Add from "./add"
     import InitData from "./data"
 
     const tagName = "未归类";
@@ -21,6 +17,7 @@
                 projectId: "",
                 now: 0,
                 data: {},
+                width: 0,
                 columns: []
             }
         },
@@ -29,16 +26,32 @@
                 this.init();
             }
         },
-        components: {Column, Add},
-        mounted: function () {
+        components: {Column},
+        created() {
             this.init();
+            $.on("thingUpdate", this.thingChange);
         },
-        destroyed: function () {
-            $.lockBody(false);
+        destroyed() {
+            $.off("thingUpdate");
         },
         methods: {
-            hideUserSearch: function () {
-                this.$emit("hideUserSearch", true);
+            // 监听外部事件状态变更
+            thingChange(thing, action) {
+                let column = this.getColumn(thing.tag);
+                if (!column) {
+                    return;
+                }
+                let things = column.sons;
+                for (let i = 0; i < things.length; i++) {
+                    if (things[i]._id === thing._id) {
+                        if (action === "remove") {
+                            things.splice(i, 1);
+                        } else {
+                            things[i][action] = thing[action];
+                        }
+                        return;
+                    }
+                }
             },
             init: function () {
                 this.columns = [];
@@ -47,19 +60,16 @@
                 let data = this.value;
                 this.now = date.getTime() % 1000;
                 if (data.board) {
-                    let board = JSON.parse(data.board);
-                    this.rndId = board.id;
-                    this.columns = board.content;
+                    this.rndId = this.projectId;
+                    this.columns = JSON.parse(data.board);
                 } else {
                     this.rndId = zen.id();
                     this.columns = InitData;
                 }
-                let width = this.columns.length * 310 + 360;
-                $(".k-board-detail", this.$el).css("width", width + "px");
-                $(".k-board-column", this.$el).css("width", this.columns.length * 310 + "px");
-                for (let i = 0; i < this.columns.length; i++) {
-                    this.columns[i].sons = [];
-                }
+                this.columns.forEach((item) => {
+                    !item.sons && (item.sons = [])
+                });
+                this.resize();
                 // 初始化任务
                 let things = data.things;
                 if (!things || things.length === 0) {
@@ -76,21 +86,9 @@
                 if (this.columns[0].tag === tagName && this.columns[0].length === 0) {
                     this.columns.splice(0, 1);
                 }
-
-                // 锁定页面高度
-                this.$nextTick(function () {
-                    $.lockBody(true);
-                    let height = $(window).height() - 150;
-                    if (height < 680) {
-                        $("#J_app .k-project-toolbar").css("min-height", height + "px");
-                    }
-                    $(".column", this.$el).css("height", height + "px");
-                    this.resize();
-                });
             },
             resize: function () {
-                let width = (this.columns.length + 2) * 300 + 20;
-                $(".k-board-detail", this.$el).css("width", width + "px");
+                this.width = this.columns.length * 320;
             },
             getColumn: function (tag) {
                 let column;
@@ -128,7 +126,7 @@
                         _id: this.projectId,
                         board: JSON.stringify(boards),
                     };
-                    $.http(param, "/patch/project.json", function () {
+                    $.post(param, "/patch/project.json", function () {
                         this.resize();
                     }, this);
                 }

@@ -2,6 +2,7 @@ package com.zeto.kooteam.service.eventbus.model;
 
 import com.blade.kit.PatternKit;
 import com.zeto.ZenResult;
+import com.zeto.domain.ZenSite;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class MailMode {
     private ZenResult data;
     private String title;
     private String content;
+    private ZenSite site;
 
     public MailMode addTo(String mail) {
         if (!PatternKit.isEmail(mail)) {

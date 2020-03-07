@@ -10,4 +10,11 @@ public class DingApp {
     private Long agentId;
     private String homeUrl;
     private String corpId;
+
+    /*
+    校验配置信息是否正确
+     */
+    public boolean check() {
+        return false;
+    }
 }

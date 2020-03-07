@@ -1,73 +1,87 @@
 <template>
-    <div class="k-login" v-if="!check">
-        <QR v-if="isQr" v-model="params"></QR>
-        <Password v-if="!isQr" v-model="params" :target="target"></Password>
-        <span class="z-red hover" v-if="isQr" @click="change">切换到账户登陆</span>
-        <span class="z-red hover" v-if="!isQr&&hasQr" @click="change">切换到扫码登陆</span>
+    <div class="bl inline-block" @click="show">
+        <slot></slot>
+        <z-dialog width="450px" :title="title" v-if="visible" visible @close="close">
+            <QR v-if="showQr" v-model="params"></QR>
+            <Password v-if="!showQr" v-model="params" :target="target"></Password>
+            <div class="ft hover blue" style="text-align: right" v-if="isQr" @click="change">
+                {{tip}}
+            </div>
+        </z-dialog>
     </div>
 </template>
 <script>
-    import Password from "./password"
-    import QR from "./qr"
+    import Password from './password';
+    import QR from './qr';
 
     export default {
-        props: ["check", "timer"],
         components: {Password, QR},
         data: function () {
             return {
                 isQr: false,
-                hasQr: false,//是否可以扫码登陆
+                showQr: false,
+                visible: false,
                 params: null,
-                target: "/todo/home.htm",
+                target: '/todo/home.xhtm',
                 timerId: null
+            };
+        },
+        computed: {
+            tip() {
+                return this.showQr ? '账号密码登陆' : '手机扫码登陆';
+            },
+            title() {
+                let params = this.params;
+                if (!params || !this.isQr) {
+                    return '用户登录';
+                }
+                if (params.type === 'dingding') {
+                    return '请用钉钉扫码登录';
+                }
+                if (params.type === 'wechat') {
+                    return '请用企业微信扫码登录';
+                }
+                if (params.type === 'cloud') {
+                    return '微信扫码/关注后登录';
+                }
+                return '用户登录';
             }
         },
         mounted: function () {
-            if (this.check) {
-                this.status();
-            } else {
-                $.http(null, "/login/type.do", function (reback) {
-                    let data = reback.data;
-                    this.params = data;
-                    if (data && data.qr) {
-                        this.isQr = true;
-                        this.hasQr = true;
-                        this.timerId = setInterval(this.checkId, 2000);
-                    }
-                }, this);
-            }
+            $.get(null, '/home/loginCheck.do', function (reback) {
+                let data = reback.data;
+                this.params = data;
+                if (!data || !data.type || data.type === "ladp") {
+                    return;
+                }
+                this.isQr = true;
+                this.showQr = true;
+                if (data.type === "dingding" || data.type === "cloud") {
+                    this.timerId = setInterval(this.checkId, 2000);
+                }
+            }, this);
         },
         destory: function () {
             clearInterval(this.timerId);
         },
         methods: {
+            show() {
+                this.visible = true;
+            },
+            close() {
+                this.visible = false;
+            },
             change: function () {
-                this.isQr = !this.isQr;
+                this.showQr = !this.showQr;
             },
             checkId: function () {
                 let id = this.params.checkId;
                 if (!id) {
                     return;
                 }
-                $.http({checkId: id}, "/login/checkId.do", function (reback) {
-                    if (reback.hasError) {
-                        return;
-                    }
-                    window.location.href = this.target;
-                }, this);
-            },
-            status: function () {
-                $.http(null, "/login/checkStatus.do", function (reback) {
-                    if (reback.hasError) {
-                        return;
-                    }
-                    let home = this.target, data = reback.data;
-                    if (data && data.home) {
-                        home = data.home;
-                    }
-                    window.location = home;
-                }, this);
+                $.get({checkId: id}, '/home/loginCheck.do', () => {
+                });
             }
         }
-    }
+    };
 </script>

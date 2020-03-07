@@ -1,12 +1,12 @@
 function loadUser(win, callback) {
-    let config = win.localStorage["config"];
-    if (config) {
+    let config = win.localStorage["config"], uid = $.cookie("uid");
+    if (config && uid) {
         zen.user = JSON.parse(config);
-        if (zen.user.id) {
+        if (uid === zen.user.id) {
             return callback(zen.user);
         }
     }
-    $.http(null, "/system/my.do", function (reback) {
+    $.post(null, "/system/my.do", function (reback) {
         let data = reback.data;
         let user = {
             id: data._id,
@@ -33,25 +33,6 @@ function bindMenu(user) {
             let css = "url('" + url + "/bg/" + user.skin + ".jpg')";
             $("body").css("background-image", css);
         }
-        let navLinkDom = $("#J_navbar");
-        let cls = "active";
-        $("h2", navLinkDom).on("click", function () {
-            $.goto(zen.user.home);
-        });
-        $("a", navLinkDom).on("click", function (e) {
-            let target = $(e.currentTarget).parent();
-            if (!target.length) {
-                return;
-            }
-            if (target[0].tagName !== "DD") {
-                return;
-            }
-            if (target.hasClass(cls)) {
-                return;
-            }
-            $("." + cls, navLinkDom).removeClass(cls);
-            target.addClass(cls);
-        });
     });
 }
 
@@ -64,6 +45,18 @@ export default function () {
     loadUser(win, function (user) {
         bindMenu(user);
     });
-
+    let navLinkDom = $("#J_navbar");
+    let cls = "active";
+    $("a", navLinkDom).el.forEach((item) => {
+        let dom = $(item), href = dom.attr("href");
+        if (href === path) {
+            dom.parent().addClass("active")
+        }
+    });
+    $("a", navLinkDom).on("click", function (e) {
+        let target = $(e.target);
+        $("." + cls, navLinkDom).removeClass(cls);
+        target.parent().addClass(cls);
+    });
 }
 

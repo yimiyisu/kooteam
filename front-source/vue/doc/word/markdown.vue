@@ -66,6 +66,7 @@
                                 return alert("登录已失效");
                             }
                             if (result.action === 23) {
+                                debugger
                                 return alert(result.message);
                             }
                             that.insertImage(result.data);

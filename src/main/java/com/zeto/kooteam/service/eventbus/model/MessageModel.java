@@ -1,5 +1,6 @@
 package com.zeto.kooteam.service.eventbus.model;
 
+import com.zeto.domain.ZenSite;
 import lombok.Data;
 
 @Data
@@ -10,6 +11,7 @@ public class MessageModel {
     private String objectId;
     private MessageType messageType;
     private String unionId;
+    private ZenSite site;
 
     public MessageModel(String from, String to, String content, String objectId, MessageType type) {
         this.from = from;

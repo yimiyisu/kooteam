@@ -3,12 +3,14 @@
 </template>
 <script>
     import skin from "./components/skin"
-    import logout from "./components/logout"
-    import things from "./components/things"
+    // import things from "./components/things"
     import set from "./components/set"
+    import thingList from './components/thingList'
+    import invite from "./components/invite"
+    import user from "./components/user"
 
     export default {
         props: ["name", "value"],
-        components: {skin, logout, things, set}
+        components: {skin, set, thingList, invite, user}
     }
 </script>
