@@ -2,6 +2,9 @@
 + kooteam是一款轻量级的在线团队协作工具，提供各类文档工具、在线思维导图、在线流程图、项目管理、任务分发，知识库管理等工具。
 + kooteam支持钉钉，企业微信等账号同步登陆，保障企业数据安全。
 
+## 微信咨询
++ [二维码](https://img.yimiyisu.com/5e6/4a5/b83d85b262652e5aa5.jpg)
+
 ## 技术选型
 + 后端框架：[Blade MVC](https://github.com/lets-blade/blade)
 + 前端框架：[Vue 2.0](https://cn.vuejs.org/)
