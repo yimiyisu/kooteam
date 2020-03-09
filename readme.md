@@ -10,13 +10,13 @@
 
 ## 微信咨询
 
-- [二维码](https://img.yimiyisu.com/5e6/4a5/b83d85b262652e5aa5.jpg)
+- ![二维码](https://img.yimiyisu.com/5e6/4a5/b83d85b262652e5aa5.jpg)
 
 ## 技术选型
 
 - 后端框架：[Blade MVC](https://github.com/lets-blade/blade)
-- 前端框架：[Vue 2.0](https://cn.vuejs.org/)
-- 数据库：Mysql
+- 前端框架：[Vue 2.0](https://cn.vuejs.org/) + Element UI
+- 数据库：Mysql/Mongodb/SQLite
 
 ## 功能简介
 
