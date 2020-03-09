@@ -34,8 +34,10 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>4.12</junit.version>
+        <netty.version>4.1.45.Final</netty.version>
+        <enjoy>4.7</enjoy>
+        <blade-asm.version>0.0.4</blade-asm.version>
         <slf4j-api.version>1.7.25</slf4j-api.version>
-        <netty.version>4.1.33.Final</netty.version>
         <gson.version>2.8.5</gson.version>
         <lombok.version>1.16.20</lombok.version>
         <hikarcp.version>3.2.0</hikarcp.version>
@@ -68,6 +70,11 @@
             <groupId>com.sun.mail</groupId>
             <artifactId>javax.mail</artifactId>
             <version>1.6.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jfinal</groupId>
+            <artifactId>enjoy</artifactId>
+            <version>${enjoy}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
