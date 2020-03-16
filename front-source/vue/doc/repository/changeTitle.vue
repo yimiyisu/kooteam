@@ -32,6 +32,9 @@
                 this.visible = false;
             },
             update() {
+                if (!this.title) {
+                    return $.notice("标题不能为空", "error");
+                }
                 let data = {
                     _id: this.value.link || this.value._id,
                     title: this.title

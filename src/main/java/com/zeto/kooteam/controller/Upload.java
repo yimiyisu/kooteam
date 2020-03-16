@@ -53,7 +53,9 @@ public class Upload {
             return ZenResult.fail("图片格式错误，只支持PNG,JPG,GIF图片");
         }
         String savePath = this.uploaderService.image(fileItem.getData(), ext);
-        return ZenResult.success().setData(savePath);
+        return ZenResult.success().
+                put("path", savePath).
+                put("title", fileItem.getFileName());
     }
 
     // 上传附件

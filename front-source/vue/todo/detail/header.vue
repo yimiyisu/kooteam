@@ -1,6 +1,6 @@
 <template>
     <z-row class="header">
-        <z-col :span="1"><i class="ft icon h1">&#xe706;</i></z-col>
+        <z-col :span="1"><i class="ft icon h1">&#xe740;</i></z-col>
         <z-col :span="23">
             <input :disabled="value.status === 1" type="text" maxlength="60" @change="change"
                    v-model="value.title"/>

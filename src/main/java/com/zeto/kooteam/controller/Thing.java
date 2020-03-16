@@ -2,6 +2,7 @@ package com.zeto.kooteam.controller;
 
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.DateKit;
+import com.blade.kit.GsonKit;
 import com.google.common.base.Strings;
 import com.zeto.ZenConditionKit;
 import com.zeto.ZenData;
@@ -16,7 +17,6 @@ import com.zeto.kooteam.init.TodoInit;
 import com.zeto.kooteam.service.EventBiz;
 import com.zeto.kooteam.service.eventbus.model.MessageModel;
 import com.zeto.kooteam.service.eventbus.model.MessageType;
-import org.bson.types.ObjectId;
 
 import java.util.Map;
 
@@ -38,18 +38,18 @@ public class Thing {
             data.put("size", "200");
         }
         ZenResult result = zenStorageEngine.execute(path, data, user);
-        if (result.isEmpty()) {
-            ObjectId objectId = new ObjectId(user.getUid());
-            long regTime = objectId.getDate().getTime() / 1000 + 24 * 360;
-            long now = DateKit.now();
-            // 注册时间在一天以内的用户，帮助初始化数据
-            if (regTime > now) {
-                // 初始化数据
-                todoInit.execute(user);
-                EventBiz.userInit(user);
-                return this.latest(data, user);
-            }
-        }
+//        if (result.isEmpty()) {
+//            ObjectId objectId = new ObjectId(user.getUid());
+//            long regTime = objectId.getDate().getTime() / 1000 + 24 * 360;
+//            long now = DateKit.now();
+//            // 注册时间在一天以内的用户，帮助初始化数据
+//            if (regTime > now) {
+//                // 初始化数据
+//                todoInit.execute(user);
+//                EventBiz.userInit(user);
+//                return this.latest(data, user);
+//            }
+//        }
         return result;
     }
 
@@ -59,27 +59,6 @@ public class Thing {
             return thing;
         }
         ZenResult extend = zenStorageEngine.extend("thing", data.get("_id"));
-        if (!extend.isEmpty()) {
-            thing.put("content", extend.get("content"));
-        }
-        String ownerId = thing.get("owner");
-        if (user.getUid().equals(ownerId)) {
-            thing.put("nick", user.getNick());
-        } else {
-            ZenUser current = ZenUserKit.get(ownerId);
-            if (current != null) {
-                thing.put("nick", current.getNick());
-            }
-        }
-        return thing;
-    }
-
-    public ZenResult archive_get(ZenData data, ZenUser user) {
-        ZenResult thing = zenStorageEngine.execute("get/archiveById", data, user);
-        if (thing.isEmpty()) {
-            return thing;
-        }
-        ZenResult extend = zenStorageEngine.extend("archive", data.get("_id"));
         if (!extend.isEmpty()) {
             thing.put("content", extend.get("content"));
         }
@@ -121,40 +100,45 @@ public class Thing {
     public ZenResult patch(ZenData data, ZenUser user) {
         ZenResult result = zenStorageEngine.execute("patch/thing", data, user);
         // 异步更新工程统计数据
-        if (data.contains("status")) {
+        if (data.contains("status") && data.contains("projectId")) {
             EventBiz.projectState(data.get("projectId"));
         }
-        String owner = data.get("owner");
+//        String owner = data.get("owner");
         // 给别人发送任务，需要发送消息通知
-        if (!user.getUid().equals(owner) && !Strings.isNullOrEmpty(owner)) {
-            String message = user.getNick() + "转交了一个任务给你：" + data.get("title");
-            EventBiz.sendMessage(new MessageModel(user.getUid(), owner, message, data.get("_id"), MessageType.THING));
-        }
+//        if (!user.getUid().equals(owner) && !Strings.isNullOrEmpty(owner)) {
+//            String message = user.getNick() + "转交了一个任务给你：" + data.get("title");
+//            EventBiz.sendMessage(new MessageModel(user.getUid(), owner, message, data.get("_id"), MessageType.THING));
+//        }
         return result;
     }
 
     // 归档
     public ZenResult archive(ZenData data, ZenUser user) {
-        Map<String, Object> thing = zenStorageEngine.execute("get/thingById", data, user).getMap();
-        ZenData param = new ZenData();
-        for (String key : thing.keySet()) {
-            param.put(key, thing.get(key));
-        }
-        ZenResult result = zenStorageEngine.execute("put/archive", param, user);
+        ZenResult thing = zenStorageEngine.get("thing", data.get("_id"));
+        ZenData params = ZenData.create("title", thing.get("title")).
+                put("content", GsonKit.stringify(thing.getData())).
+                put("parentId", thing.get("parentId")).
+                put("projectId", thing.get("projectId")).
+                put("owner", thing.get("owner")).
+                put("quadrant", thing.get("quadrant")).
+                put("owner", thing.get("owner"));
+
+        ZenResult result = zenStorageEngine.execute("put/archive", params, user);
         zenStorageEngine.execute("delete/thing", data, user);
-        return result;
+        return result.setMessage("归档成功");
     }
 
-    // 恢复任务
-    public ZenResult recoverThing(ZenData data, ZenUser user) {
-        Map<String, Object> thing = zenStorageEngine.execute("get/archiveById", data, user).getMap();
-        ZenData param = new ZenData();
-        for (String key : thing.keySet()) {
-            param.put(key, thing.get(key));
+    // 归档任务恢复
+    public ZenResult restore(ZenData data, ZenUser user) {
+        ZenResult thing = zenStorageEngine.get("archive", data.get("_id"));
+        if (thing.isEmpty()) {
+            ZenResult.fail("任务不存在");
         }
-        ZenResult result = zenStorageEngine.execute("put/thingAdd", param, user);
+        Map<String, Object> thingData = GsonKit.parseMap(thing.get("content"));
+        ZenData params = ZenData.parse(thingData);
+        zenStorageEngine.execute("put/thingAdd", params, user);
         zenStorageEngine.execute("delete/archive", data, user);
-        return result;
+        return ZenResult.success("取消归档成功").setData(thingData);
     }
 
     public ZenResult deleteArchive(ZenData data, ZenUser user) {
@@ -178,18 +162,12 @@ public class Thing {
         return ZenResult.success();
     }
 
-    public ZenResult selectByUid(ZenUser user, ZenData data) {
-        ZenResult things = zenStorageEngine.execute("select/thingByUid", data, user);
-        long total = zenStorageEngine.count("thing", ZenConditionKit.And().eq("uid", user.getUid()));
-        return ZenResult.success().put("total", total).put("list", things.getData());
-    }
-
-    public ZenResult selectByFinish(ZenUser user, ZenData data) {
-        data.put("status", "1");
-        ZenResult things = zenStorageEngine.execute("select/thing", data, user);
-        ZenCondition condition = ZenConditionKit.And().eq("uid", user.getUid()).eq("status", 1);
-        long total = zenStorageEngine.count("thing", condition);
-        return ZenResult.success().put("total", total).put("data", things.getData());
+    public ZenResult watch(ZenUser user, ZenData data) {
+        data.put("userId", user.getUid());
+        ZenResult source = zenStorageEngine.execute("select/thingWatcher", data, user);
+        long total = zenStorageEngine.count("thingWatcher", ZenConditionKit.And().eq("uid", user.getUid()));
+        ZenResult projects = zenStorageEngine.selectByIds("thing", "thingId", source);
+        return ZenResult.success().put("list", projects.getData()).setTotal((int) total);
     }
 
     public ZenResult remove(ZenUser user, ZenData data) {
@@ -199,9 +177,8 @@ public class Thing {
             return ZenResult.fail("找不到该任务");
         }
         if (!uid.equals(result.get("uid")) && !uid.equals(result.get("owner"))) {
-            return ZenResult.fail("你无权删除任务");
+            return ZenResult.fail("只有创建人或负责人才能删除");
         }
-        data.put("uid", result.get("uid"));
         zenStorageEngine.execute("delete/thing", data, user);
         return ZenResult.success();
     }

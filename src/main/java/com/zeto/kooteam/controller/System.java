@@ -2,15 +2,12 @@ package com.zeto.kooteam.controller;
 
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.EncryptKit;
-import com.blade.kit.GsonKit;
 import com.blade.kit.PatternKit;
-import com.blade.mvc.http.Request;
 import com.google.common.base.Strings;
 import com.zeto.*;
 import com.zeto.annotation.AccessRole;
 import com.zeto.annotation.MethodType;
 import com.zeto.domain.ZenMethod;
-import com.zeto.domain.ZenRole;
 import com.zeto.domain.ZenUser;
 import com.zeto.driver.ZenStorageEngine;
 import com.zeto.kit.ConfigKit;
@@ -20,9 +17,8 @@ import com.zeto.kooteam.service.auth.AuthService;
 import com.zeto.kooteam.service.eventbus.MailListener;
 import com.zeto.kooteam.service.eventbus.model.UserNickModel;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @AccessRole
 public class System extends Base {
@@ -60,28 +56,27 @@ public class System extends Base {
         return zenStorageEngine.execute("get/userById", param, user);
     }
 
-    public ZenResult getConfig(Request request) {
-        ConfigKit.selectByApp("kooteam");
-        List<ConfigOptionVO> config = ConfigKit.getGroup("account");
-        Map<String, Object> data = GsonKit.parseMap("");
+    public ZenResult getConfig(ZenData data) {
+        List<ConfigOptionVO> config = ConfigKit.getGroup(data.get("name"));
+        ZenResult result = ZenResult.success();
         for (ConfigOptionVO optionVO : config) {
-            data.put(optionVO.getKey(), optionVO.getValue());
+            result.put(optionVO.getKey(), optionVO.getValue());
         }
-        return ZenResult.success().setData(data);
+        return result;
     }
 
     public ZenResult platformConfig(ZenData data, ZenUser user) {
-        if (!user.hasTag(ZenRole.ADMIN)) {
-            return ZenResult.success("没有操作权限");
+        ZenResult checkResult = checkRoot(user);
+        if (checkResult != null) {
+            return checkResult;
         }
-        Map<String, Object> config = GsonKit.parseMap(data.toJSON());
-        List<ConfigOptionVO> configList = GsonKit.parseList("[]", ConfigOptionVO.class);
-        config.forEach((key, value) -> {
+        List<ConfigOptionVO> configList = new ArrayList<>();
+        for (String key : data.getKeys()) {
             ConfigOptionVO optionVO = new ConfigOptionVO();
             optionVO.setKey(key);
-            optionVO.setValue(value.toString());
+            optionVO.setValue(data.get(key));
             configList.add(optionVO);
-        });
+        }
         ConfigKit.setByApp("kooteam", "account", configList);
         authService.init();
         return ZenResult.success("保存成功");
@@ -93,8 +88,8 @@ public class System extends Base {
         if (checkResult != null) {
 //            return checkResult;
         }
-        String mailHost = data.get("mailHost"), mailPort = data.get("mailPort"),
-                mailUser = data.get("mailUser"), mailPassword = data.get("mailPassword");
+        String mailHost = data.get("host"), mailPort = data.get("port"),
+                mailUser = data.get("user"), mailPassword = data.get("password");
         if (Strings.isNullOrEmpty(mailHost)) {
             return ZenResult.fail("邮件服务器地址不能为空");
         }
@@ -107,12 +102,14 @@ public class System extends Base {
         if (Strings.isNullOrEmpty(mailPassword)) {
             return ZenResult.fail("邮件密码不能为空");
         }
-        Map<String, String> config = new HashMap<>();
-        config.put("mailHost", mailHost);
-        config.put("mailPort", mailPort);
-        config.put("mailUser", mailUser);
-        config.put("mailPassword", mailPassword);
-        ZenEnvironment.serialize(config);
+        List<ConfigOptionVO> configList = new ArrayList<>();
+        for (String key : data.getKeys()) {
+            ConfigOptionVO optionVO = new ConfigOptionVO();
+            optionVO.setKey(key);
+            optionVO.setValue(data.get(key));
+            configList.add(optionVO);
+        }
+        ConfigKit.setByApp("kooteam", "mail", configList);
         MailListener.test();
         return ZenResult.success("保存成功，请检查" + mailUser + "账户测试邮件");
     }

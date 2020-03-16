@@ -18,7 +18,7 @@
                 <li class="k-thing" v-for="(itemChild, childInx) in item.childList"
                     :class="{finish: itemChild.status === 1}" v-show="show(itemChild.status)">
                     <label @click.stop="doFinish(childInx, itemChild._id)">
-                        <i class="z-icon"></i>
+                        <i class="ft icon"></i>
                     </label>
                     <div class="title" v-if="itemChild.status === 1">{{itemChild.title}}</div>
                     <input class="title" v-else @keyup.enter="updateTitle(childInx)"

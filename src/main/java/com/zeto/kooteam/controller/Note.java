@@ -17,6 +17,18 @@ public class Note {
 
     // 我的文库
     public ZenResult my(ZenData data, ZenUser user) {
+        // 这里要加上搜索关键字支持
+//        String title = data.get("keyword");
+//        if (Strings.isNullOrEmpty(title)) {
+//            int page = data.getInt("page", 0), size = data.getInt("size", 20);
+//            LeftJoinCondition leftCondition = ZenConditionKit.And().
+//                    like("title", title).
+//                    outputs("_id", "title", "type").
+//                    skip(page * size).
+//                    leftJoin("noteUser", "_id", "nodeId").
+//                    setRight(ZenConditionKit.And().eq("uid", user.getUid()));
+//            return zenStorageEngine.leftJoin("note", leftCondition);
+//        }
         ZenResult result = zenStorageEngine.execute("select/noteUserByUid", data, user);
         String[] params = new String[]{"permission"};
         ZenResult notes = zenStorageEngine.selectByIds("note", "noteId", result, params);
@@ -37,7 +49,7 @@ public class Note {
 
     public ZenResult patch(ZenData data, ZenUser user) {
         zenStorageEngine.execute("patch/note", data, user);
-        ZenResult result = ZenResult.success("保存成功");
+        ZenResult result = ZenResult.success();
         if (data.contains("title")) {
             result.put("title", data.get("title"));
         }
@@ -66,7 +78,19 @@ public class Note {
     }
 
     public ZenResult remove(ZenData data, ZenUser user) {
-        zenStorageEngine.execute("delete/noteUser", data, user);
+        ZenResult result = zenStorageEngine.get("noteUser", data.get("_id"));
+        if (result.isEmpty()) {
+            return ZenResult.fail("文件找不到");
+        }
+        String nodeId = result.get("noteId");
+        result = zenStorageEngine.get("note", nodeId);
+        if (user.getUid().equals(result.get("uid"))) {
+            zenStorageEngine.execute("delete/noteUserByNoteId", ZenData.create("nodeId", nodeId), user);
+            zenStorageEngine.execute("delete/note", ZenData.create("_id", nodeId), user);
+        } else {
+            zenStorageEngine.execute("delete/noteUser", data, user);
+        }
+
         return ZenResult.success();
     }
 

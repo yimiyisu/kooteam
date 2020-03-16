@@ -6,7 +6,7 @@
                     {{data.title}}
                 </div>
                 <div class="z-12" style="text-align: right">
-                    <z-button plain size="small" @click="addNode">新增章节</z-button>
+                    <AddDoc class="el-button el-button--small is-plain">新增章节</AddDoc>
                     <!--<span class="z-button primary" @click="saveModel">保存</span>-->
                     <!--<div v-if="readonly">-->
                     <z-link target="_blank" type="button" :href="'/view.html?id='+data._id" size="small">查看</z-link>
@@ -25,13 +25,10 @@
                 </div>
             </div>
             <z-scrollbar :height="-180">
-                <Chapter key="root" :value="summary.sons" :readonly="readonly"></Chapter>
+                <Chapter class="chapter-list" key="root" :value="summary.sons" :readonly="readonly"></Chapter>
             </z-scrollbar>
         </div>
-        <AddDoc :parent="data._id"></AddDoc>
         <Board :itemId="docId" :nodes="summary.sons"></Board>
-
-        <!--        <Set :permision="data.permision" :note="data._id"></Set>-->
     </div>
 
 </template>
@@ -44,14 +41,17 @@
     export default {
         props: ["data", "summary", "pid"],
         components: {Chapter, AddDoc, Board, Set},
-        data: function () {
+        data() {
             return {
                 showSet: false,
                 readonly: false,
                 docId: null
             }
         },
-        mounted: function () {
+        provide() {
+            return {repository: this}
+        },
+        mounted() {
             $.on("chapterEvt", this.subscribe);
             let doc = $.getParam("docId");
             if (!doc) {
@@ -64,7 +64,7 @@
         },
         methods: {
             // 删除节点
-            remove: function (id, parent, isMove) {
+            remove(id, parent, isMove) {
                 let current, item;
                 for (let i = 0; i < parent.length; i++) {
                     current = parent[i];
@@ -85,21 +85,8 @@
                 }
                 return null;
             },
-            addNode: function () {
-                let item = {
-                    title: "新增文档",
-                    link: "",
-                    date: "",
-                    type: "",
-                    sons: []
-                };
-                this.summary.id++;
-                item.id = this.summary.id;
-                this.summary.sons.push(item);
-                this.save(true);
-            },
             // 添加子节点
-            add: function (id, parent, item, isSon) {
+            add(id, parent, item, isSon) {
                 let current, result;
                 for (let i = 0; i < parent.length; i++) {
                     current = parent[i];
@@ -121,7 +108,7 @@
                 return false;
             },
             // 编辑节点内容
-            edit: function (params, parent) {
+            edit(params, parent) {
                 let current, result;
                 for (let i = 0; i < parent.length; i++) {
                     current = parent[i];
@@ -162,12 +149,12 @@
                 return false;
             },
             // 移动节点
-            move: function (params) {
+            move(params) {
                 let item = this.remove(params.from, this.summary.sons, true);
                 let data = $.extend({}, item, false);
                 return this.add(params.to, this.summary.sons, data, params.isSon);
             },
-            subscribe: function (params) {
+            subscribe(params) {
                 let result, parent = this.summary;
                 if (params.event === "move") {
                     result = this.move(params);
@@ -199,21 +186,17 @@
                 if (params.event === "doc") {
                     return this.docId = params.data;
                 }
-                // 新建文档
-                if (params.event === "newDoc") {
-                    return $.emit("showAddDocBox", true, params);
-                }
                 // 编辑文档
                 result = this.edit(params, parent.sons);
                 this.save(result);
             },
-            cancel: function () {
+            cancel() {
                 this.readonly = true;
             },
-            changeTitle: function (reback) {
+            changeTitle(reback) {
                 this.data.title = reback.data.title;
             },
-            save: function (result) {
+            save() {
                 let param = {
                     _id: this.data._id,
                     content: JSON.stringify(this.summary)

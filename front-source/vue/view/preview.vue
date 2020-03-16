@@ -7,7 +7,7 @@
     export default {
         data() {
             return {
-                src: "//a.yimiyisu.com/s.gif",
+                src: "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==",
                 isShow: false
             }
         },

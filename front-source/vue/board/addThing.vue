@@ -67,7 +67,7 @@
                 }
                 if (code === 27) {
                     event.preventDefault();
-                    // return this.close();
+                    return this.close();
                 }
             },
             save: function () {

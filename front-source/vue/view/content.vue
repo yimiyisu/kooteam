@@ -10,6 +10,7 @@
             <!--<Flow v-if="data.type===3" :value="data" :readonly="true"></Flow>-->
             <Mind v-if="data.type===2" :readonly="true" :value="data.content"></Mind>
             <Graph v-if="data.type===5" :value="data"></Graph>
+            <Grid v-if="data.type===6" :value="data"></Grid>
         </div>
     </div>
 </template>
@@ -18,30 +19,35 @@
     // import Flow from "./flow"
     import Mind from "../doc/mind/minder"
     import Graph from "./graph"
+    import Grid from "./grid"
 
     export default {
         props: ["tree", "data", "current", "isnav"],
-        components: {Chapter, Mind, Graph},
+        components: {Chapter, Mind, Graph, Grid},
         data() {
             return {
                 bg: ""
             }
         },
         watch: {
-            data(val) {
-                if (val.type === 1) {
-                    this.bg = "";
-                } else {
-                    this.bg = "bg";
-                }
+            data() {
+                this.init()
             }
         },
         mounted() {
-            if (this.data.type !== 1) {
-                this.bg = "bg";
-            }
+            this.init();
         },
         methods: {
+            init() {
+                let val = this.data;
+                if (val.type === 1 || val.type === 6) {
+                    this.bg = "";
+                    return this.$nextTick(function () {
+                        Prism.highlightAll(this.$el);
+                    });
+                }
+                this.bg = "bg";
+            },
             click() {
                 if (this.isnav) {
                     this.$parent.showNav = false;

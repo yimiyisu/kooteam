@@ -76,7 +76,6 @@
                     images_upload_url: uploadURL,
                     automatic_uploads: false,
                     toolbar: ' undo redo | formatselect | bold italic forecolor backcolor | copy paste cut image link table | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat ',
-                    content_css: ["//a.yimiyisu.com/zeto/lib/zetoui.css"],
                     save_enablewhendirty: true,
                     save_onsavecallback: function () {
                         that.save();

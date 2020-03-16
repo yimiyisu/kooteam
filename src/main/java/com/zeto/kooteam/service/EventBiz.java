@@ -28,6 +28,7 @@ public class EventBiz {
 
     public static void employeeSync() {
         EmployeeModel model = new EmployeeModel();
+        model.setSite(WebContext.get().getZenSite());
         model.setId("employee");
         eventBus.post(model);
     }
@@ -37,6 +38,7 @@ public class EventBiz {
     }
 
     public static void sendMail(MailMode mode) {
+        mode.setSite(WebContext.get().getZenSite());
         eventBus.post(mode);
     }
 

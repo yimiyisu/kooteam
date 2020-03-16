@@ -5,23 +5,23 @@ export default {
             sons: [{
                 "title": "欢迎使用",
                 "link": "",
-                "date": "2016-09-18",
                 "id": 1,
-                "type": "",
+                "type": 0,
+                "chapterId": "",
                 "sons": [{
                     "title": "怎么创建",
                     "id": 3,
                     "link": "",
-                    "type": "",
-                    "date": "2016-09-18",
+                    "chapterId": "",
+                    "type": 0,
                     "sons": []
                 }]
             }, {
                 "title": "关于kooteam",
                 "id": 2,
                 "link": "",
-                "type": "",
-                "date": "2016-09-18",
+                "chapterId": "",
+                "type": 0,
                 "sons": []
             }]
         }

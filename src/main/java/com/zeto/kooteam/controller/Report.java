@@ -25,21 +25,18 @@ public class Report {
     private static final String DailyType = "0";
     private static final String tableName = "myReport";
 
-    // 我的周报
-    public ZenResult my(ZenUser user, ZenData data) {
-        ZenResult reports = zenStorageEngine.execute("select/myReport", data, user);
-        long total = zenStorageEngine.count("myReport", ZenConditionKit.And().eq("uid", user.getUid()));
-        return ZenResult.success().put("data", reports.getData()).put("total", total);
-    }
 
     public ZenResult recieve(ZenUser user, ZenData data) {
         String[] recieves = zenStorageEngine
                 .execute("select/reportReader", data, user)
                 .getIds("reportId");
+        if (recieves == null || recieves.length == 0) {
+            return ZenResult.success().setTotal(0);
+        }
         ZenResult reports = zenStorageEngine.selectByIds(tableName, recieves);
         reports = ZenUserKit.selectByUids(reports, "uid");
         long total = zenStorageEngine.count("reportReader", ZenConditionKit.And().eq("uid", user.getUid()));
-        return reports.put("total", total);
+        return ZenResult.success().setList(reports.getList()).setTotal(total);
     }
 
     // 详情
@@ -85,6 +82,7 @@ public class Report {
 
     public ZenResult save(ZenData data, ZenUser user) {
         ZenResult result;
+        String mails = data.get("mails"), readers = data.get("readers");
         if (data.isEmptyPrimary()) {
             String dateId = DateKit.toString(new Date(), "yyyy-MM-dd");
             long count = zenStorageEngine.count(tableName, ZenConditionKit.And()
@@ -94,6 +92,8 @@ public class Report {
             }
             data.put("dateId", dateId);
             data.put("status", "0");
+
+
             // 同步到用户的mail信息
             result = zenStorageEngine.execute("put/myReport", data, user);
         } else {
@@ -106,11 +106,11 @@ public class Report {
         ReportDO config = reportService.config(user.getUid());
         String type = data.get("type");
         if (DailyType.equals(type)) {
-            config.setDailyMail(data.get("mails"));
-            config.setDailyTo(data.get("readers"));
+            config.setDailyMail(mails);
+            config.setDailyTo(readers);
         } else {
-            config.setWeekMail(data.get("mails"));
-            config.setWeekTo(data.get("readers"));
+            config.setWeekMail(mails);
+            config.setWeekTo(readers);
         }
         ZenData params = ZenData.create("report", GsonKit.stringify(config));
         zenStorageEngine.execute("patch/userReport", params, user);

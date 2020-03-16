@@ -2,8 +2,8 @@ import Todo from "./todo/index"
 import TodoDetail from "./todo/detail"
 import Calendar from "./calendar/index"
 import Doc from "./doc/index"
-import Search from "./doc/search"
 import Thing from "./todo/thing"
+import ThingRestore from "./common/thingRestore"
 // import Plan from "./plan/index"
 import Init from "./util/init"
 import Board from "./board/index"
@@ -17,12 +17,11 @@ zen.loginURL = "/home.html";
 Init();
 Vue.component("k-doc", Doc);
 Vue.component("k-thing", Thing);
+Vue.component("k-thing-restore", ThingRestore);
 Vue.component("k-board", Board);
-Vue.component("k-doc-search", Search);
 
 Vue.component("k-calendar", Calendar);
 Vue.component("k-todo", Todo);
-// Vue.component("k-todo-add", TodoAdd);
 Vue.component("k-todo-detail", TodoDetail);
 // Vue.component("k-plan", Plan);
 

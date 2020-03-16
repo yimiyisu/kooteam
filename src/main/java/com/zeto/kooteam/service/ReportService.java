@@ -5,8 +5,11 @@ import com.blade.ioc.annotation.Inject;
 import com.blade.kit.DateKit;
 import com.blade.kit.GsonKit;
 import com.google.common.base.Strings;
+import com.zeto.ZenConditionKit;
 import com.zeto.ZenData;
 import com.zeto.ZenResult;
+import com.zeto.ZenUserKit;
+import com.zeto.domain.ZenCondition;
 import com.zeto.domain.ZenUser;
 import com.zeto.driver.ZenStorageEngine;
 import com.zeto.kooteam.service.domain.ReportDO;
@@ -28,51 +31,67 @@ public class ReportService {
         if (content.isEmpty() || content.get("status").equals("1")) {
             return;
         }
-        if (user != null) {// 手动发送，需要校验邮件身份
-            if (!user.getUid().equals(content.get("uid"))) {
-                return;
+        if (!user.getUid().equals(content.get("uid"))) {
+            return;
+        }
+        MailMode mailMode = new MailMode();
+        String mails = content.get("mails"), targetUid;
+        if (mails != null) {
+            mailMode.addTo(mails.split(","));
+        }
+        List<Map<String, Object>> readers = GsonKit.parseListMap(content.get("readers"));
+        if (readers != null) {
+            for (Map<String, Object> item : readers) {
+                targetUid = item.get("uid").toString();
+                ZenUser target = ZenUserKit.get(targetUid);
+                if (target != null && target.getEmail() != null) {
+                    mailMode.addTo(target.getEmail());
+                }
+                ZenData params = ZenData.create("reportId", _id).put("uid", targetUid);
+                zenStorageEngine.execute("put/reportReader", params, null);
             }
         }
-        addReaders(content.get("readers"), _id);
         ZenData params = ZenData.create("_id", _id).put("status", "1");
         zenStorageEngine.execute("patch/myReport", params, user);
-        MailMode mailMode = new MailMode();
-        mailMode.setData(content);
+        mailMode.setContent(content.get("content"));
+        mailMode.setTitle(content.get("title"));
         EventBiz.sendMail(mailMode);
-        // 发送邮件
-    }
-
-    public void send(String _id) {
-        send(_id, null);
     }
 
     public ZenResult data(ZenUser user, String mode) {
-        long start, end = DateKit.now();
-        Calendar calendar = this.getCalendar();
+        long start, end = DateKit.now() + 3600;
         int dateId;
         String title;
+        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        calendar.setTime(now);
         // 周报
         if (mode.equals("1")) {
+            dateId = calendar.get(Calendar.WEEK_OF_MONTH);
+            title = user.getNick() + "的周报  [" + DateKit.toString(now, "yyyy年MM") + "月第" + dateId + "周]";
             start = end - 7 * 24 * 3600;
-            dateId = calendar.get(Calendar.WEEK_OF_YEAR);
-            title = user.getNick() + "的周报，第" + dateId + "周";
         } else {
             start = end - 24 * 3600;
             dateId = calendar.get(Calendar.DAY_OF_YEAR);
-            title = user.getNick() + "的日报";
+            title = user.getNick() + "的日报  [" + DateKit.toString(now, "yyyy-MM-dd") + "]";
         }
-        ZenResult result = ZenResult.success().put("title", title).put("dateId", dateId);
-        ZenData param = ZenData.create("end", end).put("start", start);
-        List<Map<String, Object>> things = zenStorageEngine.execute("select/thingByStartAndUid", param, user).getListWidthMap();
-        if (things == null || things.size() == 0) {
+        ZenCondition condition = ZenConditionKit.And().outputs("title", "status").
+                eq("owner", user.getUid()).
+                greater("updatetime", start).
+                lesser("updatetime", end);
+
+        ZenResult result = ZenResult.success().put("title", title).put("dateId", dateId),
+                things = zenStorageEngine.select("thing", condition);
+        if (things.isEmpty()) {
             return result;
         }
         String done = "", undone = "";
-        for (Map<String, Object> item : things) {
-            if (item.get("status").equals(1)) {
-                undone += "<li>" + item.get("title") + "</li>";
-            } else {
+        for (Map<String, Object> item : things.getListWidthMap()) {
+            if (item.get("status").equals(1L)) {
                 done += "<li>" + item.get("title") + "</li>";
+            } else {
+                undone += "<li>" + item.get("title") + "</li>";
             }
         }
         if (done.equals("")) {
@@ -99,26 +118,5 @@ public class ReportService {
             }
         }
         return reportDO;
-    }
-
-
-    private void addReaders(String readers, String id) {
-        List<Map<String, Object>> current = GsonKit.parseListMap(readers);
-        if (current == null) {
-            return;
-        }
-        for (Map<String, Object> item : current) {
-            ZenData params = ZenData.create("reportId", id).put("uid", item.get("_id"));
-            zenStorageEngine.execute("put/reportReader", params, null);
-        }
-    }
-
-    private Calendar getCalendar() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setFirstDayOfWeek(Calendar.MONDAY);
-        calendar.setTime(new Date());
-//        calendar.get(Calendar.DAY_OF_YEAR);
-//        return calendar.get(Calendar.WEEK_OF_YEAR);
-        return calendar;
     }
 }

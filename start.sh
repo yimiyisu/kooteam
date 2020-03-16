@@ -19,6 +19,7 @@ Download() {
 Start() {
     proc=$(ps -ef | grep ${SERVICE}.jar | grep -v grep | wc -l)
     if [ $proc != 0  ];then
+      sleep 3
       echo 'Kooteam Is Runing'
       exit 5
     else

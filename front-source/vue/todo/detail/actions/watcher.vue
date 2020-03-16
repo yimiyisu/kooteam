@@ -1,9 +1,9 @@
 <template>
     <div class="btn" @click="trigger">
-        <i class="ft icon">&#xe764;</i>关注人
+        <i class="ft icon">&#xe764;</i>{{text}}
         <z-popover v-model="visible">
-            <z-employee :max="1" @change="change"></z-employee>
-            <div class="z-detail-soperator">
+            <z-employee :max="1" v-model="people"></z-employee>
+            <div class="k-detail-operator">
                 <z-button plain size="mini" @click.stop="close">取消</z-button>
                 <z-button size="mini" type="primary" @click.stop="submit">确定</z-button>
             </div>
@@ -34,7 +34,7 @@
             }
         },
         created() {
-            let thing = this.getThing(), myUid = zen.user.id;
+            let thing = this.getThing(), myUid = zen.user.uid;
             this.thingId = thing._id;
             if (thing.owner === myUid) {
                 this.isOnwer = true;
@@ -53,13 +53,13 @@
                 if (this.isOnwer) {
                     return this.visible = true;
                 }
-                let uid = zen.user.id;
+                let uid = zen.user.uid;
                 if (this.hasWatch) {
-                    $.post({thingId: this.thingId, uid: uid}, "/delete/thingWatcherUid.json", function () {
-                        this.hasWatch = false;
-                        $.emit("detailWatcher", uid, "remove");
-                    });
-                    return;
+                    return $.post({thingId: this.thingId, uid: uid},
+                        "/delete/thingWatcherUid.json", function () {
+                            this.hasWatch = false;
+                            $.emit("detailWatcher", uid, "remove");
+                        }, this);
                 }
                 this.people = uid;
                 this.submit();
@@ -67,9 +67,6 @@
             },
             close() {
                 this.visible = false;
-            },
-            change(val) {
-                this.people = val;
             },
             submit() {
                 if (!this.people) {

@@ -1,9 +1,9 @@
 <template>
     <z-row class="k-doc" type="flex" justify="space-between">
         <z-col :span="4">
-            <h3>我的知识库
-                <z-wicket type="text" class="search" size="small" view="J_new" action="/note/add.do" title="新建知识库"><i
-                        class="ft icon hover">&#xe7ae;</i></z-wicket>
+            <h3>
+                我的知识库
+                <Search></Search>
             </h3>
             <z-scrollbar :height="-150">
                 <z-list url="/note/my.do" id="J_docList" :callback="callback">
@@ -29,6 +29,7 @@
 <script>
     import Editor from "./repository/index"
     import Config from "./repository/config"
+    import Search from "./search"
 
     export default {
         data: function () {
@@ -37,7 +38,7 @@
                 current: null
             }
         },
-        components: {Editor},
+        components: {Editor, Search},
         created() {
             $.on("docSave", this.save);
         },
@@ -58,7 +59,14 @@
                 if (data.total === 0) {
                     return;
                 }
-                this.select(data.list[0]);
+                let list = data.list;
+                if (list.length === 0) {
+                    this.current = null;
+                }
+                if (this.current && this.current._id === list[0]._id) {
+                    return;
+                }
+                this.select(list[0]);
             },
             save: function (result, content, later) {
                 if (!result) {

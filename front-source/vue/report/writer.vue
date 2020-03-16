@@ -7,21 +7,17 @@
             </div>
             <div class="z-4">
                 <z-radio name="type" type="button" size="mini" v-model="mode">
-                    <var value="1">周报</var>
                     <var value="2">日报</var>
+                    <var value="1">周报</var>
                 </z-radio>
             </div>
         </div>
         <z-editor :value="report.content" height="500" name="content"></z-editor>
-        <z-field class="form-item" label="抄送人">
-            <z-employee :value="readers" name="readers"></z-employee>
-        </z-field>
-        <z-field label="抄送邮箱">
-            <z-input-tag name="mails" :value="report.mails" placeholder="抄送邮箱"></z-input-tag>
-        </z-field>
+        <z-employee style="margin-top: 18px" label="抄送人" :value="readers" name="readers"></z-employee>
+        <z-input-tag label="抄送邮箱" name="mails" :value="report.mails" placeholder="抄送邮箱"></z-input-tag>
         <z-field>
-            <z-submit size="small" refresh="reports" @finish="save" action="/report/save.do">保存</z-submit>
-            <z-submit size="small" @finish="save" type="text" action="/report/saveWithSend.do">立即发送
+            <z-submit @finish="save" action="/report/save.do">保存</z-submit>
+            <z-submit @finish="save" type="text" action="/report/saveWithSend.do">立即发送
             </z-submit>
         </z-field>
     </z-form>
@@ -33,7 +29,7 @@
         data: function () {
             return {
                 report: {},
-                mode: "1",
+                mode: "2",
                 editor: null
             }
         },
@@ -59,8 +55,8 @@
             }
         },
         created() {
-            this.report = this.data;
-            this.template();
+            this.report = this.data || {};
+            this.template(this.mode);
         },
         methods: {
             template: function (val) {
@@ -76,10 +72,7 @@
                 }, this);
             },
             save: function (reback) {
-                let id = reback.data._id;
-                if (id) {
-                    this.report._id = id;
-                }
+                reback.data && (this.report._id = reback.data._id);
             }
         }
     }

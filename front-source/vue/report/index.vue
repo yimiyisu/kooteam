@@ -1,8 +1,6 @@
 <template>
-    <z-dialog
-            custom-class="k-report"
-            v-if="isShow"
-            width="80%" top="20px" @close="close">
+    <z-dialog custom-class="k-report" v-if="isShow"
+              width="80%" top="20px" @close="close">
         <Writer v-if="type==='new'||type==='edit'" :data="report"></Writer>
         <!--<Set v-if="type==='put'"></Set>-->
         <Preview v-if="type==='view'" :data="report"></Preview>

@@ -11,11 +11,11 @@
                     </z-tooltip>
                 </dd>
                 <!--<dt v-tip="'编辑文档'" @click="edit" :class="{'on':!readonly}">-->
-                <!--<i class="z-icon">&#xe22b;</i>-->
+                <!--<i class="ft icon">&#xe22b;</i>-->
                 <!--</dt>-->
                 <dd>
                     <z-tooltip content="预览文档">
-                        <a :href="'/view.html?id='+itemId" target="_blank">
+                        <a @click="debounce.flush" :href="'/view.html?id='+itemId" target="_blank">
                             <i class="ft icon">&#xe878;</i>
                         </a>
                     </z-tooltip>
@@ -45,23 +45,22 @@
     import Editor from '../word/index';
     import Mind from "../mind/minder.js";
     import Graph from '../graph/index';
+    import Grid from "../grid/index"
     import ChangeTitle from "./changeTitle";
     import Nav from './nav';
 
     const ComponentName = {
-
-        1: 'Editor', 2: 'Mind', 5: 'Graph'
+        1: 'Editor', 2: 'Mind', 5: 'Graph', 6: 'Grid'
     };
     const Tips = {
-        1: '按Ctr+S 立即保存文档',
         2: '选中节点，按enter键添加子节点，tab键添加同级节点',
-        5: '按Ctr+S 立即保存文档'
+        5: '按Ctr+S，保存文档'
     };
     export default {
         name: "docBoard",
         props: ['itemId', 'nodes'],
-        components: {Editor, Mind, Nav, Graph, ChangeTitle},
-        data: function () {
+        components: {Editor, Mind, Nav, Graph, ChangeTitle, Grid},
+        data() {
             return {
                 isShow: false,
                 showNav: false,
@@ -69,22 +68,31 @@
                 timerId: 1,
                 value: null,
                 tooltip: '',
+                debounce: null,
                 name: 'Editor'
             };
         },
         watch: {
-            itemId: function (val) {
+            itemId(val) {
                 this.init(val);
             }
         },
-        mounted: function () {
+        created() {
+            this.debounce = $.debounce(this.save, 15000);
             this.init(this.itemId);
         },
         methods: {
+            unload(e) {
+                this.debounce.flush();
+                let msg = "确定退出吗?";
+                e = e || window.event;
+                e.returnValue = msg;
+                return msg;
+            },
             changeTitle(reback) {
                 this.value.title = reback.data.title;
             },
-            init: function (val) {
+            init(val) {
                 if (!val) {
                     return (this.isShow = false);
                 }
@@ -97,6 +105,7 @@
                         this.readonly = false;
                     }
                     this.isShow = true;
+                    window.addEventListener("beforeunload", this.unload);
                     let href = window.location.href;
                     if (href.indexOf('docId') > -1) {
                         href = $.setParam('docId', val, href);
@@ -107,24 +116,28 @@
                     }
                 }, this);
             },
-            edit: function () {
+            edit() {
                 this.readonly = !this.readonly;
             },
-            nav: function () {
+            nav() {
                 this.showNav = !this.showNav;
             },
-            save() {
-            },
-            updateContent(content) {
+            save(content) {
                 let param = {
                     _id: this.itemId,
                     content: content
                 };
                 $.post(param, '/note/patch.do', function () {
+                    $.notice("保存完成", "success");
                     return false;
                 }, this);
             },
-            close: function () {
+            updateContent(content) {
+                this.debounce(content);
+            },
+            close() {
+                this.debounce.flush();
+                window.removeEventListener("beforeunload", this.unload);
                 this.$parent.docId = '';
                 let url = $.setParam('docId', '');
                 window.history.replaceState(null, null, url);

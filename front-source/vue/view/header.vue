@@ -1,8 +1,8 @@
 <template>
     <div class="header">
         <h1>
-            <span class="z-icon hover list" @click="toggle">&#xe241;</span>
-            <span class="z-icon hover full" @click="full">&#xe3c2;</span>
+            <span class="ft icon hover list" @click="toggle">&#xe8b2;</span>
+            <span class="ft icon hover full" @click="full">&#xe8b2;</span>
             {{title}}
         </h1>
         <a href="//www.kooteam.com" target="_blank">

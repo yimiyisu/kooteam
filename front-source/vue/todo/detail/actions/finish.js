@@ -21,9 +21,12 @@ export default {
     },
     methods: {
         doFinish() {
-            let thing = this.thing;
+            let thing = this.thing, uid = zen.user.uid;
+            if (uid !== thing.owner) {
+                return $.notice("只有负责人才能点击完成", "error");
+            }
             let status = !!thing.status ? 0 : 1;
-            $.post({status: status, _id: thing._id}, "/thing/patch.do", () => {
+            $.post({status: status, _id: thing._id, projectId: thing.projectId}, "/thing/patch.do", () => {
                 thing.status = status;
                 if (status === 1) {
                     this.log("完成了这个任务");

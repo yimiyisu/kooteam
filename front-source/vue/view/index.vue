@@ -1,6 +1,6 @@
 <template>
     <div v-if="loaded">
-        <Header :title="title" :logo="logo"></Header>
+        <Header :title="title||navTitle" :logo="logo"></Header>
         <Chapter class="book" v-if="article.type===4" :data="nav.sons"></Chapter>
         <Content v-else :tree="nav.sons" :isnav="showNav" :current="article._id" :data="article"></Content>
     </div>

@@ -175,6 +175,12 @@
       position: relative;
       line-height: 30px;
       height: 30px;
+      .status {
+        color: #79AA1C;
+        &.doned {
+          color: #999;
+        }
+      }
     }
     .z-avatar {
       position: absolute;

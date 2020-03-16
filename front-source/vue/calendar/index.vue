@@ -1,14 +1,16 @@
 <template>
     <div class="k-calendar">
         <div id='calendar'></div>
-        <k-todo-add :value="eventData" :visible="isShow" :is-cal="true"></k-todo-add>
+        <Add :value="eventData" :visible="isShow" :is-cal="true"></Add>
     </div>
 </template>
 <script>
     import Util from "./util"
+    import Add from "./add"
 
     export default {
         props: ["value"],
+        components: {Add},
         data: function () {
             return {
                 calendar: null,
@@ -17,7 +19,7 @@
                 isShow: false
             }
         },
-        mounted: function () {
+        created: function () {
             $.lib(["calendar/main.min.js", "calendar/interaction/min.js", "calendar/daygrid/min.js", "calendar/timegrid/min.js"], this.init);
             $.on("thingUpdate", this.update);
         },

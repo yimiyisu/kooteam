@@ -7,6 +7,7 @@
         <Remind/>
         <Attach/>
         <Watcher/>
+        <Archive/>
         <Remove/>
     </div>
 </template>
@@ -20,9 +21,10 @@
     import Finish from "./finish"
     import Remind from './remind'
     import Remove from "./remove"
+    import Archive from "./archive"
 
     export default {
         name: "actions",
-        components: {Attach, Watcher, Owner, Plan, Priority, Todo, Finish, Remind, Remove}
+        components: {Attach, Watcher, Owner, Plan, Priority, Todo, Finish, Remind, Archive, Remove}
     }
 </script>

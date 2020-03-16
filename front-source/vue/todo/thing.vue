@@ -2,7 +2,7 @@
     <div v-show="data.status !== 2" class="k-thing" :class="{finish:data.status}" @dblclick="dblclick" @click="detail"
          :data-id="data._id">
         <label @click.stop="doFinish" :data-id="data._id">
-            <i class="z-icon"></i>
+            <i class="ft icon"></i>
         </label>
         <div>{{data.title}}</div>
         <span v-if="data.finish<current">延期{{data.finish|time}}</span>
@@ -21,8 +21,12 @@
         methods: {
             doFinish: function (evt) {
                 let cls = "finish",
-                    id = this.data._id, status;
+                    thing = this.data,
+                    id = thing._id, status, uid = zen.user.uid;
                 let target = $(evt.currentTarget).parent();
+                if (uid !== thing.owner) {
+                    return $.notice("只有负责人才能点击完成", "error");
+                }
                 if (target.hasClass(cls)) {
                     target.removeClass(cls);
                     status = 0;
@@ -33,10 +37,10 @@
                 let param = {
                     _id: id,
                     status: status,
-                    projectId: this.data.projectId
+                    projectId: thing.projectId
                 };
                 $.post(param, "/thing/patch.do", function () {
-                    this.data["status"] = status;
+                    thing["status"] = status;
                     let parent = this.$parent;
                     if (parent.sort) {
                         parent.sort(id, status);

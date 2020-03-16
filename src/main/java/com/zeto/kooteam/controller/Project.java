@@ -3,6 +3,7 @@ package com.zeto.kooteam.controller;
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.DateKit;
 import com.blade.kit.GsonKit;
+import com.google.common.base.Strings;
 import com.zeto.ZenConditionKit;
 import com.zeto.ZenData;
 import com.zeto.ZenResult;
@@ -102,24 +103,29 @@ public class Project {
     }
 
     // 项目包含的任务
-    public ZenResult things(ZenUser user, ZenData data) {
-        ZenCondition condition = ZenConditionKit.And().eq("projectId", data.get("id"));
-        String type = data.get("type");
-        ZenResult result = ZenResult.success();
+    public ZenResult things(ZenData data, ZenUser user) {
+        String type = data.get("type"), projectId = data.get("id");
+        if (Strings.isNullOrEmpty(projectId)) {
+            return ZenResult.fail("项目编号不能为空！");
+        }
+        ZenData params = ZenData.create("projectId", projectId);
+        // 未完成任务
         if (type.equals("unfinish")) {
-            result.put("title", "未完成任务");
-            condition.eq("status", 0);
+            params.put("status", "0");
+            return zenStorageEngine.listWithPage("select/thing", params, user);
         }
+        // 已完成任务
         if (type.equals("finished")) {
-            result.put("title", "已完成任务");
-            condition.eq("status", 1);
+            params.put("status", "1");
+            return zenStorageEngine.listWithPage("select/thing", params, user);
         }
+        // 超期任务
         if (type.equals("overtime")) {
-            result.put("title", "超期任务");
-            condition.greater("end", 0).lesser("end", DateKit.now());
+            params.put("status", "0");
+            params.put("ls_end", DateKit.now());
+            return zenStorageEngine.listWithPage("select/thing", params, user);
         }
-        ZenResult things = zenStorageEngine.select("thing", condition.limit(count));
-        return result.put("data", things.getData());
+        return ZenResult.fail("类型错误");
     }
 
     public ZenResult addUser(ZenData data, ZenUser user) {
@@ -313,7 +319,7 @@ public class Project {
         long now = DateKit.now();
         ZenCondition condition = ZenConditionKit.And().
                 eq("projectId", projectId).
-                greater("end", 0).
+                eq("status", 1).
                 lesser("end", now);
         long overtime = zenStorageEngine.count("thing", condition);
         stat.setOvertime(overtime);

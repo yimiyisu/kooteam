@@ -6,7 +6,7 @@
             <div class="tag">
                     <span v-for="(cl,idx) in colors" @click="selectColor(idx)"
                           :style="'background:'+cl ">
-                        <i class="z-icon" v-if="newColor===idx">&#xe5ca;</i>
+                        <i class="ft icon" v-if="newColor===idx">&#xe5ca;</i>
                     </span>
             </div>
             <div class="operator">

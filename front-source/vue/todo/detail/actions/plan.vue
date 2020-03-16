@@ -1,7 +1,7 @@
 <template>
     <z-popover v-model="visible">
         <z-date type="datetime" v-model="text" :clearable="false"></z-date>
-        <div class="operator">
+        <div class="k-detail-operator">
             <z-button plain size="mini" @click="close">取消</z-button>
             <z-button size="mini" type="primary" @click="submit">确定</z-button>
         </div>

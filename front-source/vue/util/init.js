@@ -25,14 +25,13 @@ function loadUser(win, callback) {
 
 function bindMenu(user) {
     $(document).ready(function () {
-        if (user.skin) {
-            let url = "";
-            if (zen.mode < 3) {
-                url = "//a.yimiyisu.com/kooteam";
-            }
-            let css = "url('" + url + "/bg/" + user.skin + ".jpg')";
-            $("body").css("background-image", css);
+        let skin = user.skin || "3";
+        let url = "";
+        if (zen.mode < 3) {
+            url = "//a.yimiyisu.com/kooteam";
         }
+        let css = "url('" + url + "/bg/" + skin + ".jpg')";
+        $("body").css("background-image", css);
     });
 }
 

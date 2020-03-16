@@ -42,6 +42,9 @@
                     return;
                 }
                 let things = column.sons;
+                if (action === "add") {
+                    return things.unshift(thing);
+                }
                 for (let i = 0; i < things.length; i++) {
                     if (things[i]._id === thing._id) {
                         if (action === "remove") {

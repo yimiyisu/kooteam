@@ -5,7 +5,7 @@
             {{item.title}}
         </div>
         <div class="more">
-            <span>{{status}}</span>
+            <span class="status" :class="{'doned':item.status === 1}">{{status}}</span>
             <z-avatar size="small" :uid="item.owner"></z-avatar>
         </div>
     </div>

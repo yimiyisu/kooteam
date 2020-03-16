@@ -42,6 +42,9 @@ public class AuthService implements BladeLoader {
             TYPE = "cloud";
             return;
         }
+        if (ZenEnvironment.isNoSetup()) {
+            return;
+        }
         String type = ConfigKit.get(configKey, "type");
         if (ClientType.Wechat.equals(type)) {
             client = this.wechatClient;

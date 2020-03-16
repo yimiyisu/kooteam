@@ -1,89 +1,34 @@
 .k-project-set {
-  margin: 0 15px;
-  border-radius: .15rem;
-
-  .z-1 {
-    padding: 10px 0;
-    background: rgba(255, 255, 255, 0.9);
-    min-height: 300px;
-  }
-
-  h3 {
-    margin-left: 20px;
-    font-size: 18px;
-  }
-
-  .stat {
-    margin: 10px 20px;
-    border: 1px solid transparent;
-  }
-
-  .empty {
-    margin: 50px;
-    color: #666;
-    font-size: 14px;
-  }
-
-  h4, h5 {
-    font-size: 14px;
-    color: #666;
-  }
-
-  h5 {
-    font-size: 15px;
-    color: #333;
-    margin: 12px;
-  }
-
-  .things {
-    background: #fff;
-    max-height: 600px;
-    min-height: 200px;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-
   .k-thing {
     margin-top: -1px;
   }
 
   .card {
-    display: inline-block;
-    width: 40%;
-    height: 160px;
-    margin: 0 3% 3% 0;
-    background: #fff;
-    border-radius: .15rem;
-    padding: 1%;
+    height: 100px;
+    padding-top: 10px;
+    border-radius: 6px;
     text-align: center;
-    border: 1px solid #eee;
-
-    span {
-      display: block;
-      cursor: pointer;
-    }
-
-    div {
-      margin-top: 18px;
-      font-size: 42px;
-    }
+    color: #fff;
+    cursor: pointer;
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+  h4 {
+    font-size: 18px;
   }
 
   .finished {
-    div {
-      color: #79aa1c;
-    }
+    background: #19be6b;
+    //background: rgba(121, 170, 28, .7);
   }
 
   .unfinish {
-    div {
-      color: #E7C004;
-    }
+    background: #E7C004;
+    //background: rgba(236, 196, 2, .5);
   }
 
   .over {
-    div {
-      color: #f80e15;
-    }
+    background: #ff7a7a;
+    //background: rgba(248, 14, 21, .5);
   }
 }

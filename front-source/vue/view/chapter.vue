@@ -3,7 +3,7 @@
         <div class="chapter" v-for="(item,idx) in list" :key="item.id">
             <div class="item" @click="select(item)" :class="{'active':item.link===current}">
                 <i v-if="item.link==='folder'"
-                   class="folder z-icon" :class="{'hide':item.status===false}"></i>
+                   class="folder ft icon" :class="{'hide':item.status===false}"></i>
                 <div class="serial">
                     <i v-if="son">{{idx+1}}</i>
                     <span v-else>{{serial[idx]}}</span>
