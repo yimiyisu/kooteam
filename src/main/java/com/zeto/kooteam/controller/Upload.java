@@ -38,7 +38,7 @@ public class Upload {
             return ZenResult.fail("请选择文件");
         }
         String savePath = this.uploaderService.avator(fileItem.getData(), user.getUid());
-        return ZenResult.success().put("url", savePath);
+        return ZenResult.success().setData(savePath);
     }
 
     // 上传图片

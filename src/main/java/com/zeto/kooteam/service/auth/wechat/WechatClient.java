@@ -33,9 +33,9 @@ public class WechatClient implements Client {
     private UploaderService uploaderService;
 
     public void init(String key) {
-        corpId = ConfigKit.get(key, "corpid");
-        agentId = ConfigKit.get(key, "key");
-        secret = ConfigKit.get(key, "secret");
+        corpId = ConfigKit.getByApp(key, "wxCorpid");
+        agentId = ConfigKit.getByApp(key, "wxKey");
+        secret = ConfigKit.getByApp(key, "wxSecret");
     }
 
     private String token() {
@@ -51,6 +51,14 @@ public class WechatClient implements Client {
         token = data.get(TOKEN_KEY).toString();
         ZenCache.set(TOKEN_KEY, token, 100);
         return token;
+    }
+
+    public String check() {
+        Map<String, Object> data = HttpKit.getAsMap(TOKEN_URL, ZenData.create("corpid", corpId).put("corpsecret", secret));
+        if (!data.get("errcode").equals(SUCCESS_STATUS)) {
+            return data.get("errcode") + "-" + data.get("errmsg");
+        }
+        return null;
     }
 
     public ZenResult params(String checkId) {

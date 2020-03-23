@@ -216,7 +216,7 @@
 }
 
 body {
-  background: url("//a.yimiyisu.com/kooteam/bg/3.jpg") fixed no-repeat #F4F7F9;
+  background: fixed no-repeat #F4F7F9;
   background-size: cover;
   font-size: 12px;
   padding-top: 86px;
@@ -227,7 +227,7 @@ body {
   background: #fff url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2VlZWVlZSIgb3BhY2l0eT0iMC4zIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZWVlZWVlIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=") -1px -1px;
 }
 
-.k-todo-tag .tags, .k-todo-plan .calendar, .k-rich-content .content, .k-repository-set .search, .k-repository-set .modal, .k-repository .do {
+.k-todo-tag .tags, .k-todo-plan .calendar, .k-rich-content .content, .k-repository .do {
   box-shadow: 1px 0 0 #e6e6e6, -1px 0 0 #e6e6e6, 0 1px 0 #e6e6e6, 0 -1px 0 #e6e6e6, 0 3px 13px rgba(0, 0, 0, 0.08);
 }
 
@@ -291,6 +291,16 @@ a:visited {
 }
 .k-prority.d {
   color: #79aa1c;
+}
+
+.k-main {
+  margin: 0 15px;
+  border: solid #fff 1px;
+  background: #fff;
+  border-radius: 3px;
+}
+.k-main .content {
+  margin: 20px 20px;
 }
 
 .k-board-add {
@@ -406,6 +416,9 @@ a:visited {
 .k-board-detail .h4 input:focus {
   outline: 0;
 }
+.k-board-detail .h4 .bold {
+  margin-right: 2px;
+}
 .k-board-detail .h4 .plus {
   margin-left: 6px;
   font-size: 14px;
@@ -417,13 +430,26 @@ a:visited {
   top: 8px;
 }
 .k-board-detail .thing {
-  margin: 8px 11px 0 11px;
+  margin: 8px 11px 0 9px;
   background-color: #fff;
+  border-left: 2px solid #fff;
   color: #091e42;
   padding: 6px 8px 2px;
   border-radius: 3px;
   cursor: pointer;
   box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+}
+.k-board-detail .thing.a {
+  border-color: #f80e15;
+}
+.k-board-detail .thing.b {
+  border-color: #BF9F03;
+}
+.k-board-detail .thing.c {
+  border-color: #009fe3;
+}
+.k-board-detail .thing.d {
+  border-color: #79aa1c;
 }
 .k-board-detail .thing:hover {
   color: #091e42;
@@ -434,7 +460,25 @@ a:visited {
   line-height: 30px;
   height: 30px;
 }
-.k-board-detail .thing .el-avatar {
+.k-board-detail .thing .status {
+  color: #40bf89;
+}
+.k-board-detail .thing .status:before {
+  content: "待处理";
+}
+.k-board-detail .thing .status.doned {
+  color: #999;
+}
+.k-board-detail .thing .status.doned:before {
+  content: "已完成";
+}
+.k-board-detail .thing .status.overtime {
+  color: #ed3f14;
+}
+.k-board-detail .thing .status.overtime:before {
+  content: "已超时";
+}
+.k-board-detail .thing .z-avatar {
   position: absolute;
   right: 0;
   bottom: 2px;
@@ -461,9 +505,11 @@ a:visited {
   margin-top: 4px;
   text-align: center;
   display: inline-block;
-  width: 12px;
+  width: 16px;
   height: 16px;
-  font-family: "zenFont";
+  padding-left: 2px;
+  cursor: pointer;
+  font-family: "zenicon";
 }
 .k-prority-add.a {
   background: #f80e15;
@@ -478,9 +524,9 @@ a:visited {
   background: #79aa1c;
 }
 .k-prority-add.active:before {
-  content: "";
+  content: "";
   position: absolute;
-  left: 0;
+  left: 3px;
   top: -1px;
 }
 .k-prority-add.active {
@@ -625,7 +671,7 @@ a:visited {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 12;
+  z-index: 22;
   overflow: hidden;
   background: #f9f9f9;
 }
@@ -656,6 +702,8 @@ a:visited {
 }
 .k-doc-board .tox-sidebar-wrap {
   margin-top: 60px;
+  padding: 10px 30px;
+  background: #fff;
 }
 .k-doc-board .tox-edit-area,
 .k-doc-board .tox-tinymce {
@@ -846,23 +894,6 @@ a:visited {
   right: 0;
   bottom: 0;
 }
-.k-grap-editor span {
-  display: inline-block;
-  width: 30px;
-  height: 20px;
-  overflow: hidden;
-  line-height: 22px;
-  cursor: pointer;
-  border: 3px solid #fff;
-  background: #f40;
-  border-radius: 2px;
-  color: #fff;
-  text-align: center;
-  font-family: "zenFont";
-}
-.k-grap-editor span.active:before {
-  content: "";
-}
 .k-grap-editor .theme {
   width: 30px;
   height: 30px;
@@ -952,14 +983,14 @@ a:visited {
   margin-top: 0.2rem;
   position: relative;
 }
-.k-doc .doc-item .z-execute {
+.k-doc .doc-item .z-confirm {
   position: absolute;
   display: none;
   bottom: 0;
   right: 6px;
   color: #FA585D;
 }
-.k-doc .doc-item:hover .z-execute {
+.k-doc .doc-item:hover .z-confirm {
   display: block;
 }
 .k-doc .doc-item:hover, .k-doc .doc-item.active {
@@ -1063,21 +1094,6 @@ a:visited {
 .k-flow .tool .l4 {
   left: -4px;
   top: calc(50% - 4px);
-}
-
-.k-system-formwork .add {
-  margin-bottom: 20px;
-}
-
-.k-add-formwork .z-input {
-  display: inline-block;
-  margin-bottom: 10px;
-}
-.k-add-formwork .formwork-content input {
-  width: 300px;
-}
-.k-add-formwork i {
-  cursor: pointer;
 }
 
 .fc {
@@ -2509,7 +2525,7 @@ be a descendant of the grid when it is being dragged.
 }
 
 .k-header {
-  z-index: 12;
+  z-index: 15;
   height: 40px;
   position: fixed;
   left: 0;
@@ -2519,6 +2535,10 @@ be a descendant of the grid when it is being dragged.
   background-color: #0396f2;
   background: linear-gradient(45deg, #0396f2 0%, #0285d7 100%);
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.25);
+}
+.k-header .icon {
+  font-size: 16px;
+  margin-right: 3px;
 }
 .k-header .z-row {
   color: #fff;
@@ -2548,13 +2568,43 @@ be a descendant of the grid when it is being dragged.
 .k-header .z-12 li:hover, .k-header .z-12 li.active {
   background: #0277c0;
 }
+.k-header .logout {
+  cursor: pointer;
+}
+.k-header .user-info {
+  display: inline-block;
+  position: relative;
+  margin-right: 6px;
+  cursor: pointer;
+}
+.k-header .user-info ul {
+  display: none;
+  position: absolute;
+  background: #fff;
+  border: 1px solid #eee;
+  left: 0;
+  top: 38px;
+  width: 80px;
+  text-align: center;
+}
+.k-header .user-info li {
+  height: 32px;
+  padding: 2px 0;
+  line-height: 32px;
+  color: #666;
+}
+.k-header .user-info li:hover {
+  color: #0396f2;
+}
+.k-header .user-info:hover ul {
+  display: block;
+}
 .k-header .profile {
   text-align: right;
   line-height: 40px;
 }
-.k-header .profile span {
-  cursor: pointer;
-  margin-right: 6px;
+.k-header .profile .username:hover {
+  color: #f0f0f0 !important;
 }
 .k-header a {
   color: #fff;
@@ -2588,7 +2638,7 @@ be a descendant of the grid when it is being dragged.
   font-size: 16px;
   margin-right: 2px;
 }
-.k-nav .el-col-8 {
+.k-nav .el-col-16 {
   text-align: right;
 }
 .k-nav span {
@@ -2597,7 +2647,6 @@ be a descendant of the grid when it is being dragged.
 }
 .k-nav span:hover {
   color: #0396f2;
-  font-weight: bold;
 }
 .k-nav span.active {
   color: #0396f2;
@@ -2866,143 +2915,30 @@ be a descendant of the grid when it is being dragged.
   empty-cells: show;
 }
 
-.k-project-member {
-  border-radius: 0.15rem;
-  min-height: 680px;
-}
-.k-project-member.bg {
-  border-top: 1px solid transparent;
-  background: rgba(255, 255, 255, 0.9);
-}
-.k-project-member .z-col {
-  position: relative;
-  width: 4rem;
-}
-.k-project-member h3 {
-  margin-bottom: 12px;
-  font-size: 18px;
-}
-.k-project-member .z-1 {
-  border-radius: 0 0.15rem 0.15rem 0;
-  background: rgba(255, 255, 255, 0.9);
-}
-.k-project-member .content {
-  margin: 20px;
-}
-.k-project-member img {
-  width: 40px;
-  border-radius: 50%;
-}
-.k-project-member .owner {
-  color: #ff2e2e;
-}
-.k-project-member .admin {
-  color: #4009ef;
-}
-
-.k-archive .k-thing {
-  border: none !important;
-  background: none !important;
-}
-
-.k-project-set {
-  margin: 0 15px;
-  border-radius: 0.15rem;
-}
-.k-project-set .z-1 {
-  padding: 10px 0;
-  background: rgba(255, 255, 255, 0.9);
-  min-height: 300px;
-}
-.k-project-set h3 {
-  margin-left: 20px;
-  font-size: 18px;
-}
-.k-project-set .stat {
-  margin: 10px 20px;
-  border: 1px solid transparent;
-}
-.k-project-set .empty {
-  margin: 50px;
-  color: #666;
-  font-size: 14px;
-}
-.k-project-set h4, .k-project-set h5 {
-  font-size: 14px;
-  color: #666;
-}
-.k-project-set h5 {
-  font-size: 15px;
-  color: #333;
-  margin: 12px;
-}
-.k-project-set .things {
-  background: #fff;
-  max-height: 600px;
-  min-height: 200px;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
 .k-project-set .k-thing {
   margin-top: -1px;
 }
 .k-project-set .card {
-  display: inline-block;
-  width: 40%;
-  height: 160px;
-  margin: 0 3% 3% 0;
-  background: #fff;
-  border-radius: 0.15rem;
-  padding: 1%;
+  height: 100px;
+  padding-top: 10px;
+  border-radius: 6px;
   text-align: center;
-  border: 1px solid #eee;
-}
-.k-project-set .card span {
-  display: block;
-  cursor: pointer;
-}
-.k-project-set .card div {
-  margin-top: 18px;
-  font-size: 42px;
-}
-.k-project-set .finished div {
-  color: #79aa1c;
-}
-.k-project-set .unfinish div {
-  color: #E7C004;
-}
-.k-project-set .over div {
-  color: #f80e15;
-}
-
-.k-project-toolbar {
-  border-radius: 0.15rem 0 0 0.15rem;
-  background-color: rgba(60, 60, 60, 0.9);
-  left: 0;
-  bottom: 0;
-  top: 0;
-  text-align: center;
-  width: 4rem;
-  color: #ccc;
-  overflow: hidden;
-  min-height: 680px;
-}
-.k-project-toolbar i {
-  font-size: 1.5rem;
-}
-.k-project-toolbar span {
-  font-size: 12px;
-  display: block;
-}
-.k-project-toolbar div {
-  display: block;
-  text-align: center;
-  cursor: pointer;
-  padding: 12px 0 6px 0;
-}
-.k-project-toolbar div:hover, .k-project-toolbar div.active {
   color: #fff;
-  background: #0285d7;
+  cursor: pointer;
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+.k-project-set h4 {
+  font-size: 18px;
+}
+.k-project-set .finished {
+  background: #19be6b;
+}
+.k-project-set .unfinish {
+  background: #E7C004;
+}
+.k-project-set .over {
+  background: #ff7a7a;
 }
 
 .k-project {
@@ -3013,6 +2949,11 @@ be a descendant of the grid when it is being dragged.
   margin-bottom: 20px;
   border-radius: 0.1rem;
   position: relative;
+}
+.k-project .empty {
+  background: rgba(255, 255, 255, 0.7);
+  min-height: 80px;
+  border-radius: 2px;
 }
 .k-project .header {
   background: #fff;
@@ -3044,48 +2985,6 @@ be a descendant of the grid when it is being dragged.
   right: 30px;
   top: 14px;
   font-size: 20px;
-}
-.k-project .op.popover span {
-  display: block;
-}
-.k-project .op:hover ul {
-  display: block;
-}
-.k-project .op ul {
-  display: none;
-  background: #fff;
-  width: 80px;
-  position: absolute;
-  right: -12px;
-  top: -9px;
-}
-.k-project .op span {
-  text-align: left;
-  display: block;
-}
-.k-project .op .el-button {
-  padding: 6px 12px;
-  color: #666;
-  font-weight: initial;
-}
-.k-project .op .el-button:hover {
-  color: #0285d7;
-  border-color: #fff;
-}
-.k-project .op .z-execute {
-  padding: 6px 12px;
-  text-align: center;
-}
-.k-project .op li {
-  border-top: dotted 1px #ccc;
-  color: #666;
-  cursor: pointer;
-}
-.k-project .op li:hover {
-  color: #0396f2;
-}
-.k-project .op i {
-  color: #666;
 }
 .k-project .z-8 {
   text-align: center;
@@ -3153,11 +3052,11 @@ be a descendant of the grid when it is being dragged.
   margin-top: 10px;
 }
 .k-project-process p {
-  font-weight: bold;
   color: #999;
   margin-left: 36px;
 }
 .k-project-process ul {
+  font-weight: bold;
   width: 90%;
   display: inline-block;
   margin-left: 36px;
@@ -3208,6 +3107,11 @@ be a descendant of the grid when it is being dragged.
   background-color: #1b9aee;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
+}
+
+.z-project-pop span {
+  display: block;
+  margin-bottom: 8px;
 }
 
 .k-report {
@@ -3309,29 +3213,14 @@ be a descendant of the grid when it is being dragged.
   background: #f0f0f0;
   border: dotted #ddd 1px;
 }
-.k-repository .doc-txt, .k-repository .doc-graph, .k-repository .doc-mind {
+.k-repository .doc-icon {
   display: inline-block;
   width: 12px;
   height: 12px;
-  border-radius: 15%;
-  font-size: 9px;
+  color: #666;
+  font-weight: 200;
   text-align: center;
   line-height: 12px;
-  border: 1px solid;
-}
-.k-repository .doc-txt {
-  border-color: #9a7aff;
-  color: #9a7aff;
-}
-.k-repository .doc-txt:before {
-  content: "文";
-}
-.k-repository .doc-graph {
-  border-color: #ff7a7a;
-  color: #ff7a7a;
-}
-.k-repository .doc-graph:before {
-  content: "G";
 }
 .k-repository .doc-floder {
   color: #777;
@@ -3342,19 +3231,15 @@ be a descendant of the grid when it is being dragged.
 .k-repository .doc-floder.lap:before {
   content: "";
 }
-.k-repository .doc-mind {
-  border-color: #56baff;
-  color: #56baff;
-}
-.k-repository .doc-mind:before {
-  content: "M";
+.k-repository .chapter-list {
+  margin-right: 12px;
 }
 .k-repository .group {
   cursor: move;
 }
 .k-repository .group .group {
   padding-left: 14px;
-  background: url("//a.yimiyisu.com/tree.png") no-repeat -2px -2px;
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAABS2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDAgNzkuMTYwNDUxLCAyMDE3LzA1LzA2LTAxOjA4OjIxICAgICAgICAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIi8+CiA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgo8P3hwYWNrZXQgZW5kPSJyIj8+LUNEtwAAAEtJREFUSIntzzEVwAAMQkFSKfi3FKzQqQ5oJm5h5P3ZXQMYkrgwtk+OPo8kSzo7bGFcC+NaGNfCuBbGtTCuhXEtzB+SHAAGAEm/7wv2LKvDNoBjfgAAAABJRU5ErkJggg==") no-repeat -2px -2px;
   margin-left: 12px;
   border-left: 1px dotted #ddd;
 }
@@ -3446,9 +3331,15 @@ be a descendant of the grid when it is being dragged.
   right: 0;
   top: 0;
 }
-.k-repository .info i {
+.k-repository .info .icon {
   cursor: pointer;
-  margin-right: 8px;
+  display: inline-block;
+  font-size: 13px;
+}
+.k-repository .empty {
+  text-align: center;
+  margin: 30px;
+  color: #666;
 }
 .k-repository hr {
   position: absolute;
@@ -3462,91 +3353,23 @@ be a descendant of the grid when it is being dragged.
   border-bottom: dashed 1px #eee;
 }
 
-.k-repository-set {
-  position: fixed;
-  z-index: 20;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-.k-repository-set .modal {
-  width: 640px;
-  left: 50%;
-  top: 80px;
-  min-height: 400px;
-  margin-left: -320px;
-  position: absolute;
-  background: #fff;
-}
-.k-repository-set h4 {
-  background: #eef1f4;
-  border-bottom: solid 1px #eaeaea;
-  margin-bottom: 20px;
-  font-size: 14px;
-  padding: 10px 16px;
-}
-.k-repository-set dl {
-  margin: 10px 40px 0 0;
-}
-.k-repository-set .close {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  cursor: pointer;
-}
-.k-repository-set .z-6 {
-  text-align: center;
-  min-height: 42px;
-  line-height: 42px;
-}
-.k-repository-set .z-18 {
-  position: relative;
-  line-height: 42px;
-}
-.k-repository-set .search {
-  position: absolute;
-  z-index: 7;
-  left: 0;
-  top: 0;
-  background: #fff;
-  padding: 10px;
-  width: 300px;
-}
-.k-repository-set .action {
-  text-align: right;
-}
-.k-repository-set .add {
-  margin-bottom: 12px;
-}
 .k-repository-set .user {
   width: 80px;
-  margin: 5px 0;
-  height: 60px;
+  height: 26px;
   display: inline-block;
   position: relative;
-  cursor: pointer;
   overflow: hidden;
   text-align: center;
+  margin-right: 0.6rem;
 }
-.k-repository-set .user:hover span {
+.k-repository-set .user:hover .ft {
   display: block;
 }
-.k-repository-set .user span {
+.k-repository-set .user .ft {
   position: absolute;
   display: none;
   top: 0;
   right: 0;
-}
-.k-repository-set .user img {
-  width: 30px;
-  border-radius: 50%;
-}
-.k-repository-set .user strong {
-  color: #666;
-  display: block;
-  line-height: 0;
 }
 
 .k-rich {
@@ -3798,17 +3621,19 @@ be a descendant of the grid when it is being dragged.
 .k-thing-detail-bg .btn.remove {
   color: rgba(248, 14, 21, 0.5);
 }
+.k-thing-detail-bg .btn.remove .hover {
+  display: block;
+}
+.k-thing-detail-bg .btn.remove .hover:hover {
+  color: #fff !important;
+}
 .k-thing-detail-bg .btn.remove:hover {
   background: rgba(248, 14, 21, 0.5);
   color: #fff;
 }
 .k-thing-detail-bg .btn:hover {
-  background: #172b4d;
+  background: #409EFF;
   color: #fff;
-}
-.k-thing-detail-bg .z-detail-soperator {
-  margin-top: 10px;
-  text-align: right;
 }
 .k-thing-detail-bg .header {
   margin-bottom: 12px;
@@ -3982,6 +3807,11 @@ be a descendant of the grid when it is being dragged.
   margin-left: 10px;
 }
 
+.k-detail-operator {
+  margin-top: 10px;
+  text-align: right;
+}
+
 .k-thing {
   border-radius: 0.1rem;
   margin-top: -1px;
@@ -4008,17 +3838,16 @@ be a descendant of the grid when it is being dragged.
 .k-thing.draghover label {
   color: #fff;
 }
-.k-thing:hover {
-  color: #222;
-  background: #f5f6f7;
-}
 .k-thing label {
   color: #666;
   width: 1.4rem;
   cursor: pointer;
 }
-.k-thing i:before {
-  content: "";
+.k-thing .bold {
+  margin-right: 2px;
+}
+.k-thing .icon:before {
+  content: "";
 }
 .k-thing.finish {
   color: #999;
@@ -4026,11 +3855,11 @@ be a descendant of the grid when it is being dragged.
 .k-thing.finish div {
   text-decoration: line-through;
 }
-.k-thing.finish i {
+.k-thing.finish .icon {
   color: #999;
 }
-.k-thing.finish i:before {
-  content: "";
+.k-thing.finish .icon:before {
+  content: "";
 }
 .k-thing div {
   flex: 1;

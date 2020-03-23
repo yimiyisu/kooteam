@@ -3,6 +3,7 @@ package com.zeto.kooteam.controller;
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.EncryptKit;
 import com.blade.kit.PatternKit;
+import com.blade.mvc.http.Request;
 import com.google.common.base.Strings;
 import com.zeto.*;
 import com.zeto.annotation.AccessRole;
@@ -56,12 +57,19 @@ public class System extends Base {
         return zenStorageEngine.execute("get/userById", param, user);
     }
 
-    public ZenResult getConfig(ZenData data) {
+    public ZenResult getConfig(ZenData data, ZenUser user, Request request) {
+        ZenResult checkResult = checkRoot(user);
+        if (checkResult != null) {
+            return checkResult;
+        }
         List<ConfigOptionVO> config = ConfigKit.getGroup(data.get("name"));
         ZenResult result = ZenResult.success();
-        for (ConfigOptionVO optionVO : config) {
-            result.put(optionVO.getKey(), optionVO.getValue());
+        if (config != null) {
+            for (ConfigOptionVO optionVO : config) {
+                result.put(optionVO.getKey(), optionVO.getValue());
+            }
         }
+        result.put("_Host", request.header("Host"));
         return result;
     }
 
@@ -79,14 +87,21 @@ public class System extends Base {
         }
         ConfigKit.setByApp("kooteam", "account", configList);
         authService.init();
-        return ZenResult.success("保存成功");
+        if (data.get("type").equals("3")) {
+            return ZenResult.success("配置成功");
+        }
+        String result = authService.check();
+        if (result == null) {
+            return ZenResult.success("配置成功");
+        }
+        return ZenResult.fail("配置失败:" + result);
     }
 
 
     public ZenResult mail(ZenData data, ZenUser user) {
         ZenResult checkResult = checkRoot(user);
         if (checkResult != null) {
-//            return checkResult;
+            return checkResult;
         }
         String mailHost = data.get("host"), mailPort = data.get("port"),
                 mailUser = data.get("user"), mailPassword = data.get("password");
@@ -123,7 +138,7 @@ public class System extends Base {
             return ZenResult.fail("两次密码输入不一致！");
         }
         String pwd = EncryptKit.md5(data.get("pwd"));
-        ZenUserKit.changePassword(pwd, user.getUid());
+        ZenUserKit.changePassword(user.getUid(), pwd);
         return ZenResult.success("修改成功！");
     }
 

@@ -65,6 +65,7 @@ a {
   margin-right: 8px;
   overflow: hidden;
   text-align: center;
+
   &.a {
     color: #f80e15;
   }
@@ -82,3 +83,25 @@ a {
   }
 }
 
+.k-main {
+  margin: 0 15px;
+  border: solid #fff 1px;
+  background: #fff;
+  border-radius: 3px;
+
+  .content {
+    margin: 20px 20px;
+  }
+}
+
+.k-empty {
+  text-align: center;
+  color: #666;
+  margin: 30px;
+
+  &:before {
+    font-family: "zenicon";
+    content: '\e883';
+    margin-right: 4px;
+  }
+}

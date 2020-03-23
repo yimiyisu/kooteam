@@ -4,18 +4,23 @@
         <label @click.stop="doFinish" :data-id="data._id">
             <i class="ft icon"></i>
         </label>
-        <div>{{data.title}}</div>
-        <span v-if="data.finish<current">延期{{data.finish|time}}</span>
+        <div><i v-if="overtime" class="ft bold red">!</i>{{data.title}}</div>
     </div>
 </template>
 <script>
-    let now = new Date();
-    now = now.getTime() % 1000;
     export default {
         props: ["data", "now"],
         computed: {
             current() {
-                return this.now || now;
+                if (!this.now) {
+                    let now = new Date();
+                    return parseInt(now.getTime() / 1000);
+                }
+                return this.now;
+            },
+            overtime() {
+                let item = this.data;
+                return item.status === 0 && item.end && item.end < this.current;
             }
         },
         methods: {

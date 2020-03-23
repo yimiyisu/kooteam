@@ -71,24 +71,35 @@ public class Project {
         return ZenResult.success("修改成功！");
     }
 
-    // 我收藏的项目
-    public ZenResult faviList(ZenUser user) {
-        ZenData param = new ZenData();
-        if (!param.contains("size")) {
-            param.put("size", "5");
-        }
-        ZenResult result = zenStorageEngine.execute("select/projectFaviByUid", param, user);
-        return zenStorageEngine.selectByIds("project", "projectId", result);
-    }
-
     // 参与的项目
-    public ZenResult joinList(ZenUser user) {
-        ZenData param = ZenData.create("userId", user.getUid());
-
-        ZenResult result = zenStorageEngine.execute("select/projectUserByUserId", param, user);
-        return zenStorageEngine.selectByIds("project", "projectId", result);
+    public ZenResult joinList(ZenData data, ZenUser user) {
+        ZenResult result = zenStorageEngine.execute("select/projectUserByUserId", data, user);
+        ZenResult projects = zenStorageEngine.selectByIds("project", "projectId", result);
+        long total = zenStorageEngine.count("projectUser", ZenConditionKit.And().eq("userId", user.getUid()));
+        return ZenResult.success().setList(projects.getList()).setTotal(total);
     }
 
+    // 退出项目
+    public ZenResult quit(ZenData data, ZenUser user) {
+        data.put("userId", user.getUid());
+        ZenResult result = zenStorageEngine.execute("get/projectUserByProjectIdUid", data, user);
+        if (result.isEmpty()) {
+            ZenResult.success("退出完成");
+        }
+        if (result.get("role").equals("5")) {
+            return ZenResult.fail("项目负责人，只能转交项目");
+        }
+        ZenData param = ZenData.create("projectId", data.get("projectId"));
+        ZenResult project = zenStorageEngine.execute("get/projectById", param, user);
+        if (user.getUid().equals(project.get("owner"))) {
+            return ZenResult.fail("项目负责人，只能转交项目");
+        }
+        param = ZenData.create("_id", result.get("_id"));
+        zenStorageEngine.execute("delete/projectUser", param, user);
+        return ZenResult.success("退出成功");
+    }
+
+    // 项目看板
     public ZenResult board(ZenUser user, ZenData data) {
         String projectId = data.get("_id");
         ZenResult project = zenStorageEngine.execute("get/projectById", data, user);
@@ -165,11 +176,19 @@ public class Project {
                 continue;
             }
             param.put("role", role);
-            message = user.getNick() + "已经把你加入到项目[" + projectInfo.get("title") + "]成员中";
+//            message = user.getNick() + "已经把你加入到项目[" + projectInfo.get("title") + "]成员中";
             //EventBiz.sendMessage(new MessageModel(user.getUid(), uid.get("uid"), message, projectId, MessageType.PROJECT));
             zenStorageEngine.execute("put/projectUser", param, user);
         }
         return ZenResult.success("添加成功");
+    }
+
+    // 我收藏的项目
+    public ZenResult faviList(ZenData data, ZenUser user) {
+        ZenResult result = zenStorageEngine.execute("select/projectFaviByUid", data, user);
+        ZenResult projects = zenStorageEngine.selectByIds("project", "projectId", result);
+        long total = zenStorageEngine.count("projectFavi", ZenConditionKit.And().eq("uid", user.getUid()));
+        return ZenResult.success().setList(projects.getList()).setTotal(total);
     }
 
     // 收藏
@@ -189,17 +208,22 @@ public class Project {
 
     // 转交
     public ZenResult trans(ZenData data, ZenUser user) {
-        String projectId = data.get("_id");
+        String projectId = data.get("_id"), onwerUid = data.get("userId");
         ZenResult result = checkOnwer(user, projectId);
         if (!result.isSuccess()) {
             return result;
         }
-        ZenData params = ZenData.create("owner", data.get("userId")).put("_id", data.get("_id"));
+        ZenData params = ZenData.create("owner", onwerUid).put("_id", data.get("_id"));
         zenStorageEngine.execute("patch/project", params, user);
 
         // 删除负责人项目权限
         params = ZenData.create("projectId", result.get("_id")).put("userId", user.getUid());
-        zenStorageEngine.execute("delete/projectUserWidthProject", params, user);
+        ZenData projectUserParam = ZenData.create("projectId", projectId);
+        zenStorageEngine.execute("delete/projectUserWidthProject", projectUserParam.put("userId", user.getUid()), user);
+        zenStorageEngine.execute("delete/projectUserWidthProject", projectUserParam.put("userId", onwerUid), user);
+
+        // 将新负责人插入到用户表
+        zenStorageEngine.execute("put/projectUser", projectUserParam.put("role", "5"), user);
 
         String message = user.getNick() + "已把[" + result.get("title") + "]项目负责人角色转交给你";
         EventBiz.sendMessage(new MessageModel(user.getUid(), data.get("userId"), message, result.get("_id"), MessageType.PROJECT));
@@ -222,23 +246,6 @@ public class Project {
         //  清除项目用户
         zenStorageEngine.execute("delete/projectUserClean", params, user);
         return ZenResult.success("删除成功");
-    }
-
-    // 退出
-    public ZenResult quit(ZenData data, ZenUser user) {
-        data.put("userId", user.getUid());
-        ZenResult result = zenStorageEngine.execute("get/projectUserByProjectIdUid", data, user);
-        if (result.isEmpty()) {
-            ZenResult.success("退出完成");
-        }
-        ZenData param = ZenData.create("projectId", data.get("projectId"));
-        ZenResult project = zenStorageEngine.execute("get/projectById", param, user);
-        if (user.getUid().equals(project.get("owner"))) {
-            ZenResult.fail("项目负责人，只能转交项目");
-        }
-        param = ZenData.create("_id", result.get("_id"));
-        zenStorageEngine.execute("delete/projectUser", param, user);
-        return ZenResult.success("退出成功");
     }
 
     public ZenResult deleteMember(ZenData data, ZenUser user) {
@@ -313,13 +320,13 @@ public class Project {
         stat.setFinished(project.getLong("finished"));
         stat.setUnfinish(project.getLong("unfinish"));
         if (stat.getFinished() + stat.getUnfinish() == 0) {
-            return ZenResult.success().setData(0);
+            return ZenResult.success().setData("empty");
         }
 
         long now = DateKit.now();
         ZenCondition condition = ZenConditionKit.And().
                 eq("projectId", projectId).
-                eq("status", 1).
+                eq("status", 0).
                 lesser("end", now);
         long overtime = zenStorageEngine.count("thing", condition);
         stat.setOvertime(overtime);

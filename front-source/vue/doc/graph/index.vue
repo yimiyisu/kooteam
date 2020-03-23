@@ -8,22 +8,21 @@
         name: "graph",
         props: ["value", "type"],
         watch: {
-            value: function () {
+            value() {
                 if (this.type + '' !== "5") {
                     return;
                 }
                 this.sendData();
             }
         },
-        mounted: function () {
-            let that = this;
+        mounted() {
             // 接受文件修改
             window.addEventListener('message', function (ev) {
-                that.$parent.updateContent(ev.data);
+                $.emit("docContentUpdate", ev.data);
             }, false);
         },
         methods: {
-            sendData: function () {
+            sendData() {
                 let iframe = this.$el.getElementsByTagName("iframe");
                 iframe[0].contentWindow.postMessage(this.value, "/");
             }

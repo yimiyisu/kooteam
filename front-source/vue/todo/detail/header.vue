@@ -4,7 +4,11 @@
         <z-col :span="23">
             <input :disabled="value.status === 1" type="text" maxlength="60" @change="change"
                    v-model="value.title"/>
-            <div class="time">{{value.nick}}创建于：{{value.start | date}}</div>
+            <div class="time">
+                <z-nick :uid="value.uid"></z-nick>
+                创建于：
+                <z-idate :value="value._id"></z-idate>
+            </div>
         </z-col>
     </z-row>
 </template>

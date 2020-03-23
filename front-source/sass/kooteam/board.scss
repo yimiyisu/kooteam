@@ -130,6 +130,10 @@
       }
     }
 
+    .bold {
+      margin-right: 2px;
+    }
+
     .plus {
       margin-left: 6px;
       font-size: 14px;
@@ -152,6 +156,7 @@
     border-radius: 3px;
     cursor: pointer;
     box-shadow: 0 1px 0 rgba(9, 30, 66, .25);
+
     &.a {
       border-color: #f80e15;
     }
@@ -167,27 +172,49 @@
     &.d {
       border-color: #79aa1c;
     }
+
     &:hover {
       color: #091e42;
       background: #F4F5F7;
     }
+
     .more {
       position: relative;
       line-height: 30px;
       height: 30px;
-      .status {
-        color: #79AA1C;
-        &.doned {
-          color: #999;
+    }
+
+    .status {
+      &:before {
+        content: "待处理";
+      }
+
+      color: #40bf89;
+
+      &.doned {
+        &:before {
+          content: "已完成";
         }
+
+        color: #999;
+      }
+
+      &.overtime {
+        &:before {
+          content: "已超时";
+        }
+
+        color: #ed3f14;
       }
     }
+
     .z-avatar {
       position: absolute;
       right: 0;
       bottom: 2px;
     }
   }
+
   .column {
     width: 300px;
     margin-right: 15px;
@@ -201,6 +228,7 @@
     &.draghover {
       background: #ccc;
     }
+
     .empty {
       margin: 20px;
       text-align: center;

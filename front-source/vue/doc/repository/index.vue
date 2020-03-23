@@ -25,6 +25,7 @@
                 </div>
             </div>
             <z-scrollbar :height="-180">
+                <div v-if="!summary||summary.sons.length===0" class="empty"><i class="ft icon">&#xe718;</i>暂无章节</div>
                 <Chapter class="chapter-list" key="root" :value="summary.sons" :readonly="readonly"></Chapter>
             </z-scrollbar>
         </div>

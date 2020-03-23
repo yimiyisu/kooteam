@@ -7,7 +7,6 @@ import com.google.common.base.Strings;
 import com.zeto.ZenConditionKit;
 import com.zeto.ZenData;
 import com.zeto.ZenResult;
-import com.zeto.ZenUserKit;
 import com.zeto.annotation.AccessRole;
 import com.zeto.domain.ZenCondition;
 import com.zeto.domain.ZenUser;
@@ -53,27 +52,6 @@ public class Thing {
         return result;
     }
 
-    public ZenResult get(ZenData data, ZenUser user) {
-        ZenResult thing = zenStorageEngine.execute("get/thingById", data, user);
-        if (thing.isEmpty()) {
-            return thing;
-        }
-        ZenResult extend = zenStorageEngine.extend("thing", data.get("_id"));
-        if (!extend.isEmpty()) {
-            thing.put("content", extend.get("content"));
-        }
-        String ownerId = thing.get("owner");
-        if (user.getUid().equals(ownerId)) {
-            thing.put("nick", user.getNick());
-        } else {
-            ZenUser current = ZenUserKit.get(ownerId);
-            if (current != null) {
-                thing.put("nick", current.getNick());
-            }
-        }
-        return thing;
-    }
-
     public ZenResult put(ZenData data, ZenUser user) {
         String owner = data.get("owner");
         if (Strings.isNullOrEmpty(owner)) {
@@ -115,6 +93,9 @@ public class Thing {
     // 归档
     public ZenResult archive(ZenData data, ZenUser user) {
         ZenResult thing = zenStorageEngine.get("thing", data.get("_id"));
+        if (thing.isEmpty()) {
+            return ZenResult.fail("任务不存在");
+        }
         ZenData params = ZenData.create("title", thing.get("title")).
                 put("content", GsonKit.stringify(thing.getData())).
                 put("parentId", thing.get("parentId")).
@@ -125,6 +106,7 @@ public class Thing {
 
         ZenResult result = zenStorageEngine.execute("put/archive", params, user);
         zenStorageEngine.execute("delete/thing", data, user);
+        EventBiz.projectState(data.get("projectId"));
         return result.setMessage("归档成功");
     }
 
@@ -138,14 +120,15 @@ public class Thing {
         ZenData params = ZenData.parse(thingData);
         zenStorageEngine.execute("put/thingAdd", params, user);
         zenStorageEngine.execute("delete/archive", data, user);
+        EventBiz.projectState(data.get("projectId"));
         return ZenResult.success("取消归档成功").setData(thingData);
     }
 
     public ZenResult deleteArchive(ZenData data, ZenUser user) {
-        ZenCondition condition = ZenConditionKit.Or().eq("_id", data.get("_id"));
+        ZenCondition condition = ZenConditionKit.And().eq("_id", data.get("_id"));
         // 删除归档
         zenStorageEngine.delete("archive", condition);
-        ZenCondition logCondition = ZenConditionKit.Or().eq("thingId", data.get("_id"));
+        ZenCondition logCondition = ZenConditionKit.And().eq("thingId", data.get("_id"));
         // 删除操作日志
         zenStorageEngine.delete("thingLog", logCondition);
         // 删除关注人
@@ -155,10 +138,8 @@ public class Thing {
 
     // 删除清单
     public ZenResult removeThing(ZenData data, ZenUser user) {
-        ZenCondition condition = ZenConditionKit.Or().eq("_id", data.get("id"));
-        ZenCondition condition1 = ZenConditionKit.Or().eq("parentId", data.get("id"));
+        ZenCondition condition = ZenConditionKit.Or().eq("parentId", data.get("id"));
         zenStorageEngine.delete("childThing", condition);
-        zenStorageEngine.delete("childThing", condition1);
         return ZenResult.success();
     }
 
@@ -179,6 +160,8 @@ public class Thing {
         if (!uid.equals(result.get("uid")) && !uid.equals(result.get("owner"))) {
             return ZenResult.fail("只有创建人或负责人才能删除");
         }
+        // 更新项目统计数据
+        EventBiz.projectState(result.get("projectId"));
         zenStorageEngine.execute("delete/thing", data, user);
         return ZenResult.success();
     }

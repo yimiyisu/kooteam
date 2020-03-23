@@ -56,10 +56,8 @@
                 data["title"] = title;
                 data["quadrant"] = this.quadrant;
                 $.post(data, "/thing/put.do", function (reback) {
-                    let resultData = reback.data;
-                    data._id = resultData._id;
-                    let tempStatus = resultData.status;
-                    data.status = parseInt(tempStatus);
+                    let data = reback.data;
+                    data.status = parseInt(reback.data);
                     this.$emit("finish", data);
                     this.text = "";
                 }, this);

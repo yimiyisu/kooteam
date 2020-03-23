@@ -45,23 +45,38 @@ public class AuthService implements BladeLoader {
         if (ZenEnvironment.isNoSetup()) {
             return;
         }
-        String type = ConfigKit.get(configKey, "type");
+        String type = ConfigKit.getByApp(configKey, "type");
         if (ClientType.Wechat.equals(type)) {
             client = this.wechatClient;
-            TYPE = "dingding";
+            TYPE = "wechat";
         }
         if (ClientType.DingDing.equals(type)) {
             client = this.dingClient;
-            TYPE = "wechat";
+            TYPE = "dingding";
         }
         if (ClientType.LADP.equals(type)) {
             ldapService.init(configKey);
             TYPE = "ladp";
+            client = null;
             return;
         }
         if (client != null) {
             client.init(configKey);
+            // 自动校验配置信息
+            check();
         }
+    }
+
+    public String check() {
+        if (client == null) {
+            return "找不到应用配置信息";
+        }
+        String result = client.check();
+        if (result != null) {
+            TYPE = null;
+            client = null;
+        }
+        return result;
     }
 
     // 获取系统登录类型

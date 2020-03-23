@@ -68,9 +68,16 @@
                 timerId: 1,
                 value: null,
                 tooltip: '',
-                debounce: null,
-                name: 'Editor'
+                debounce: null
             };
+        },
+        computed: {
+            name() {
+                if (!this.value) {
+                    return "Editor";
+                }
+                return ComponentName[this.value.type];
+            }
         },
         watch: {
             itemId(val) {
@@ -80,6 +87,11 @@
         created() {
             this.debounce = $.debounce(this.save, 15000);
             this.init(this.itemId);
+            $.on("docContentUpdate", this.debounce);
+        },
+        destoryed() {
+            this.debounce.cancel();
+            $.off("docContentUpdate");
         },
         methods: {
             unload(e) {
@@ -98,7 +110,6 @@
                 }
                 $.get({_id: val}, '/note/get.do', function (reback) {
                     let data = reback.data;
-                    this.name = ComponentName[data.type];
                     this.tooltip = Tips[data.type];
                     this.value = data;
                     if (!data || !data.content) {
@@ -123,6 +134,7 @@
                 this.showNav = !this.showNav;
             },
             save(content) {
+                console.log(content);
                 let param = {
                     _id: this.itemId,
                     content: content
@@ -132,13 +144,10 @@
                     return false;
                 }, this);
             },
-            updateContent(content) {
-                this.debounce(content);
-            },
             close() {
                 this.debounce.flush();
                 window.removeEventListener("beforeunload", this.unload);
-                this.$parent.docId = '';
+                this.$parent.docId = "";
                 let url = $.setParam('docId', '');
                 window.history.replaceState(null, null, url);
             }

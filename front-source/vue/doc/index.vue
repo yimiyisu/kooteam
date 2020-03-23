@@ -61,7 +61,8 @@
                 }
                 let list = data.list;
                 if (list.length === 0) {
-                    this.current = null;
+                    this.content = null;
+                    return this.current = null;
                 }
                 if (this.current && this.current._id === list[0]._id) {
                     return;

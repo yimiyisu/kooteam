@@ -38,19 +38,23 @@
 
   .doc-floder {
     color: #777;
+
     &:before {
       content: "\e882";
     }
+
     &.lap:before {
       content: "\e87e";
     }
   }
+
   .chapter-list {
     margin-right: 12px;
   }
 
   .group {
     cursor: move;
+
     .group {
       padding-left: 14px;
       background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAABS2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDAgNzkuMTYwNDUxLCAyMDE3LzA1LzA2LTAxOjA4OjIxICAgICAgICAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIi8+CiA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgo8P3hwYWNrZXQgZW5kPSJyIj8+LUNEtwAAAEtJREFUSIntzzEVwAAMQkFSKfi3FKzQqQ5oJm5h5P3ZXQMYkrgwtk+OPo8kSzo7bGFcC+NaGNfCuBbGtTCuhXEtzB+SHAAGAEm/7wv2LKvDNoBjfgAAAABJRU5ErkJggg==") no-repeat -2px -2px;
@@ -168,11 +172,18 @@
     color: #666;
     right: 0;
     top: 0;
+
     .icon {
       cursor: pointer;
       display: inline-block;
       font-size: 13px;
     }
+  }
+
+  .empty {
+    text-align: center;
+    margin: 30px;
+    color: #666;
   }
 
   hr {

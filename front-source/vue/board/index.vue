@@ -28,6 +28,8 @@
         },
         components: {Column},
         created() {
+            let date = new Date();
+            this.now = parseInt(date.getTime() / 1000);
             this.init();
             $.on("thingUpdate", this.thingChange);
         },
@@ -59,9 +61,7 @@
             init: function () {
                 this.columns = [];
                 this.projectId = $.getParam("id");
-                let date = new Date();
                 let data = this.value;
-                this.now = date.getTime() % 1000;
                 if (data.board) {
                     this.rndId = this.projectId;
                     this.columns = JSON.parse(data.board);

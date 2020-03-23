@@ -275,18 +275,9 @@ body {
   color: #666;
 }
 
-.k-login .qr {
-  margin: 15px 0;
-  color: #666;
-}
-.k-login .qr img {
-  margin: 240px auto;
-}
-.k-login .el-form-item__content {
-  text-align: left;
-}
-.k-login .z-input {
-  width: 340px;
+#J_qr img {
+  margin: 0 auto;
+  width: 240px;
 }
 
 .second {

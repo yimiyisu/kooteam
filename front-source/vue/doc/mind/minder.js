@@ -20,8 +20,8 @@ export default {
         return null;
     },
     methods: {
-        save(content) {
-            this.$parent.updateContent(content);
+        save(val) {
+            $.emit("docContentUpdate", val);
         },
         load() {
             let that = this;

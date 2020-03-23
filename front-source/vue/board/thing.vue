@@ -5,7 +5,7 @@
             {{item.title}}
         </div>
         <div class="more">
-            <span class="status" :class="{'doned':item.status === 1}">{{status}}</span>
+            <span class="status" :class="status"></span>
             <z-avatar size="small" :uid="item.owner"></z-avatar>
         </div>
     </div>
@@ -15,7 +15,14 @@
         props: ["item", "now"],
         computed: {
             status() {
-                return this.item.status === 1 ? "已完成" : "待处理"
+                let item = this.item;
+                if (item.status === 1) {
+                    return "doned";
+                }
+                if (item.end && item.end < this.now) {
+                    return "overtime"
+                }
+                return ""
             }
         },
         methods: {

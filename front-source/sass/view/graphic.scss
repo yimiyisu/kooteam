@@ -75,9 +75,23 @@
 
 .k-graph {
   position: absolute;
+  top: 6px;
   left: 0;
-  top: 10px;
-  bottom: 40px;
   right: 0;
-  z-index: 2;
+  bottom: 0;
+
+  iframe {
+    border: 0;
+    height: 100%;
+    width: 100%;
+  }
 }
+
+//.k-graph {
+//  position: absolute;
+//  left: 0;
+//  top: 10px;
+//  bottom: 40px;
+//  right: 0;
+//  z-index: 2;
+//}

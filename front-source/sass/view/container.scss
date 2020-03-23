@@ -9,7 +9,11 @@
   &.bg {
     @extend %grid-bg;
     overflow: hidden;
-    max-height: 720px;
+    //max-height: 720px;
+  }
+
+  .md-editor {
+    top: 0 !important;
   }
 
   .wrap {
@@ -19,8 +23,7 @@
   .content {
     margin: 20px 30px 60px 330px;
     flex: 1;
-    overflow: hidden;
-    //overflow-x: hidden;
+    overflow-x: hidden;
   }
 
   @media screen and (max-width: $mobile) {
@@ -29,7 +32,7 @@
       min-width: 60% !important;
     }
     .content {
-      margin-left: 20px !important;
+      margin: 0 0 0 20px !important;
     }
   }
 }

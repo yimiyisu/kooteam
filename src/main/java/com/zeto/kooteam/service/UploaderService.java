@@ -24,7 +24,7 @@ public class UploaderService {
             return null;
         }
         String webPath = String.format("/avator/%s/%s/",
-                uid.substring(0, 4), uid.substring(4, 6));
+                uid.substring(0, 3), uid.substring(3, 6), uid.substring(6) + ".jpg");
         String path = ZenEnvironment.getPath() + "/upload" + webPath;
 
         File dir = new File(path);
@@ -39,7 +39,7 @@ public class UploaderService {
 
     public String image(byte[] data, String ext) {
         String id = StringKit.objectId(),
-                relPath = "/upload/" + String.format("%s/%s", id.substring(0, 4), id.substring(4, 6)),
+                relPath = "/upload/" + String.format("%s/%s", id.substring(0, 3), id.substring(3, 6)),
                 fileName = "/" + id.substring(6) + "." + ext;
 
         String pyPath = ZenEnvironment.getPath() + relPath;
@@ -56,7 +56,7 @@ public class UploaderService {
             return null;
         }
         String webPath = String.format("/%s/%s/",
-                id.substring(0, 4), id.substring(4, 6));
+                id.substring(0, 3), id.substring(3, 6));
         String path = ZenEnvironment.getPath() + "/upload" + webPath;
 
         File dir = new File(path);

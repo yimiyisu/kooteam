@@ -1,6 +1,6 @@
 <template>
     <div v-show="!readonly" class="k-rich">
-        <z-editor :value="value" :="upload" @input="save" mode="full"></z-editor>
+        <z-editor :value="value" @input="save" mode="full"></z-editor>
     </div>
 </template>
 <script>
@@ -14,7 +14,7 @@
         },
         methods: {
             save(content) {
-                this.$parent.updateContent(content);
+                $.emit("docContentUpdate", content);
             }
         }
     };

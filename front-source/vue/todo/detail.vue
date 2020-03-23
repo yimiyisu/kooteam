@@ -5,12 +5,12 @@
                 <Header v-model="item" :type="type"/>
                 <Describe v-model="item" :type="type"/>
                 <div class="infos">
-                    <dl class="z-left">
+                    <dl class="z-left" v-if="item.end">
                         <dt>
                             <i class="ft icon h1">&#xe706;</i>计划完成时间：
                         </dt>
                         <dd>
-                            <span>{{item.start | date}}</span>
+                            <z-idate :value="item.end"></z-idate>
                         </dd>
                     </dl>
                     <Owner/>
@@ -83,18 +83,19 @@
                 return this.type
             },
             init(id) {
-                let url = "/thing/get.do";
+                let url = "/get/thingById.json";
                 if (this.type === 1) {
                     url = "/thing/archive_get.do"
                 }
                 $.post({_id: id}, url, function (reback) {
-                    this.item = reback.data;
+                    let data = reback.data;
+                    !data.end && (data.end = 0);
+                    this.item = data;
                     this.isShow = true;
                 }, this);
             },
             log(content) {
                 $.post({thingId: this.item._id, content: content}, '/put/thingLog.json', function (reback) {
-
                 });
             },
             close() {

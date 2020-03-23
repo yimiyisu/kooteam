@@ -28,6 +28,25 @@ body {
     .k-footer {
       display: none;
     }
+
+    .toggle {
+      left: 4px;
+
+      &:before {
+        content: "\e6ed";
+      }
+    }
+  }
+}
+
+.toggle {
+  position: fixed;
+  top: 56px;
+  left: 295px;
+  z-index: 3;
+
+  &:before {
+    content: "\e703";
   }
 }
 

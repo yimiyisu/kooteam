@@ -46,7 +46,7 @@ export default {
             content && this.instance.loadData(JSON.parse(content));
         },
         save(data) {
-            this.$parent.updateContent(JSON.stringify(data));
+            $.emit("docContentUpdate", JSON.stringify(data));
         }
     }
 }

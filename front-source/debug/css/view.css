@@ -214,6 +214,22 @@ body.full .content {
 body.full .k-footer {
   display: none;
 }
+body.full .toggle {
+  left: 4px;
+}
+body.full .toggle:before {
+  content: "";
+}
+
+.toggle {
+  position: fixed;
+  top: 56px;
+  left: 295px;
+  z-index: 3;
+}
+.toggle:before {
+  content: "";
+}
 
 .container.bg {
   background: #fff url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2VlZWVlZSIgb3BhY2l0eT0iMC4zIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZWVlZWVlIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=") -1px -1px;
@@ -282,10 +298,10 @@ body.full .k-footer {
   font-size: 14px;
 }
 .chapter .folder:before {
-  content: "";
+  content: "";
 }
 .chapter .folder.hide:before {
-  content: "";
+  content: "";
 }
 
 .container {
@@ -296,7 +312,9 @@ body.full .k-footer {
 }
 .container.bg {
   overflow: hidden;
-  max-height: 720px;
+}
+.container .md-editor {
+  top: 0 !important;
 }
 .container .wrap {
   margin: 1rem 0;
@@ -304,7 +322,7 @@ body.full .k-footer {
 .container .content {
   margin: 20px 30px 60px 330px;
   flex: 1;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 @media screen and (max-width: 768px) {
   .container .nav {
@@ -312,7 +330,7 @@ body.full .k-footer {
     min-width: 60% !important;
   }
   .container .content {
-    margin-left: 20px !important;
+    margin: 0 0 0 20px !important;
   }
 }
 
@@ -412,11 +430,15 @@ body.full .k-footer {
 
 .k-graph {
   position: absolute;
+  top: 6px;
   left: 0;
-  top: 10px;
-  bottom: 40px;
   right: 0;
-  z-index: 2;
+  bottom: 0;
+}
+.k-graph iframe {
+  border: 0;
+  height: 100%;
+  width: 100%;
 }
 
 .header {
@@ -539,4 +561,126 @@ body.full .k-footer {
   left: 50%;
   top: 50%;
   position: relative;
+}
+
+/* PrismJS 1.19.0
+https://prismjs.com/download.html#themes=prism-tomorrow&languages=markup+css+clike+javascript+c+csharp+cpp+java+json+markup-templating+php+python+ruby+sql+typescript */
+/**
+ * prism.js tomorrow night eighties for JavaScript, CoffeeScript, CSS and HTML
+ * Based on https://github.com/chriskempson/tomorrow-theme
+ * @author Rose Pritchard
+ */
+code[class*=language-],
+pre[class*=language-] {
+  color: #ccc;
+  background: none;
+  font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+  font-size: 1em;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*=language-] {
+  padding: 1em;
+  margin: 0.5em 0;
+  overflow: auto;
+}
+
+:not(pre) > code[class*=language-],
+pre[class*=language-] {
+  background: #2d2d2d;
+}
+
+/* Inline code */
+:not(pre) > code[class*=language-] {
+  padding: 0.1em;
+  border-radius: 0.3em;
+  white-space: normal;
+}
+
+.token.comment,
+.token.block-comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #999;
+}
+
+.token.punctuation {
+  color: #ccc;
+}
+
+.token.tag,
+.token.attr-name,
+.token.namespace,
+.token.deleted {
+  color: #e2777a;
+}
+
+.token.function-name {
+  color: #6196cc;
+}
+
+.token.boolean,
+.token.number,
+.token.function {
+  color: #f08d49;
+}
+
+.token.property,
+.token.class-name,
+.token.constant,
+.token.symbol {
+  color: #f8c555;
+}
+
+.token.selector,
+.token.important,
+.token.atrule,
+.token.keyword,
+.token.builtin {
+  color: #cc99cd;
+}
+
+.token.string,
+.token.char,
+.token.attr-value,
+.token.regex,
+.token.variable {
+  color: #7ec699;
+}
+
+.token.operator,
+.token.entity,
+.token.url {
+  color: #67cdcc;
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.token.inserted {
+  color: green;
 }

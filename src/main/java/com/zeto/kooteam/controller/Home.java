@@ -67,11 +67,11 @@ public class Home {
         String username = data.get("username");
         String password = data.get("password");
         if (Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(password)) {
-            ZenResult.fail("用户名与密码不能为空");
+            return ZenResult.fail("用户名与密码不能为空");
         }
         ZenUser user = ladpService.login(username, password);
         if (user == null) {
-            ZenResult.fail("用户不存在或密码错误");
+            return ZenResult.fail("登录失败，用户名不存在或密码错误。");
         }
         return ZenResult.jump(getHomePage(user)).setCookies(ZenTokenKit.cookies(user));
     }

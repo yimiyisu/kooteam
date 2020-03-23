@@ -9,11 +9,13 @@
     border-radius: .1rem;
     position: relative;
   }
+
   .empty {
     background: rgba(255, 255, 255, .7);
     min-height: 80px;
     border-radius: 2px;
   }
+
   .header {
     //background: #F7F7FB;
     background: #fff;
@@ -54,62 +56,6 @@
     right: 30px;
     top: 14px;
     font-size: 20px;
-
-    &.popover {
-      span {
-        display: block;
-      }
-    }
-
-    &:hover {
-      ul {
-        display: block;
-      }
-    }
-
-    ul {
-      display: none;
-      background: #fff;
-      width: 80px;
-      position: absolute;
-      right: -12px;
-      top: -9px;
-    }
-
-    span {
-      text-align: left;
-      display: block;
-    }
-
-    .el-button {
-      padding: 6px 12px;
-      color: #666;
-      font-weight: initial;
-
-      &:hover {
-        color: #0285d7;
-        border-color: #fff;
-      }
-    }
-
-    .z-execute {
-      padding: 6px 12px;
-      text-align: center;
-    }
-
-    li {
-      border-top: dotted 1px #ccc;
-      color: #666;
-      cursor: pointer;
-
-      &:hover {
-        color: $primary;
-      }
-    }
-
-    i {
-      color: #666;
-    }
   }
 
   .z-8 {
@@ -253,5 +199,14 @@
       border-top-left-radius: 2px;
       border-top-right-radius: 2px;
     }
+  }
+}
+
+.z-project-pop {
+
+  span {
+    display: block;
+    //text-align: left;
+    margin-bottom: 8px;
   }
 }

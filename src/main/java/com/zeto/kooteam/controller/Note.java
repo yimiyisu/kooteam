@@ -85,7 +85,7 @@ public class Note {
         String nodeId = result.get("noteId");
         result = zenStorageEngine.get("note", nodeId);
         if (user.getUid().equals(result.get("uid"))) {
-            zenStorageEngine.execute("delete/noteUserByNoteId", ZenData.create("nodeId", nodeId), user);
+            zenStorageEngine.execute("delete/noteUserByNoteId", ZenData.create("noteId", nodeId), user);
             zenStorageEngine.execute("delete/note", ZenData.create("_id", nodeId), user);
         } else {
             zenStorageEngine.execute("delete/noteUser", data, user);

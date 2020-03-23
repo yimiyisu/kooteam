@@ -34,7 +34,11 @@
     cursor: pointer;
   }
 
-  i:before {
+  .bold {
+    margin-right: 2px;
+  }
+
+  .icon:before {
     content: "\e8e8";
   }
 
@@ -45,7 +49,7 @@
       text-decoration: line-through;
     }
 
-    i {
+    .icon {
       color: #999;
 
       &:before {

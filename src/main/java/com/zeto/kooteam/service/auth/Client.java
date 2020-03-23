@@ -10,5 +10,7 @@ public interface Client {
 
     ZenUser getUser(String code);
 
+    String check();
+
     void updateUser(String unionId);
 }

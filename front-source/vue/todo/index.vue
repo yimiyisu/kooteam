@@ -35,7 +35,7 @@
         components: {Quadrant},
         created() {
             let date = new Date();
-            this.now = date.getTime() % 1000;
+            this.now = parseInt(date.getTime() / 1000);
             this.resize();
             $.on("thingUpdate", this.thingChange);
             window.addEventListener("resize", this.resize);

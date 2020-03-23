@@ -1,32 +1,48 @@
 <template>
     <div class="container" :class="bg">
-        <div class="nav" :class="{'active':isnav}">
+        <div class="nav">
             <Chapter class="wrap" :data="tree" :current="current"></Chapter>
         </div>
-        <div class="content" @click="click">
-            <div class="wrap" v-if="data.type===1">
-                <div class="article-body" v-html="data.content"></div>
-            </div>
-            <!--<Flow v-if="data.type===3" :value="data" :readonly="true"></Flow>-->
-            <Mind v-if="data.type===2" :readonly="true" :value="data.content"></Mind>
-            <Graph v-if="data.type===5" :value="data"></Graph>
-            <Grid v-if="data.type===6" :value="data"></Grid>
-        </div>
+        <div class="ft icon bold hover toggle" @click="toggle"></div>
+        <z-scrollbar :height="-65" class="content">
+            <keep-alive>
+                <component :is="com" :value="data" :readonly="true"></component>
+            </keep-alive>
+        </z-scrollbar>
     </div>
 </template>
 <script>
     import Chapter from "./chapter"
     // import Flow from "./flow"
-    import Mind from "../doc/mind/minder"
-    import Graph from "./graph"
-    import Grid from "./grid"
+    import Rich from "./docs/rich"
+    import Mind from "./docs/minder"
+    import Graph from "./docs/mx"
+    import Grid from "./docs/grid"
 
     export default {
-        props: ["tree", "data", "current", "isnav"],
-        components: {Chapter, Mind, Graph, Grid},
+        props: ["tree", "data", "current"],
+        components: {Chapter},
         data() {
             return {
                 bg: ""
+            }
+        },
+        computed: {
+            com() {
+                let type = this.data.type;
+                if (type === 1) {
+                    return Rich;
+                }
+                if (type === 2) {
+                    return Mind;
+                }
+                if (type === 5) {
+                    return Graph;
+                }
+                if (type === 6) {
+                    return Grid;
+                }
+                return null;
             }
         },
         watch: {
@@ -48,11 +64,9 @@
                 }
                 this.bg = "bg";
             },
-            click() {
-                if (this.isnav) {
-                    this.$parent.showNav = false;
-                    $.scrollTop(0);
-                }
+            toggle() {
+                $("body").toggleClass("full");
+                $.scrollTop(0);
             }
         }
     }

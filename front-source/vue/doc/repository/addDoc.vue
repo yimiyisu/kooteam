@@ -1,7 +1,7 @@
 <template>
     <span @click="toggle">
         <slot></slot>
-        <z-dialog title="新建文档" width="540px" v-if="isShow">
+        <z-dialog title="新建文档" width="540px" @close="toggle" v-if="isShow">
             <z-form label-width="100px" @submit.native.prevent>
                 <z-field label="文档标题">
                     <z-input width="340px" type="text" v-model="title"></z-input>
@@ -64,6 +64,7 @@
                     } else {
                         summary.sons.push(params);
                     }
+                    this.title = "";
                     context.save();
                 }, this);
             },

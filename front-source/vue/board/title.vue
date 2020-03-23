@@ -2,12 +2,12 @@
     <div class="header">
         <div class="h4">
             {{title}}
-            <z-popover placement="bottom-end" width="50" trigger="click">
-                <div class="ft hover" @click="visible=true">重命名</div>
+            <z-popover placement="bottom-end" popper-class="z-project-pop" width="50" trigger="click">
+                <span class="ft hover" @click="visible=true">重命名</span>
                 <z-confirm class="ft hover" tip="确定删除面板吗" @click="remove">删除</z-confirm>
                 <i class="ft icon" slot="reference">&#xe737;</i>
             </z-popover>
-            <z-dialog :visible.sync="visible" width="30%" title="修改名称">
+            <z-dialog v-if="visible" width="30%" title="修改名称">
                 <z-input type="text" v-model="title"></z-input>
                 <span slot="footer" class="dialog-footer">
                   <z-button @click="visible = false">取 消</z-button>
