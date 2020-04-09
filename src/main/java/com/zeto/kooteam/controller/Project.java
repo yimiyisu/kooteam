@@ -38,6 +38,9 @@ public class Project {
 
     // 创建项目
     public ZenResult create(ZenUser user, ZenData data) {
+        if (data.isEmpty("title")) {
+            return ZenResult.fail("标题不能为空");
+        }
         data.put("owner", user.getUid());
         ZenResult result = zenStorageEngine.execute("put/project", data, user);
         String projectId = result.get("_id");
@@ -68,7 +71,11 @@ public class Project {
             return project;
         }
         zenStorageEngine.execute("patch/project", data, user);
-        return ZenResult.success("修改成功！");
+        return ZenResult.success("修改成功!");
+    }
+
+    public ZenResult getByIds(ZenData data) {
+        return zenStorageEngine.selectByIds("project", data.getParameters("ids"));
     }
 
     // 参与的项目
@@ -99,6 +106,55 @@ public class Project {
         return ZenResult.success("退出成功");
     }
 
+    public ZenResult thingList(ZenData data, ZenUser user) {
+        ZenCondition condition = ZenConditionKit.And().
+                eq("projectId", data.get("_id")).eq("status", 0).limit(200);
+        return zenStorageEngine.select("thing", condition);
+    }
+
+
+    public ZenResult searchThings(ZenData data, ZenUser user) {
+        int page = data.getInt("page", 0), size = data.getInt("size", 20);
+        ZenCondition condition = ZenConditionKit.And().eq("projectId", data.get("_id")).skip(page * size).limit(size);
+        // 状态查询
+        if (!data.isEmpty("status")) {
+            int status = data.getInt("status");
+            if (status == 2) {
+                long now = DateKit.now();
+                condition.eq("status", 0).lesser("end", now);
+            } else {
+                condition.eq("status", status);
+            }
+        }
+        // 优先级
+        if (!data.isEmpty("priority")) {
+            condition.eq("quadrant", data.get("priority"));
+        }
+        // 所在阶段
+        if (!data.isEmpty("section")) {
+            condition.eq("tag", data.get("section"));
+        }
+        // 开始时间
+        if (!data.isEmpty("start1")) {
+            long start1 = data.getTime("start1"), start2 = data.getTime("start2");
+            condition.greater("start", start1).lesser("start", start2);
+        }
+        // 结束时间
+        if (!data.isEmpty("end1")) {
+            long end1 = data.getTime("end1"), end2 = data.getTime("end2");
+            condition.greater("end", end1).lesser("end", end2);
+        }
+        if (!data.isEmpty("owner")) {
+            condition.eq("owner", data.get("owner"));
+//            List<String> owners = data.getStringList("owner");
+//            condition.in("owner", owners);
+        }
+        if (!data.isEmpty("title")) {
+            condition.like("title", data.get("title"));
+        }
+        return zenStorageEngine.listWithPage("thing", condition);
+    }
+
     // 项目看板
     public ZenResult board(ZenUser user, ZenData data) {
         String projectId = data.get("_id");
@@ -107,8 +163,10 @@ public class Project {
             return ZenResult.fail("工程不存在");
         }
         project.put("board", project.get("board"));
-        ZenData param = ZenData.create("projectId", projectId).put("size", "200");
-        ZenResult thingsData = zenStorageEngine.execute("select/thingByProjectId", param, user);
+        ZenCondition condition = ZenConditionKit.And().eq("projectId", projectId).notEq("owner", "0").limit(200);
+//        ZenData param = ZenData.create("projectId", projectId).put("size", "200");
+//        ZenResult thingsData = zenStorageEngine.execute("select/thingByProjectId", param, user);
+        ZenResult thingsData = zenStorageEngine.select("thing", condition);
         project.put("things", thingsData.getData());
         return project;
     }
@@ -240,7 +298,7 @@ public class Project {
         ZenData params = ZenData.create("projectId", data.get("_id"));
         result = zenStorageEngine.execute("count/thingByProjectId", params, user);
         if (result.getLong() > 0) {
-            return ZenResult.fail("该项目中存在未完成任务，不能删除");
+            return ZenResult.fail("该项目还存在任务，不能删除");
         }
         zenStorageEngine.execute("delete/project", data, user);
         //  清除项目用户

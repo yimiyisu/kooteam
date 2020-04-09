@@ -16,8 +16,8 @@ import com.zeto.kooteam.init.TodoInit;
 import com.zeto.kooteam.service.EventBiz;
 import com.zeto.kooteam.service.eventbus.model.MessageModel;
 import com.zeto.kooteam.service.eventbus.model.MessageType;
-
 import java.util.Map;
+
 
 
 @AccessRole
@@ -90,6 +90,11 @@ public class Thing {
         return result;
     }
 
+    // 任务详情
+    public ZenResult detail(ZenData data, ZenUser user) {
+        return null;
+    }
+
     // 归档
     public ZenResult archive(ZenData data, ZenUser user) {
         ZenResult thing = zenStorageEngine.get("thing", data.get("_id"));
@@ -108,6 +113,10 @@ public class Thing {
         zenStorageEngine.execute("delete/thing", data, user);
         EventBiz.projectState(data.get("projectId"));
         return result.setMessage("归档成功");
+    }
+
+    public ZenResult archiveGet(ZenData data) {
+        return ZenResult.success();
     }
 
     // 归档任务恢复
@@ -133,13 +142,6 @@ public class Thing {
         zenStorageEngine.delete("thingLog", logCondition);
         // 删除关注人
         zenStorageEngine.delete("thingWatcher", logCondition);
-        return ZenResult.success();
-    }
-
-    // 删除清单
-    public ZenResult removeThing(ZenData data, ZenUser user) {
-        ZenCondition condition = ZenConditionKit.Or().eq("parentId", data.get("id"));
-        zenStorageEngine.delete("childThing", condition);
         return ZenResult.success();
     }
 

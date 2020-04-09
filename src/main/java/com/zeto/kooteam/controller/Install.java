@@ -22,7 +22,7 @@ public class Install {
     public ZenResult check(ZenData data) {
         String status = data.get("status");
         if (Strings.isNullOrEmpty(status) && !ZenEnvironment.isNoSetup()) {// 私有化部署
-            return ZenResult.jump("/install.html?status=finish");
+            return ZenResult.redirect("/install.html?status=finish");
         }
         return ZenResult.success();
     }
@@ -53,7 +53,7 @@ public class Install {
         if (!conf.isMysql()) {
             ZenUserKit.resetRoot();
         }
-        return ZenResult.jump("/install.html?status=finish");
+        return ZenResult.redirect("/install.html?status=finish");
     }
 
     private void serialize(AppConf conf) {

@@ -17,10 +17,10 @@ public class ProjectListener {
     public void execute(ProjectModel model) {
         WebContext.create(model.getSite());
         ZenStorageEngine storageEngine = Zen.getStorageEngine();
-        ZenCondition unfinishCon = ZenConditionKit.And().eq("projectId", model.getProjectId()).eq("status", 0);
+        ZenCondition unfinishCon = ZenConditionKit.And().eq("projectId", model.getProjectId()).eq("status", 0).notEq("owner", "0");
         long unfinish = storageEngine.count(thingTable, unfinishCon);
 
-        ZenCondition finishedCon = ZenConditionKit.And().eq("projectId", model.getProjectId()).eq("status", 1);
+        ZenCondition finishedCon = ZenConditionKit.And().eq("projectId", model.getProjectId()).eq("status", 1).notEq("owner", "0");
         long finished = storageEngine.count(thingTable, finishedCon);
         ZenData params = ZenData.create("_id", model.getProjectId()).
                 put("unfinish", unfinish + "").put("finished", finished + "");

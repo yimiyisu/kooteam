@@ -39,7 +39,7 @@ public class Home {
         if (user == null) {
             return ZenResult.fail("获取用户信息失败");
         }
-        return ZenResult.redirect(getHomePage(user)).setCookies(ZenTokenKit.cookies(user));
+        return ZenResult.login(getHomePage(user), ZenTokenKit.profile(user));
     }
 
     // 钉钉应用端自动登录
@@ -59,7 +59,7 @@ public class Home {
             }
         }
         ZenTokenKit.set(checkId, user.getUid());
-        return ZenResult.success().setCookies(ZenTokenKit.cookies(user));
+        return ZenResult.login(ZenTokenKit.profile(user));
     }
 
     // LADP登录配置
@@ -73,17 +73,17 @@ public class Home {
         if (user == null) {
             return ZenResult.fail("登录失败，用户名不存在或密码错误。");
         }
-        return ZenResult.jump(getHomePage(user)).setCookies(ZenTokenKit.cookies(user));
+        return ZenResult.login(getHomePage(user), ZenTokenKit.profile(user));
     }
 
     // 判断用户是否登陆，轮询checkId实现扫码自动登录，判断系统是否初始化过
     public ZenResult loginCheck(ZenData data, ZenUser user) {
         if (ZenEnvironment.isNoSetup()) {
-            return ZenResult.jump("/install.html", "系统尚未初始化");
+            return ZenResult.redirect("/install.html");
         }
         // 用户已登录，直接跳转到首页
         if (user != null) {
-            return ZenResult.jump(getHomePage(user));
+            return ZenResult.redirect(getHomePage(user));
         }
         String checkId = data.get("checkId");
         // 通过后天配置文件，判断是否设置了，企业微信，钉钉信息，展示相关的二维码登录
@@ -94,10 +94,10 @@ public class Home {
         // 钉钉定时轮训检测登录状态
         user = ZenTokenKit.check(checkId);
         if (user == null) {
-            return ZenResult.fail();
+            return ZenResult.success();
         }
         // 跳转到登录页面
-        return ZenResult.jump(getHomePage(user)).setCookies(ZenTokenKit.cookies(user));
+        return ZenResult.login(getHomePage(user), ZenTokenKit.profile(user));
     }
 
     // 获取当前用户的默认首页
