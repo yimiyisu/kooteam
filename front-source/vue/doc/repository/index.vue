@@ -18,10 +18,14 @@
                     <!--<span class="z-button primary" @click="editModel">编辑</span>-->
                     <!--</div>-->
                     <!--<div v-else>-->
+
                     <z-wicket plain action="/note/patch.do" wicket-size="small" :prop="data" view="J_title"
                               :callback="changeTitle">修改标题
                     </z-wicket>
-                    <Set :permision="data.permision" :note="data._id" v-if="!pid">设置</Set>
+                    <Share class="el-button el-button--small is-plain" :itemId="data._id">分享</Share>
+                    <z-popup :prop="data" view="/doc/config.xhtm">
+                        设置
+                    </z-popup>
                 </div>
             </div>
             <z-scrollbar :height="-180">
@@ -37,11 +41,11 @@
     import Chapter from "./chapter"
     import AddDoc from "./addDoc"
     import Board from "./board"
-    import Set from "./set"
+    import Share from "./share"
 
     export default {
         props: ["data", "summary", "pid"],
-        components: {Chapter, AddDoc, Board, Set},
+        components: {Chapter, AddDoc, Board, Share},
         data() {
             return {
                 showSet: false,
@@ -52,7 +56,7 @@
         provide() {
             return {repository: this}
         },
-        mounted() {
+        created() {
             $.on("chapterEvt", this.subscribe);
             let doc = $.getParam("docId");
             if (!doc) {
@@ -60,7 +64,7 @@
             }
             this.docId = doc;
         },
-        destory() {
+        beforeDestroy() {
             $.off("chapterEvt");
         },
         methods: {

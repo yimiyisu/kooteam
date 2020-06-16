@@ -1,6 +1,6 @@
 <template>
-    <div class="column" :data-id="data.tag">
-        <Title :data="data" :columns="columns"/>
+    <div class="column J_data" :data-id="data.tag">
+        <Title :column="data"/>
         <z-scrollbar :height="-150" :data-id="data.tag">
             <z-draggable :list="data.sons" group="things" @add="begin" @end="end">
                 <Thing v-for="item in data.sons" :now="now" :item="item" :key="item._id"/>
@@ -11,13 +11,14 @@
 </template>
 <script>
     import AddThing from "./addThing"
-    import ThingsUtil from "../util/things"
+    import ThingsUtil from "../../util/things"
     import Thing from "./thing"
     import Title from "./title"
 
     export default {
-        props: ["data", "now", "columns"],
+        props: ["data", "now"],
         components: {Thing, AddThing, Title},
+        inject: ['getColumn'],
         methods: {
             // 拖动到其它框中
             begin: function (evt) {
@@ -32,28 +33,39 @@
                 }
             },
             drag(evt) {
-                let inx = evt.newIndex, things = this.data;
-                let currentObj = things.sons[inx];
+                let inx = evt.newIndex,
+                    things = this.data,
+                    pervObj, nextObj,
+                    currentObj = things.sons[inx];
                 let param = {
                     _id: currentObj._id,
-                    tag: currentObj.tag
+                    tag: this.data.tag
                 };
                 if (inx === 0) {
                     if (things.sons.length === 1) {
                         param.order = 100000;
                     } else {
-                        let nextObj = this.data.sons[inx + 1];
+                        nextObj = this.data.sons[inx + 1];
                         param.order = nextObj.order - 500;
                     }
                 } else if (inx === things.sons.length) {
-                    let pervObj = things.sons[inx - 1];
+                    pervObj = things.sons[inx - 1];
                     param.order = pervObj.order + 500;
                 } else {
-                    let nextObj = things.sons[inx + 1];
-                    let pervObj = things.sons[inx - 1];
-                    param.order = parseInt((nextObj.order + pervObj.order) / 2);
+                    let nextObj = things.sons[inx + 1],
+                        pervObj = things.sons[inx - 1];
+                    if (nextObj) {
+                        param.order = parseInt((nextObj.order + pervObj.order) / 2);
+                    } else {
+                        param.order = pervObj.order + 1;
+                    }
                 }
                 $.post(param, "/thing/patch.do", function (reback) {
+                    let column = this.getColumn(param.tag);
+                    $.post({
+                        thingId: param._id,
+                        content: "把任务移入到:" + column.title
+                    }, '/put/thingLog.json');
                 }, this);
             },
             sort: function (id, status) {
@@ -61,24 +73,6 @@
             },
             addTing(data) {
                 this.data.sons.unshift(data);
-                // 这里保障滚动条也能复位
-                // let scroll = this.$refs.scroll;
-                // scroll.moveY = 0;
-                // scroll.update();
-            },
-            remove: function () {
-                let columns = this.$parent.columns, clm;
-                for (let i = 0; i < columns.length; i++) {
-                    clm = columns[i];
-                    if (clm.tag === this.data.tag) {
-                        clm = columns.splice(i, 1)[0];
-                        break;
-                    }
-                }
-                this.$parent.save();
-                if (clm.sons.length > 0 && columns.length > 0) {
-                    $.refresh();// 重新加载页面
-                }
             }
         }
     }

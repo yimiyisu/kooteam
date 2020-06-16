@@ -3,15 +3,11 @@
         <z-col :span="1"><span class="ft icon h2">&#xe819;</span></z-col>
         <z-col :span="23">
             <div class="title"><strong>子任务列表</strong>
-                <!--<z-dropdown @command="cmd" class="right">-->
-                <!--<var command="hide">隐藏完成的项目</var>-->
-                <!--<var command="delete">删除</var>-->
-                <!--</z-dropdown>-->
-                <z-button class="right" size="mini" type="primary" @click="add">添加子任务</z-button>
+                <z-button v-if="!archiveId" class="right" size="mini" type="primary" @click="add">添加子任务</z-button>
             </div>
             <z-progress v-if="list&&list.length>0" :percentage="percent" color="#67c23a"></z-progress>
             <div v-else class="empty">暂无子任务</div>
-            <TodoItem v-for="item in list" :value="item" :key="item._id"/>
+            <TodoItem v-for="(item,idx) in list" @remove="remove(idx)" :value="item" :key="item._id"/>
             <Editor v-if="visible" :list="list" v-model="visible"/>
         </z-col>
     </z-row>
@@ -28,8 +24,8 @@
             }
         },
         components: {TodoItem, Editor},
-        props: ["value"],
-        mounted() {
+        props: ["value", "archiveId"],
+        created() {
             this.getList();
         },
         computed: {
@@ -44,19 +40,16 @@
             }
         },
         methods: {
-            cmd(command) {
-                debugger
-            },
             getList() {
-                $.post({parentId: this.value._id}, "/mix/thingList.json", (reback) => {
+                $.post({parentId: this.value._id}, "/select/thingByParentId.json", (reback) => {
                     this.list = reback.data;
-                });
+                }, this);
             },
             add() {
                 this.visible = true;
             },
-            remove(inx) {
-                this.list.splice(inx, 1);
+            remove(index) {
+                this.list.splice(index, 1);
             }
         }
     }

@@ -105,3 +105,34 @@ a {
     margin-right: 4px;
   }
 }
+
+.flip-list-move {
+  transition: transform 0.5s;
+}
+
+.k-form-action {
+  position: relative;
+
+  .more {
+    position: absolute;
+    left: 0;
+    top: 6px;
+    font-size: 16px;
+    color: #666;
+
+    &:before {
+      font-family: "zenicon";
+      content: "\e6d2";
+    }
+
+    &.active {
+      &:before {
+        content: "\e6d6";
+      }
+    }
+  }
+}
+
+.no-move {
+  transition: transform 0s;
+}

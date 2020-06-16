@@ -25,7 +25,6 @@
                 if (this.value && this.value.type === "ladp") {
                     target = '/home/ladp.do';
                 }
-                debugger
                 $.post({
                     username: this.user,
                     password: this.pwd,

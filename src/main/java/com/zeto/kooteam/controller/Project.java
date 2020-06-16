@@ -283,8 +283,14 @@ public class Project {
         // 将新负责人插入到用户表
         zenStorageEngine.execute("put/projectUser", projectUserParam.put("role", "5"), user);
 
-        String message = user.getNick() + "已把[" + result.get("title") + "]项目负责人角色转交给你";
-        EventBiz.sendMessage(new MessageModel(user.getUid(), data.get("userId"), message, result.get("_id"), MessageType.PROJECT));
+        // 发送消息
+        MessageModel messageModel = new MessageModel();
+        messageModel.setFrom(user.getUid());
+        messageModel.setTo(data.get("userId"));
+        messageModel.setContent(user.getNick() + "已把[" + result.get("title") + "]项目负责人角色转交给你");
+        messageModel.setObjectId(result.get("_id"));
+        messageModel.setMessageType(MessageType.PROJECT);
+        EventBiz.sendMessage(messageModel);
         return ZenResult.success("转交成功");
     }
 

@@ -1,87 +1,33 @@
 .k-calendar {
-  .sidebar {
-    border-radius: .15rem 0 0 .15rem;
-    width: 200px;
-    padding: 15px;
-    color: #fff;
-    background-color: rgba(0, 0, 0, .5);
-    //background-color: rgba(2, 133, 215, .5);
-    //background: hsla(0, 0%, 100%, .7);
-    h4 {
-      margin-bottom: 1rem;
-      padding-bottom: .5rem;
-      border-bottom: 1px solid #333;
-    }
-    li {
-      line-height: 2rem;
-      cursor: pointer;
-      &.selected i {
-        border-color: #00d99c;
-      }
-      &:hover {
-        color: #999;
-      }
-      i {
-        margin-right: .5rem;
-        width: .6rem;
-        height: .6rem;
-        display: inline-block;
-        background-color: #fff;
-        border: solid 2px #eee;
-        border-radius: .6rem;
-      }
-    }
-  }
-  .main {
-    min-height: 680px;
-    //background: rgba(255, 255, 255, .7);
-  }
   button:focus {
     outline: 0;
   }
+
   td {
     color: #666;
+
     &.fc-widget-content {
       border-color: #ddd;
     }
   }
+
   h2 {
     font-weight: normal;
     font-size: 1rem;
   }
+
   .fc-head {
     background: #ddd;
+
     thead {
       //border: 0;
     }
+
     th {
       font-weight: normal;
       color: #666;
       padding: 3px 0;
       //border: 0;
-    }
-  }
-}
-
-.k-cal-add {
-  color: #666;
-  font-size: 12px;
-  position: relative;
-  .config-item {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: row
-  }
-  .user-info {
-    position: relative;
-    cursor: pointer;
-    .k-user-search {
-      top: auto !important;
-      bottom: 0;
-    }
-    img {
-      width: 28px;
-      border-radius: 50%;
     }
   }
 }

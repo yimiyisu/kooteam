@@ -7,15 +7,9 @@
 <script>
     export default {
         name: "detailAttachAction",
-        inject: ["getThing", "log"],
         methods: {
-            change(val) {
-                let file = val.target.files,
-                    thing = this.getThing();
-                $.post({file: file[0], parentId: thing._id}, '/upload/file.do', (reback) => {
-                    $.emit("uploadAttach", reback.data);
-                    this.log("添加了附件 " + file[0].name);
-                }, this)
+            async change(e) {
+                $.emit("uploadAttach", e.target.files[0]);
             }
         },
 

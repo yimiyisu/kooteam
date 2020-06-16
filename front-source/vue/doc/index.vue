@@ -3,7 +3,7 @@
         <z-col :span="4">
             <h3>
                 我的知识库
-                <Search></Search>
+                <!--                <Search></Search>-->
             </h3>
             <z-scrollbar :height="-150">
                 <z-list url="/note/my.do" id="J_docList" :callback="callback">
@@ -11,7 +11,7 @@
                         <div class="doc-item" :class="{'active':current._id===item._id}"
                              @click="select(item,$event)" :key="item._id">{{item.title}}
                             <div class="time">
-                                {{item._id|idate}}
+                                <z-idate :value="item._id"></z-idate>
                                 <z-execute type="text" tip="确定删除吗？"
                                            :action="'/note/remove.do?_id='+item._source"><i class="ft icon">&#xe8f8;</i>
                                 </z-execute>
@@ -32,7 +32,7 @@
     import Search from "./search"
 
     export default {
-        data: function () {
+        data() {
             return {
                 content: null,
                 current: null
@@ -42,11 +42,11 @@
         created() {
             $.on("docSave", this.save);
         },
-        destory() {
+        beforeDestroy() {
             $.off("docSave");
         },
         methods: {
-            select: function (item) {
+            select(item) {
                 if (this.current && this.current._id === item._id) {
                     return;
                 }
@@ -69,7 +69,7 @@
                 }
                 this.select(list[0]);
             },
-            save: function (result, content, later) {
+            save(result, content, later) {
                 if (!result) {
                     return false;
                 }
@@ -84,7 +84,7 @@
                     $.notice("保存成功！", "success")
                 }, this, later);
             },
-            loadContent: function (chapterId, defData) {
+            loadContent(chapterId, defData) {
                 if (!chapterId) {
                     return;
                 }

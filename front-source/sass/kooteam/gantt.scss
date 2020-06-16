@@ -1,0 +1,37 @@
+.k-project-gantt {
+  position: absolute;
+  top: 85px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+}
+
+.k-gantt-action {
+  position: absolute;
+  top: 114px;
+  left: 320px;
+  color: #999;
+  font-size: 16px;
+  z-index: 3;
+  border-bottom: 1px solid #999;
+  cursor: pointer;
+
+  &:hover {
+    color: #0285d7;
+    border-color: #0285d7;
+  }
+}
+
+.gantt-schedule-timeline-calendar__list-column-row-content, .gantt-schedule-timeline-calendar__chart-timeline-items-row-item-label {
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.gantt-schedule-timeline-calendar__list-column-row-content:hover {
+  color: #222;
+}
+
+.gantt-schedule-timeline-calendar {
+  padding: 10px;
+  border-radius: 3px;
+}

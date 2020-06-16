@@ -1,40 +1,50 @@
 <template>
-    <z-scrollbar v-if="width>0" :viewHeight="-100" :viewWidth="width">
-        <z-draggable class="k-board-column" :list="columns" @end="save">
-            <Column v-for="column in columns" :columns="columns" :now="now" :data="column" :key="column.tag"/>
-        </z-draggable>
-    </z-scrollbar>
+    <div class="k-board-detail">
+        <z-scrollbar v-if="width>0" :viewHeight="-100" :viewWidth="width">
+            <z-draggable class="k-board-column" draggable=".J_data" :list="columns" @end="save">
+                <Column v-for="column in columns" :data="column" :key="column.tag"/>
+                <AddColumn/>
+            </z-draggable>
+        </z-scrollbar>
+    </div>
 </template>
 <script>
-    import Column from "./column"
-    import InitData from "./data"
+    import Column from "./column";
+    import InitData from "./data";
+    import AddColumn from "./addColum";
 
     const tagName = "未归类";
     export default {
         props: ["value"],
-        data: function () {
+        components: {Column, AddColumn},
+        data() {
             return {
                 projectId: "",
-                now: 0,
                 data: {},
                 width: 0,
                 columns: []
+            };
+        },
+        provide() {
+            return {
+                getColumn: this.getColumn
             }
         },
         watch: {
-            value: function () {
+            value() {
                 this.init();
             }
         },
-        components: {Column},
         created() {
-            let date = new Date();
-            this.now = parseInt(date.getTime() / 1000);
             this.init();
             $.on("thingUpdate", this.thingChange);
+            $.on("boardUpdate", this.rsync);
+            $.on("boardRemove", this.remove);
         },
-        destroyed() {
+        beforeDestroy() {
             $.off("thingUpdate");
+            $.off("boardUpdate");
+            $.off("boardRemove");
         },
         methods: {
             // 监听外部事件状态变更
@@ -58,19 +68,18 @@
                     }
                 }
             },
-            init: function () {
+            init() {
                 this.columns = [];
                 this.projectId = $.getParam("id");
                 let data = this.value;
                 if (data.board) {
-                    this.rndId = this.projectId;
                     this.columns = JSON.parse(data.board);
                 } else {
-                    this.rndId = zen.id();
                     this.columns = InitData;
                 }
-                this.columns.forEach((item) => {
-                    !item.sons && (item.sons = [])
+                this.columns.forEach(item => {
+                    item.sons = [];
+                    // !item.sons && (item.sons = [])
                 });
                 this.resize();
                 // 初始化任务
@@ -90,10 +99,10 @@
                     this.columns.splice(0, 1);
                 }
             },
-            resize: function () {
-                this.width = this.columns.length * 320;
+            resize() {
+                this.width = (this.columns.length + 1) * 320;
             },
-            getColumn: function (tag) {
+            getColumn(tag) {
                 let column;
                 for (let i = 0; i < this.columns.length; i++) {
                     column = this.columns[i];
@@ -112,28 +121,64 @@
                 this.columns.unshift(clm);
                 return this.columns[0];
             },
-            save: function (evt) {
-                if (!evt.pullMode && evt.newIndex !== evt.oldIndex) {
-                    let boards = {
-                        id: this.rndId,
-                        content: []
-                    };
-                    this.columns.forEach(clm => {
-                        boards.content.push({
-                            title: clm.title,
-                            tag: clm.tag,
-                            sons: []
-                        });
+            remove(tag) {
+                for (let i = 0; i < this.columns.length; i++) {
+                    if (this.columns[i].tag === tag) {
+                        this.columns.splice(i, 1);
+                    }
+                }
+                this.rsync();
+            },
+            rsync(title, tag) {
+                let borderId = this.data.borderId || zen.id() + 50;
+                let board = [];
+                this.columns.forEach(clm => {
+                    board.push({
+                        title: clm.title,
+                        tag: clm.tag,
+                        sons: []
                     });
-                    let param = {
-                        _id: this.projectId,
-                        board: JSON.stringify(boards),
-                    };
-                    $.post(param, "/patch/project.json", function () {
+                });
+                // 新增一列
+                if (title) {
+                    if (!tag) {
+                        // 新增列
+                        borderId++;
+                        let item = {
+                            title: title,
+                            tag: "t" + borderId,
+                            sons: []
+                        };
+                        board.push(item);
+                        this.columns.push(item);
+                    } else {
+                        // 更新列名
+                        board.forEach(clm => {
+                            if (clm.tag === tag) {
+                                clm.title = title;
+                            }
+                        });
+                    }
+                }
+                let param = {
+                    _id: this.projectId,
+                    borderId: borderId,
+                    board: JSON.stringify(board)
+                };
+                $.post(
+                    param,
+                    "/patch/project.json",
+                    function () {
                         this.resize();
-                    }, this);
+                    },
+                    this
+                );
+            },
+            save(evt) {
+                if (!evt.pullMode && evt.newIndex !== evt.oldIndex) {
+                    this.rsync();
                 }
             }
         }
-    }
+    };
 </script>

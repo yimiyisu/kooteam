@@ -22,11 +22,14 @@ public class LADPService {
     // https://blog.csdn.net/aliaichidantong/article/details/80016449
 
     private static String LDAPURL = "";
-//    private static String BASEDN = "";
+    private static String BASEDN = "";
 
     public void init(String key) {
         LDAPURL = ConfigKit.getByApp(key, "ladpURL");
-//        BASEDN = ConfigKit.get(key, "secret");
+        BASEDN = ConfigKit.get(key, "baseDN");
+        if (!Strings.isNullOrEmpty(BASEDN)) {
+            LDAPURL += "/" + BASEDN;
+        }
     }
 
     public ZenUser login(String userName, String passwd) {
@@ -35,7 +38,11 @@ public class LADPService {
         }
         ZenUser user;
         Hashtable<String, String> env = new Hashtable<String, String>();
-        env.put(Context.SECURITY_PRINCIPAL, userName);// 用户名
+        if (Strings.isNullOrEmpty(BASEDN)) {
+            env.put(Context.SECURITY_PRINCIPAL, userName);// 用户名
+        } else {
+            env.put(Context.SECURITY_PRINCIPAL, "cn=" + userName + "," + BASEDN);// 用户名
+        }
         env.put(Context.SECURITY_CREDENTIALS, passwd);// 密码
         env.put(Context.PROVIDER_URL, LDAPURL);// 连接LDAP的URL和端口（这里的BASEDN你们可以不用，只要LDAPURL）
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");// JNDI Context工厂类

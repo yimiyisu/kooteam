@@ -3,6 +3,7 @@ package com.zeto.kooteam.service.eventbus;
 import com.blade.mvc.WebContext;
 import com.google.common.base.Strings;
 import com.google.common.eventbus.Subscribe;
+import com.zeto.ZenEnvironment;
 import com.zeto.kit.ConfigKit;
 import com.zeto.kooteam.service.EventBiz;
 import com.zeto.kooteam.service.eventbus.model.MailMode;
@@ -27,8 +28,18 @@ public class MailListener {
     private static Session session;
 
     private static Session init() {
-        String pwd = ConfigKit.getByApp(group, password);
-        sendMail = ConfigKit.getByApp(group, user);
+        String pwd, portStr, hostStr;
+        if (ZenEnvironment.isCloudApp()) {
+            pwd = ZenEnvironment.get("mailPassword");
+            hostStr = ZenEnvironment.get("mailHost");
+            portStr = ZenEnvironment.get("mailPort");
+            sendMail = ZenEnvironment.get("mailUser");
+        } else {
+            pwd = ConfigKit.getByApp(group, password);
+            hostStr = ConfigKit.getByApp(group, host);
+            portStr = ConfigKit.getByApp(group, port);
+            sendMail = ConfigKit.getByApp(group, user);
+        }
         if (Strings.isNullOrEmpty(sendMail) || Strings.isNullOrEmpty(pwd)) {
             return null;
         }
@@ -37,10 +48,10 @@ public class MailListener {
                 return new PasswordAuthentication(sendMail, pwd);
             }
         };
-        String portStr = ConfigKit.getByApp(group, port);
+
         Properties properties = System.getProperties();
         properties.setProperty("mail.transport.protocol", "smtp");
-        properties.setProperty("mail.smtp.host", ConfigKit.getByApp(group, host));
+        properties.setProperty("mail.smtp.host", hostStr);
         properties.setProperty("mail.smtp.port", portStr);
         properties.put("mail.smtp.auth", "true");
         if (!portStr.equals("25")) {

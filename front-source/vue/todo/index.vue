@@ -51,7 +51,7 @@
                 }
             }
         },
-        destroyed: function () {
+        beforeDestroy() {
             $.off("thingUpdate");
             window.removeEventListener('resize', this.resize);
         },

@@ -1,17 +1,17 @@
 package com.zeto.kooteam.service;
 
+import com.blade.kit.DateKit;
 import com.blade.mvc.WebContext;
+import com.blade.mvc.http.Request;
 import com.google.common.base.Strings;
 import com.google.common.eventbus.AsyncEventBus;
+import com.zeto.ZenData;
 import com.zeto.domain.ZenUser;
 import com.zeto.kooteam.service.eventbus.MailListener;
 import com.zeto.kooteam.service.eventbus.MessageListener;
 import com.zeto.kooteam.service.eventbus.ProjectListener;
 import com.zeto.kooteam.service.eventbus.UserNickListener;
-import com.zeto.kooteam.service.eventbus.model.EmployeeModel;
-import com.zeto.kooteam.service.eventbus.model.MailMode;
-import com.zeto.kooteam.service.eventbus.model.MessageModel;
-import com.zeto.kooteam.service.eventbus.model.ProjectModel;
+import com.zeto.kooteam.service.eventbus.model.*;
 
 import java.util.concurrent.Executors;
 
@@ -33,7 +33,18 @@ public class EventBiz {
         eventBus.post(model);
     }
 
+    public static void noteBackup(ZenData data) {
+        NoteModel model = new NoteModel();
+        model.setSite(WebContext.get().getZenSite());
+        model.setData(data);
+        model.setTime(DateKit.now());
+        eventBus.post(model);
+    }
+
     public static void sendMessage(MessageModel model) {
+        Request request = WebContext.get().getRequest();
+        model.setOrigin("");
+        model.setSite(WebContext.get().getZenSite());
         eventBus.post(model);
     }
 

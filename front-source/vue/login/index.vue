@@ -42,26 +42,27 @@
                     return '请用企业微信扫码登录';
                 }
                 if (params.type === 'cloud') {
-                    return '微信扫码/关注后登录';
+                    return '微信扫码,关注后登录';
+                }
+                if (params.type === 'ladp') {
+                    return '请使用域账号登录';
                 }
                 return '用户登录';
             }
         },
-        mounted: function () {
-            $.get(null, '/home/loginCheck.do', function (reback) {
-                let data = reback.data;
-                this.params = data;
-                if (!data || !data.type || data.type === "ladp") {
-                    return;
-                }
-                this.isQr = true;
-                this.showQr = true;
-                if (data.type === "dingding" || data.type === "cloud") {
-                    this.timerId = setInterval(this.checkId, 2000);
-                }
-            }, this);
+        async mounted() {
+            let data = await $.get(null, '/home/loginCheck.do');
+            this.params = data;
+            if (!data || !data.type || data.type === "ladp") {
+                return;
+            }
+            this.isQr = true;
+            this.showQr = true;
+            if (data.type === "dingding" || data.type === "cloud") {
+                this.timerId = setInterval(this.checkId, 2000);
+            }
         },
-        destory: function () {
+        beforeDestroy() {
             clearInterval(this.timerId);
         },
         methods: {
@@ -71,15 +72,20 @@
             close() {
                 this.visible = false;
             },
-            change: function () {
+            change() {
                 this.showQr = !this.showQr;
             },
-            checkId: function () {
+            checkId() {
                 let id = this.params.checkId;
                 if (!id) {
                     return;
                 }
-                $.get({checkId: id}, '/home/loginCheck.do', () => {
+                $.get({checkId: id}, '/home/loginCheck.do', (reback) => {
+                    let action = reback.action, data = reback.data;
+                    if (action === 2) {
+                        data.profile && $.cookie('zenUser', JSON.stringify(data.profile))
+                        data.uri && $.goto(data.uri)
+                    }
                 });
             }
         }

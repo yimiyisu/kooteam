@@ -4,7 +4,7 @@
 <script>
     export default {
         props: ["value"],
-        mounted: function () {
+        mounted() {
             let params = this.value, host = window.location.origin;
             // 企业微信登录二维码
             if (params.type === "wechat") {
@@ -22,6 +22,9 @@
             if (params.type === "cloud") {
                 let now = new Date();
                 now = $.date(parseInt(now.getTime() / 1000) + 900);
+                if (params.qr && params.qr.indexOf("null") > -1) {
+                    return this.$el.innerHTML = '<div class="ft red">非常抱歉，因微信服务号迁移正在审批中<br />系统暂时无法登录。</div>';
+                }
                 return this.$el.innerHTML = `<img src="${params.qr}"/><br />二维码${now}前有效`;
             }
             // 钉钉扫码登录，自助生成二维码

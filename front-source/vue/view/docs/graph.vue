@@ -29,7 +29,7 @@
             win.mxConstants = {};
             $.lib(["mx/mxClient.js", "mx/viewer.js"], this.render);
         },
-        destroyed() {
+        beforeDestroy() {
             this.graph && this.graph.model.clear();
             this.$el.innerHTML = "";
         },

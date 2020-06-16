@@ -31,7 +31,7 @@
                 visible: false
             }
         },
-        inject: ["getThing"],
+        inject: ["getThing", "log"],
         mounted() {
             this.todo && (this.item = this.todo);
             this.$nextTick(function () {
@@ -48,7 +48,7 @@
                 };
                 if (this.item._id) {
                     params._id = this.item._id;
-                    $.post(params, "/patch/childThing.json", (reback) => {
+                    $.post(params, "/thing/patch.do", (reback) => {
                         this.todo.title = params.title;
                         this.hide();
                     }, this)
@@ -56,9 +56,12 @@
                     let thing = this.getThing();
                     params.parentId = thing._id;
                     params.status = 0;
-                    $.post(params, "/put/childThing.json", (reback) => {
+                    params.owner = 0;
+                    thing.projectId && (params.projectId = thing.projectId);
+                    $.post(params, "/thing/put.do", (reback) => {
                         params._id = reback.data._id;
                         this.list.push(params);
+                        this.log("添加了子任务:", this.item.title);
                         this.item.title = "";
                     }, this)
                 }

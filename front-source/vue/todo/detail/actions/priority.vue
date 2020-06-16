@@ -3,8 +3,8 @@
         <ul class="k-quard-list">
             <li v-for="(item,idx) in priority" :style="{'color': item.color}" :key="idx"
                 @click="quard(item.type, item.title)">
-                <i v-show="item.type === thing.quadrant" class="ft icon">&#xe6d9;</i>
-                <i v-show="item.type !== thing.quadrant" class="ft icon">&#xe770;</i>
+                <i v-if="item.type === thing.quadrant" class="ft icon">&#xe6cb;</i>
+                <i v-else class="ft icon">&#xe6d5;</i>
                 {{item.title}}
             </li>
         </ul>
@@ -21,22 +21,22 @@
                 visible: false,
                 priority: [
                     {
-                        title: "重要且紧急",
+                        title: "重要且紧急 (P1)",
                         type: 'a',
                         color: "#f80e15"
                     },
                     {
-                        title: "重要不紧急",
+                        title: "重要不紧急 (P2)",
                         type: 'b',
                         color: "#BF9F03"
                     },
                     {
-                        title: "紧急不重要",
+                        title: "紧急不重要 (P3)",
                         type: 'c',
                         color: "#009fe3"
                     },
                     {
-                        title: "不紧急不要",
+                        title: "不紧急不要 (P4)",
                         type: 'd',
                         color: "#79aa1c"
                     }

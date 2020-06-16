@@ -5,9 +5,12 @@
         </div>
         <div class="wrap" v-show="isAdd">
             <z-input type="textarea" v-model="title" autosize placeholder="请输入要处理的事项" @keyup.native="keyup"/>
+            <!--            <z-tcode code="priority" type="radio" label="优先级"></z-tcode>-->
             <div class="prority">
-                <label v-for="item in prorityData" :title="item.title" @click="select(item,$event)"
-                       :class="'k-prority-add '+item.key"></label>
+                <z-tooltip v-for="item in prorityData" :content="item.title" :key="item.key">
+                    <label @click="select(item,$event)"
+                           :class="['k-prority-add',item.key,{active:item.key===prority}]"></label>
+                </z-tooltip>
                 <div class="btns">
                     <z-button size="mini" type="primary" @click="save">添加任务</z-button>
                     <!--                    <i class="ft icon" @click="save">&#xe798;</i>-->
@@ -19,7 +22,7 @@
 </template>
 <script>
 
-    import prorityData from "../common/prority"
+    import prorityData from "../../common/prority"
 
     export default {
         props: ["data"],
@@ -51,9 +54,6 @@
                     return;
                 }
                 this.prority = val.key;
-                $(".k-prority-add", this.$el).removeClass("active");
-                let target = $(evt.currentTarget);
-                target.addClass("active");
             },
             keyup(event) {
                 let code = event.keyCode;
@@ -87,6 +87,8 @@
                 $.post(param, "/thing/put.do", function (reback) {
                     let data = reback.data;
                     param._id = data._id;
+                    param.order = data.order;
+                    param.owner = data.owner;
                     this.title = "";
                     this.$emit('changeCategory', param);
                     // this.close();

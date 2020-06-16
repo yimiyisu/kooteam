@@ -1,6 +1,7 @@
 package com.zeto.kooteam.controller;
 
 import com.blade.ioc.annotation.Inject;
+import com.google.common.base.Strings;
 import com.zeto.ZenConditionKit;
 import com.zeto.ZenData;
 import com.zeto.ZenEnvironment;
@@ -25,18 +26,22 @@ public class View {
         if (content.isEmpty()) {
             return ZenResult.fail(error);
         }
+        String parentId = content.get("parentId");
+        ZenResult parent = null;
+        if (!Strings.isNullOrEmpty(parentId)) {
+            parent = zenStorageEngine.get("note", parentId);
+            if (!checkPermission(parent.get("permision"), user, parentId, parent.get("uid"))) {
+                return ZenResult.fail(error);
+            }
+        }
         if (content.getLong("type") == 4L || data.contains("only")) {
             return content;
         }
-
-        String parentId = content.get("parentId");
-        ZenResult nav = zenStorageEngine.get("note", parentId);
-        if (!checkPermission(nav.get("permision"), user, parentId, nav.get("uid"))) {
-            return ZenResult.fail(error);
-        }
         ZenResult navContent = zenStorageEngine.get("note", parentId);
         content.put("nav", navContent.get("content"));
-        content.put("navTitle", nav.get("title"));
+        if (parent != null) {
+            content.put("navTitle", parent.get("title"));
+        }
         return content;
     }
 

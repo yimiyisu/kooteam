@@ -1,5 +1,5 @@
 <template>
-    <z-draggable :list="value" group="item" @end="end">
+    <z-draggable :list="value" tag="div" group="item" @end="end">
         <div class="group" v-for="item in value" :key="item.id">
             <div class="guide" :data-id="item.id"></div>
             <div class="item" :data-id="item.id">
@@ -11,10 +11,7 @@
                     </div>
                     <AddDoc v-else class="title" :item="item">{{item.title}}</AddDoc>
                 </div>
-                <div v-if="readonly" class="info">
-                    {{item.link|idate}}
-                </div>
-                <div v-else class="info">
+                <div class="info">
                     <ChangeTitle :value="item" class="ft icon hover">&#xe88e;</ChangeTitle>
                     <AddDoc class="ft icon hover" :parent="item" title="添加子章节">&#xe8c8;</AddDoc>
                     <z-confirm class="ft icon hover" type="text" tip="确定删除文档吗" @click="trigger(item,'remove')">
@@ -23,7 +20,7 @@
                 </div>
             </div>
             <Chapter :key="'s'+item.id" v-if="item.status!==false&&item.sons&&item.sons.length>0"
-                     :readonly="readonly" :value="item.sons"></Chapter>
+                     :value="item.sons"></Chapter>
         </div>
     </z-draggable>
 </template>
@@ -34,9 +31,9 @@
 
     export default {
         name: "Chapter",
-        props: ["value", "readonly", "parent"],
+        props: ["value", "parent"],
         components: {Icon, ChangeTitle, AddDoc},
-        data: function () {
+        data() {
             return {
                 title: "",
                 current: null
@@ -48,10 +45,8 @@
                     return;
                 }
                 this.trigger(null, "save");
-                // $.post(this.data, "/note/patch.do", function (reback) {
-                // }, this);
             },
-            view: function (item) {
+            view(item) {
                 if (item.link === "folder") {
                     return item.status = !item.status;
                 }
@@ -62,10 +57,7 @@
                 }
                 this.trigger(item.link, 'doc');
             },
-            fold: function (item) {
-                item.status = !item.status;
-            },
-            trigger: function (item, evt) {
+            trigger(item, evt) {
                 let param = {
                     event: evt,
                     data: item

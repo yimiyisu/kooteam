@@ -1,22 +1,18 @@
 <template>
     <div class="k-calendar">
         <div id='calendar'></div>
-        <Add :value="eventData" :visible="isShow" :is-cal="true"></Add>
     </div>
 </template>
 <script>
     import Util from "./util"
-    import Add from "./add"
 
     export default {
         props: ["value"],
-        components: {Add},
         data: function () {
             return {
                 calendar: null,
                 currentEvt: null,
-                eventData: {},
-                isShow: false
+                eventData: {}
             }
         },
         created: function () {
@@ -86,11 +82,12 @@
                 this.calendar.addEvent(result);
             },
             add: function (start, end) {
-                this.isShow = true;
-                this.eventData = {
-                    start: start,
-                    end: end
-                };
+                // 添加新建任务
+                // $.emit("thingAdd", {range: [start, end]});
+                // this.eventData = {
+                //     start: start,
+                //     end: end
+                // };
             },
             addThing: function (data) {
                 if (data) {

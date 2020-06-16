@@ -75,14 +75,47 @@
   }
 }
 
+.k-board-column {
+  display: flex;
+  height: 100%;
+}
+
+.k-column-add {
+  .wrap {
+    position: absolute;
+    z-index: 3;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+  }
+
+  .el-input__inner {
+    height: 50px;
+    line-height: 50px;
+  }
+
+  .prority {
+    margin-top: 12px;
+    text-align: right;
+  }
+
+  .trigger {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 16px;
+    color: #666;
+
+    .icon {
+      font-weight: bold;
+      margin-right: 3px;
+    }
+  }
+}
+
 .k-board-detail {
   margin: 0 15px;
   border-radius: .15rem;
 
-  .k-board-column {
-    display: flex;
-    height: 100%;
-  }
 
   .header {
     position: relative;
@@ -95,18 +128,19 @@
         cursor: $primary;
       }
     }
-  }
 
-  .el-popover__reference {
-    position: absolute;
-    right: 8px;
-    cursor: pointer;
-    top: 4px;
+    .el-popover__reference {
+      position: absolute;
+      right: 8px;
+      cursor: pointer;
+      top: 4px;
 
-    &:hover {
-      color: $primary;
+      &:hover {
+        color: $primary;
+      }
     }
   }
+
 
   .h4 {
     padding: 5px 12px;
@@ -184,30 +218,6 @@
       height: 30px;
     }
 
-    .status {
-      &:before {
-        content: "待处理";
-      }
-
-      color: #40bf89;
-
-      &.doned {
-        &:before {
-          content: "已完成";
-        }
-
-        color: #999;
-      }
-
-      &.overtime {
-        &:before {
-          content: "已超时";
-        }
-
-        color: #ed3f14;
-      }
-    }
-
     .z-avatar {
       position: absolute;
       right: 0;
@@ -246,6 +256,7 @@
   padding-left: 2px;
   cursor: pointer;
   font-family: "zenicon";
+  border-radius: 2px;
 
   &.a {
     background: #f80e15;

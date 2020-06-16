@@ -5,7 +5,7 @@
         </div>
         <z-row v-for="(item,index) in comments" class="content" :key="item._id">
             <z-col :span="2">
-                <z-avator class="avator" :uid="item.uid"></z-avator>
+                <z-avatar class="avator" :uid="item.uid"></z-avatar>
             </z-col>
             <z-col :span="22">
                 <z-row class="info">
@@ -15,6 +15,7 @@
                     </z-col>
                     <z-col :span="6">
                         <z-confirm class="ft red hover"
+                                   tip="确定删除吗？"
                                    @click="remove(item._id,index)"
                                    v-if="isOnwer|| item.uid===item.uid">删除
                         </z-confirm>
@@ -55,7 +56,7 @@
         },
         methods: {
             remove(id, index) {
-                $.post({_id: id, status: 0}, "/patch/comment.json", function () {
+                $.post({_id: id, status: 0}, "/delete/commentDelById.json", function () {
                     this.comments.splice(index, 1);
                 }, this);
             },

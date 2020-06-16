@@ -1,6 +1,6 @@
 <template>
     <z-popover v-model="visible" trigger="click">
-        <z-employee :max="1" @input="change"></z-employee>
+        <z-employee :max="1" placeholder="输入负责人关键字搜索" @input="change"></z-employee>
         <div class="k-detail-operator">
             <z-button plain size="mini" @click="close">取消</z-button>
             <z-button size="mini" type="primary" @click="submit">确定</z-button>

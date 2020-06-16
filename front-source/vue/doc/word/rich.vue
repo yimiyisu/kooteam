@@ -50,15 +50,15 @@
                 this.initEditor();
             }
         },
-        destroyed: function () {
+        beforeDestroy() {
             // 修复编辑器二次渲染的异常
             this.editor.destroy();
         },
         methods: {
-            initEditor: function () {
+            initEditor() {
                 $.lib(["tinymce/tinymce.min.js"], this.init);
             },
-            init: function () {
+            init() {
                 let that = this;
                 let uploadURL = Config.uploadDomain() + "/upload/image.do";
                 tinymce.init({

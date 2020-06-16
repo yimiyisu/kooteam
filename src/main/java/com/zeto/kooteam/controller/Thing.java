@@ -16,8 +16,8 @@ import com.zeto.kooteam.init.TodoInit;
 import com.zeto.kooteam.service.EventBiz;
 import com.zeto.kooteam.service.eventbus.model.MessageModel;
 import com.zeto.kooteam.service.eventbus.model.MessageType;
-import java.util.Map;
 
+import java.util.Map;
 
 
 @AccessRole
@@ -67,8 +67,13 @@ public class Thing {
         ZenResult result = zenStorageEngine.execute("put/thing", data, user);
         // 给别人发送任务，需要发送消息通知
         if (!user.getUid().equals(owner) && !Strings.isNullOrEmpty(owner)) {
-            String message = user.getNick() + "给你分配了一个任务：" + data.get("title");
-            EventBiz.sendMessage(new MessageModel(user.getUid(), owner, message, data.get("_id"), MessageType.THING));
+            MessageModel model = new MessageModel();
+            model.setFrom(user.getUid());
+            model.setTo(owner);
+            model.setContent(user.getNick() + "给你分配了一个任务：" + data.get("title"));
+            model.setObjectId(data.get("_id"));
+            model.setMessageType(MessageType.THING);
+            EventBiz.sendMessage(model);
         }
         // 异步更新工程统计数据
         EventBiz.projectState(data.get("projectId"));
@@ -81,12 +86,17 @@ public class Thing {
         if (data.contains("status") && data.contains("projectId")) {
             EventBiz.projectState(data.get("projectId"));
         }
-//        String owner = data.get("owner");
+        String owner = data.get("owner");
         // 给别人发送任务，需要发送消息通知
-//        if (!user.getUid().equals(owner) && !Strings.isNullOrEmpty(owner)) {
-//            String message = user.getNick() + "转交了一个任务给你：" + data.get("title");
-//            EventBiz.sendMessage(new MessageModel(user.getUid(), owner, message, data.get("_id"), MessageType.THING));
-//        }
+        if (!user.getUid().equals(owner) && !Strings.isNullOrEmpty(owner)) {
+            MessageModel messageModel = new MessageModel();
+            messageModel.setFrom(user.getUid());
+            messageModel.setTo(owner);
+            messageModel.setContent(user.getNick() + "转交了一个任务给你：" + data.get("title"));
+            messageModel.setObjectId(data.get("_id"));
+            messageModel.setMessageType(MessageType.THING);
+            EventBiz.sendMessage(messageModel);
+        }
         return result;
     }
 
@@ -127,7 +137,7 @@ public class Thing {
         }
         Map<String, Object> thingData = GsonKit.parseMap(thing.get("content"));
         ZenData params = ZenData.parse(thingData);
-        zenStorageEngine.execute("put/thingAdd", params, user);
+        zenStorageEngine.execute("put/thingRestore", params, user);
         zenStorageEngine.execute("delete/archive", data, user);
         EventBiz.projectState(data.get("projectId"));
         return ZenResult.success("取消归档成功").setData(thingData);

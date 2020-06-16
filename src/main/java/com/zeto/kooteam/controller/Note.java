@@ -9,11 +9,13 @@ import com.zeto.domain.ZenAction;
 import com.zeto.domain.ZenCondition;
 import com.zeto.domain.ZenUser;
 import com.zeto.driver.ZenStorageEngine;
+import com.zeto.kooteam.service.EventBiz;
 
 @AccessRole
 public class Note {
     @Inject
     private ZenStorageEngine zenStorageEngine;
+    private static final String docType = "4";
 
     // 我的文库
     public ZenResult my(ZenData data, ZenUser user) {
@@ -53,10 +55,9 @@ public class Note {
         if (data.contains("title")) {
             result.put("title", data.get("title"));
         }
+        EventBiz.noteBackup(data);
         return result.setAction(ZenAction.SILENT);
     }
-
-    private static final String docType = "4";
 
     public ZenResult add(ZenData data, ZenUser user) {
         ZenResult result = zenStorageEngine.execute("put/note", data, user);

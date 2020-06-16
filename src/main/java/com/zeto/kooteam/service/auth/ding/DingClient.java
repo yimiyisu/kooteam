@@ -4,6 +4,7 @@ import com.blade.ioc.annotation.Bean;
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.HttpKit;
 import com.blade.kit.StringKit;
+import com.google.common.base.Strings;
 import com.zeto.ZenCache;
 import com.zeto.ZenData;
 import com.zeto.ZenResult;
@@ -48,6 +49,9 @@ public class DingClient implements Client {
             return null;
         }
         token = data.get(TOKEN_KEY).toString();
+        if (Strings.isNullOrEmpty(token)) {
+            return null;
+        }
         ZenCache.set(TOKEN_KEY, token, 100);
         return token;
     }

@@ -39,7 +39,7 @@ public class Home {
         if (user == null) {
             return ZenResult.fail("获取用户信息失败");
         }
-        return ZenResult.login(getHomePage(user), ZenTokenKit.profile(user));
+        return ZenResult.jsRedirect(getHomePage(user), ZenTokenKit.profile(user));
     }
 
     // 钉钉应用端自动登录
@@ -60,6 +60,10 @@ public class Home {
         }
         ZenTokenKit.set(checkId, user.getUid());
         return ZenResult.login(ZenTokenKit.profile(user));
+    }
+
+    public ZenResult token() {
+        return ZenResult.redirect("/home.html");
     }
 
     // LADP登录配置

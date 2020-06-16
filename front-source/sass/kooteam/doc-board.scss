@@ -8,16 +8,6 @@
   overflow: hidden;
   background: #f9f9f9;
 
-  //.tox-tinymce {
-  //  position: absolute;
-  //  left: 0;
-  //  right: 0;
-  //  top: 36px;
-  //  bottom: 0;
-  //  background: #f4f7f9 !important;
-  //  height: auto !important;
-  //}
-
   .tox .tox-menubar {
     padding-left: 10%;
   }
@@ -72,25 +62,17 @@
     margin-bottom: 50px;
   }
 
-  //#tinymce {
-  //  position: absolute;
-  //  top: 100px;
-  //  left: 12%;
-  //  right: 12%;
-  //  bottom: 50px;
-  //  border: .1rem;
-  //  box-shadow: 1px 0 0 #e6e6e6, -1px 0 0 #e6e6e6, 0 1px 0 #e6e6e6, 0 -1px 0 #e6e6e6, 0 3px 13px rgba(0, 0, 0, 0.08);
-  //}
-
   .rep-nav {
     height: 36px;
     position: relative;
     font-size: 12px;
     z-index: 15;
+    overflow: hidden;
     line-height: 36px;
     color: #777;
     background: #fff;
     border-bottom: 1px solid #E9E9E9;
+
     a {
       display: block;
       color: #777;
@@ -105,7 +87,7 @@
       line-height: 36px;
       margin-right: 1px;
 
-      i {
+      i, span {
         display: block;
         line-height: 32px;
         padding-bottom: 4px;
@@ -120,6 +102,10 @@
         color: #fff;
         background: #059DFD;
 
+        i {
+          color: #fff !important;
+        }
+
         a {
           color: #fff;
         }
@@ -133,6 +119,7 @@
       padding-left: 30px;
       font-size: 16px;
     }
+
     .z-noselect {
       position: absolute;
       right: 30px;
@@ -144,14 +131,15 @@
 
   .close {
     position: absolute;
-    top: 10px;
+    top: 12px;
     color: #666;
     z-index: 17;
-    right: 6px;
+    font-size: 14px;
+    right: 16px;
   }
 
   .doc-nav {
-    top: 37px;
+    top: 0;
     right: -350px;
     bottom: 0;
     position: absolute;
@@ -177,7 +165,7 @@
     .item {
       padding: 6px 5px;
       cursor: pointer;
-      border-bottom: 1px dotted #F7F9FB;
+      border-bottom: 1px dashed #F7F9FB;
 
       i {
         color: #666;
@@ -327,6 +315,7 @@
   left: 0;
   right: 0;
   bottom: 0;
+
   iframe {
     border: 0;
     height: 100%;

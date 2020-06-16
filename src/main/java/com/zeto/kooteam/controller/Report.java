@@ -80,6 +80,14 @@ public class Report {
         return ZenResult.success("更新完成");
     }
 
+    public ZenResult remove(ZenData data, ZenUser user) {
+        ZenResult result = zenStorageEngine.get("myReport", data.get("_id"));
+        if (!user.getUid().equals(result.get("uid")) && "0".equals(result.get("status"))) {
+            return ZenResult.fail("删除失败");
+        }
+        return zenStorageEngine.execute("delete/myReportWidthUid", data, user);
+    }
+
     public ZenResult save(ZenData data, ZenUser user) {
         ZenResult result;
         String mails = data.get("mails"), readers = data.get("readers");
@@ -92,8 +100,6 @@ public class Report {
             }
             data.put("dateId", dateId);
             data.put("status", "0");
-
-
             // 同步到用户的mail信息
             result = zenStorageEngine.execute("put/myReport", data, user);
         } else {
@@ -124,6 +130,9 @@ public class Report {
 
     public ZenResult saveWithSend(ZenData data, ZenUser user) {
         ZenResult result = this.save(data, user);
+        if (!result.isSuccess()) {
+            return result;
+        }
         reportService.send(result.get("_id"), user);
         return ZenResult.success("发送完成");
     }

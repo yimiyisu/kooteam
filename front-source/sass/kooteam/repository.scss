@@ -63,6 +63,17 @@
     }
   }
 
+  .sortable-ghost {
+    .item {
+      background: #f0f0f0;
+      border: dotted #ddd 1px;
+
+      .header, .info {
+        background: #f0f0f0;
+      }
+    }
+  }
+
   .item {
     line-height: 24px;
     border: solid 1px #fff;
@@ -71,37 +82,6 @@
     &:hover {
       hr {
         border-color: $link;
-      }
-    }
-
-    &.ui-draggable-dragging {
-      background: #fff;
-      border: 1px solid $primary !important;
-      border-radius: 2px;
-      width: 360px;
-      max-width: 450px;
-      overflow: hidden;
-      height: 32px;
-
-      .header {
-        cursor: move;
-      }
-
-      .title {
-        line-height: 30px;
-      }
-
-      .info, .tip, hr {
-        display: none !important;
-      }
-    }
-
-    &.draghover {
-      background: #f0f0f0;
-      border: dotted #ddd 1px;
-
-      .header, .info {
-        background: #f0f0f0;
       }
     }
   }

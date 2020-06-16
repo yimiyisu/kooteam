@@ -51,12 +51,15 @@
 
     &.remove {
       color: rgba(248, 14, 21, .5);
+
       .hover {
         display: block;
+
         &:hover {
           color: #fff !important;
         }
       }
+
       &:hover {
         background: rgba(248, 14, 21, .5);
         color: #fff;
@@ -87,11 +90,6 @@
       background: #F4F5F7;
       width: 580px;
       border-radius: 3px;
-
-      &:disabled {
-        color: #999;
-        text-decoration: line-through;
-      }
 
       &:focus {
         outline: 0;
@@ -159,6 +157,7 @@
         border-color: $todo_blue;
       }
     }
+
     .operator {
       text-align: right;
       margin-top: 10px;
@@ -168,7 +167,6 @@
 
 .k-todo-item {
   background: #F4F5F7;
-  cursor: pointer;
   position: relative;
 
   .todo-editor {
@@ -196,37 +194,48 @@
   .status {
     position: absolute;
     left: 4px;
-    top: 6px;
+    top: 8px;
     font-size: 16px;
   }
 
   .content {
-    display: block;
-    margin: 0 28px;
-    height: 32px;
-    line-height: 32px;
+    display: inline-block;
+    margin-left: 28px;
+    height: 36px;
+    cursor: pointer;
+    line-height: 36px;
+    max-width: 500px;
+    min-width: 200px;
     overflow: hidden;
+
+    img {
+      margin-bottom: -6px;
+    }
   }
 
   .status:before {
     content: '\e6d5';
   }
 
-  &:hover {
+  &:hover, &.active {
     //background: #E5E8EC;
     background: #fff;
 
-    .z-confirm {
+    .right {
       display: inline-block;
     }
   }
 
-  .z-confirm {
+  .right {
     display: none;
-    right: 4px;
     position: absolute;
-    top: 4px;
+    top: 10px;
+    right: 0;
     color: #666;
+
+    .ft {
+      margin-right: 6px;
+    }
   }
 }
 

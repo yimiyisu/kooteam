@@ -14,52 +14,58 @@
                 <!--<i class="ft icon">&#xe22b;</i>-->
                 <!--</dt>-->
                 <dd>
+                    <z-tooltip content="分享文档">
+                        <Share :itemId="itemId" class="ft icon">&#xe8dc;</Share>
+                    </z-tooltip>
+                </dd>
+                <dd>
                     <z-tooltip content="预览文档">
                         <a @click="debounce.flush" :href="'/view.html?id='+itemId" target="_blank">
                             <i class="ft icon">&#xe878;</i>
                         </a>
                     </z-tooltip>
                 </dd>
-                <!--<dd v-show="!readonly" @click="save">-->
-                <!--<z-tooltip content="保存文档">-->
-                <!--<i class="ft icon">&#xe8d6;</i>-->
-                <!--</z-tooltip>-->
-                <!--</dd>-->
+                <dd>
+                    <History :itemId="itemId"/>
+                </dd>
                 <dt>
                     {{value.title}}
                     <!--<ChangeTitle class="ft hover" :value="value">{{value.title}}</ChangeTitle>-->
                 </dt>
             </dl>
-            <div class="z-noselect">
-                {{tooltip}}
-            </div>
+            <div class="z-noselect">{{tooltip}}</div>
         </div>
-        <component :is="name" :readonly="readonly" :type="value.type" v-model="value.content"></component>
+        <component :is="name" :readonly="readonly" :type="value.type" v-model="content"></component>
         <div class="doc-nav" :class="{'show':showNav || value.type === 4}">
-            <i class="z-icon close hover" @click="nav" v-show="showNav">&#xe14c;</i>
+            <i class="ft icon close hover" @click="nav" v-show="showNav">&#xe710;</i>
             <Nav :value="nodes" :current="itemId"></Nav>
         </div>
     </div>
 </template>
 <script>
-    import Editor from '../word/index';
+    import Editor from "../word/index";
     import Mind from "../mind/minder.js";
-    import Graph from '../graph/index';
-    import Grid from "../grid/index"
+    import Graph from "../graph/index";
+    import Grid from "../grid/index";
     import ChangeTitle from "./changeTitle";
-    import Nav from './nav';
+    import Nav from "./nav";
+    import Share from "./share"
+    import History from "./history"
 
     const ComponentName = {
-        1: 'Editor', 2: 'Mind', 5: 'Graph', 6: 'Grid'
+        1: "Editor",
+        2: "Mind",
+        5: "Graph",
+        6: "Grid"
     };
     const Tips = {
-        2: '选中节点，按enter键添加子节点，tab键添加同级节点',
-        5: '按Ctr+S，保存文档'
+        2: "选中节点，按enter键添加子节点，tab键添加同级节点",
+        5: "按Ctr+S，保存文档"
     };
     export default {
         name: "docBoard",
-        props: ['itemId', 'nodes'],
-        components: {Editor, Mind, Nav, Graph, ChangeTitle, Grid},
+        props: ["itemId", "nodes"],
+        components: {Editor, Mind, Nav, Graph, ChangeTitle, Grid, Share, History},
         data() {
             return {
                 isShow: false,
@@ -67,7 +73,8 @@
                 readonly: false,
                 timerId: 1,
                 value: null,
-                tooltip: '',
+                content: null,
+                tooltip: "",
                 debounce: null
             };
         },
@@ -89,7 +96,7 @@
             this.init(this.itemId);
             $.on("docContentUpdate", this.debounce);
         },
-        destoryed() {
+        beforeDestroy() {
             this.debounce.cancel();
             $.off("docContentUpdate");
         },
@@ -104,28 +111,27 @@
             changeTitle(reback) {
                 this.value.title = reback.data.title;
             },
-            init(val) {
+            async init(val) {
                 if (!val) {
                     return (this.isShow = false);
                 }
-                $.get({_id: val}, '/note/get.do', function (reback) {
-                    let data = reback.data;
-                    this.tooltip = Tips[data.type];
-                    this.value = data;
-                    if (!data || !data.content) {
-                        this.readonly = false;
-                    }
-                    this.isShow = true;
-                    window.addEventListener("beforeunload", this.unload);
-                    let href = window.location.href;
-                    if (href.indexOf('docId') > -1) {
-                        href = $.setParam('docId', val, href);
-                        window.history.replaceState(null, data.title, href);
-                    } else {
-                        href = $.setParam('docId', val, href);
-                        window.history.pushState(null, data.title, href);
-                    }
-                }, this);
+                let data = await $.get({_id: val}, "/note/get.do");
+                this.tooltip = Tips[data.type];
+                this.value = data;
+                this.content = data.content;
+                if (!data || !data.content) {
+                    this.readonly = false;
+                }
+                this.isShow = true;
+                window.addEventListener("beforeunload", this.unload);
+                let href = window.location.href;
+                if (href.indexOf("docId") > -1) {
+                    href = $.setParam("docId", val, href);
+                    window.history.replaceState(null, data.title, href);
+                } else {
+                    href = $.setParam("docId", val, href);
+                    window.history.pushState(null, data.title, href);
+                }
             },
             edit() {
                 this.readonly = !this.readonly;
@@ -133,22 +139,19 @@
             nav() {
                 this.showNav = !this.showNav;
             },
-            save(content) {
-                console.log(content);
+            async save(content) {
                 let param = {
                     _id: this.itemId,
                     content: content
                 };
-                $.post(param, '/note/patch.do', function () {
-                    $.notice("保存完成", "success");
-                    return false;
-                }, this);
+                await $.post(param, "/note/patch.do");
+                $.notice("保存完成", "success");
             },
             close() {
                 this.debounce.flush();
                 window.removeEventListener("beforeunload", this.unload);
                 this.$parent.docId = "";
-                let url = $.setParam('docId', '');
+                let url = $.setParam("docId", "");
                 window.history.replaceState(null, null, url);
             }
         }

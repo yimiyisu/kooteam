@@ -8,10 +8,17 @@ public class MessageModel {
     private String from;
     private String to;
     private String content;
+    /**
+     * 链接域名
+     */
+    private String origin;
     private String objectId;
     private MessageType messageType;
     private String unionId;
     private ZenSite site;
+
+    public MessageModel() {
+    }
 
     public MessageModel(String from, String to, String content, String objectId, MessageType type) {
         this.from = from;
@@ -21,11 +28,4 @@ public class MessageModel {
         this.messageType = type;
     }
 
-    public MessageModel(String from, String content, String objectId, MessageType type, String unionId) {
-        this.from = from;
-        this.unionId = unionId;
-        this.content = content;
-        this.objectId = objectId;
-        this.messageType = type;
-    }
 }

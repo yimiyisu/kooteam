@@ -6,7 +6,7 @@
                 <input type="hidden" name="_id" :value="report._id"/>
             </div>
             <div class="z-4">
-                <z-radio name="type" type="button" size="mini" v-model="mode">
+                <z-radio v-if="!data._id" name="type" type="button" size="mini" v-model="mode">
                     <var value="2">日报</var>
                     <var value="1">周报</var>
                 </z-radio>
@@ -17,8 +17,7 @@
         <z-input-tag label="抄送邮箱" name="mails" :value="report.mails" placeholder="抄送邮箱"></z-input-tag>
         <z-field>
             <z-submit @finish="save" action="/report/save.do">保存</z-submit>
-            <z-submit @finish="save" type="text" action="/report/saveWithSend.do">立即发送
-            </z-submit>
+            <z-submit @finish="save" type="text" action="/report/saveWithSend.do">立即发送</z-submit>
         </z-field>
     </z-form>
 </template>
@@ -26,7 +25,7 @@
 
     export default {
         props: ["data"],
-        data: function () {
+        data() {
             return {
                 report: {},
                 mode: "2",
@@ -43,14 +42,14 @@
             }
         },
         watch: {
-            data: function (val) {
+            data(val) {
                 val && (this.report = val);
                 if (this.mode === val.type) {
                     return this.template(this.mode);
                 }
                 this.mode = val.type;
             },
-            mode: function (val) {
+            mode(val) {
                 this.template(val);
             }
         },
@@ -59,19 +58,20 @@
             this.template(this.mode);
         },
         methods: {
-            template: function (val) {
+            async template(val) {
                 if (this.report._id) {
                     return;
                 }
-                $.post({mode: val}, "/report/template.do", function (reback) {
-                    let data = reback.data, report = this.report;
-                    report.title = data.title;
-                    report.readers = data.readers;
-                    report.mails = data.mails;
-                    data.content && (report.content = data.content);
-                }, this);
+                let data = await $.post({mode: val}, "/report/template.do");
+                let report = this.report;
+                report.title = data.title;
+                report.readers = data.readers;
+                report.mails = data.mails;
+                data.content && (report.content = data.content);
             },
-            save: function (reback) {
+            save(reback) {
+                // $.refresh(this);
+                this.$root.refresh();
                 reback.data && (this.report._id = reback.data._id);
             }
         }

@@ -24,13 +24,13 @@
                 corpId = $.getParam("corpId"),
                 that = this;
             if (checkId) {
-                this.welcome = false;
+                return this.welcome = false;
             }
             this.host = window.location.origin;
             dd.ready(function () {
                 dd.runtime.permission.requestAuthCode({
                     corpId: corpId,
-                    onSuccess: function (result) {
+                    onSuccess: (result) => {
                         let params = {
                             checkId: checkId,
                             code: result.code
@@ -42,10 +42,10 @@
                             this.status = true;
                         }, that);
                     },
-                    onFail: function (err) {
+                    onFail: (err) => {
                         alert(JSON.stringify(err));
                     },
-                    onFinish: function (dd) {
+                    onFinish: (dd) => {
                         alert(JSON.stringify(dd));
                     }
                 });
