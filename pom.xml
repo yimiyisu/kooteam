@@ -43,7 +43,7 @@
         <hikarcp.version>3.2.0</hikarcp.version>
         <guava.version>28.2-jre</guava.version>
         <fastjson.version>1.2.66</fastjson.version>
-        <mysql.version>8.0.19</mysql.version>
+        <mysql.version>8.0.28</mysql.version>
         <mongodb.version>3.12.2</mongodb.version>
         <cglib.version>3.2.6</cglib.version>
         <protobuf.java>3.6.0</protobuf.java>
