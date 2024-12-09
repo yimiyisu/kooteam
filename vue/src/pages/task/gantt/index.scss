@@ -1,0 +1,252 @@
+.bg-ff {
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  table tr th,
+  table tr td {
+    border: 1px solid #DDDDDD;
+    padding: 10px;
+  }
+
+  table tr th {
+    font-size: 18px;
+  }
+
+  table tr td {
+    font-size: 15px;
+  }
+
+  ol li,
+  ul li {
+    list-style: none;
+  }
+
+  .Gantt-header {
+    padding: 20px;
+  }
+
+  .Gantt-header_flex {
+    display: flex;
+    align-items: center;
+  }
+
+  .Gantt-View_Div {
+    background-color: #609;
+    color: #fff;
+    border-radius: 8px;
+    position: relative;
+  }
+
+  .Gantt-View_Div:hover {
+    cursor: pointer;
+  }
+
+  .Gantt-View_Div p {
+    display: flex;
+    font-size: 16px;
+    padding: 5px 25px;
+  }
+
+  .Gantt-View_Div p i {
+    font-size: 22px;
+  }
+
+  .Gantt-View_opacity {
+    position: absolute;
+    background: #FFFFFF;
+    width: 100%;
+    min-width: 100px;
+    border-radius: 3px 3px 3px 3px;
+    padding: 10px;
+    box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.09);
+  }
+
+  .Gantt-View_opacity li {
+    font-size: 14px;
+    color: #333333;
+    display: block;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .Gantt-View_opacity li.active i {
+    display: block;
+  }
+
+  .Gantt-View_opacity li i {
+    display: none;
+  }
+
+  .Gantt-View_opacity li i {
+    font-size: 22px;
+  }
+
+  .Gantt-View_opacity li:hover {
+    background: #660099;
+    color: #ffffff;
+    cursor: pointer;
+  }
+
+  .Gantt-table_flex {
+    display: flex;
+  }
+
+  .Gantt-table_left {
+    width: 20%;
+  }
+
+  .Gantt-table_left_title,
+  .Gantt-table_left_list {
+    display: flex;
+    justify-content: space-between;
+    height: 40px;
+  }
+
+  .Gantt-table_left_title {
+    height: 79px;
+  }
+
+  .Gantt-table_left_title div,
+  .Gantt-table_left_list div {
+    width: 33%;
+    text-align: center;
+    border: 1px solid #DDDDDD;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 0px;
+  }
+
+  .Gantt-table_left_title div:last-of-type,
+  .Gantt-table_left_list div:last-of-type {
+    border-right: 1px solid #DDDDDD;
+  }
+
+  .Gantt-table_left_title,
+  .Gantt-table_left_title div,
+  .Gantt-table_left_list div {
+    border-bottom: 0px;
+  }
+
+  .Gantt-table_left_title:last-of-type {
+    border-bottom: 1px solid #DDDDDD;
+  }
+
+  .Gantt-table_left_intro p {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+    -o-text-overflow: ellipsis;
+    line-height: 40px;
+    padding: 0px 10px;
+  }
+
+  .Gantt-table_right {
+    width: 80%;
+  }
+
+  .tableYear {
+    text-align: left;
+  }
+
+  .Gantt-table_right .tableDay,
+  .Gantt-table_right .tableYear,
+  .Gantt-table_right {
+    display: inline-flex;
+  }
+
+  .Gantt-table_right .tableDay p,
+  .Gantt-table_right .tableList .Gantt-table_header {
+    line-height: 38px;
+    width: 39px;
+    height: 38px;
+  }
+
+  .Gantt-table_right .tableDay p,
+  .Gantt-table_right .tableYear p,
+  .Gantt-table_right .tableList .Gantt-table_header {
+    border: 1px solid #DDDDDD;
+    border-right: 0px;
+    text-align: center;
+  }
+
+  .Gantt-table_right .tableYear p {
+    border-bottom: 0px;
+    line-height: 39px;
+    height: 39px;
+  }
+
+  .Gantt-table_right .tableList .Gantt-table_header {
+    border-top: 0px;
+  }
+
+  .Gantt-table_right .tableDay p:nth-child(1),
+  .Gantt-table_right .tableYear p:nth-child(1),
+  .Gantt-table_right .tableList p:nth-child(1) {
+    border-left: 0px;
+  }
+
+  .Gantt-table_right .tableDay p:last-of-type,
+  .Gantt-table_right .tableYear p:last-of-type,
+  .Gantt-table_right .tableList:last-of-type {
+    border-right: 1px solid #DDDDDD;
+  }
+
+  .Gantt-table_right_rew {
+    width: 1500px;
+    overflow-x: scroll;
+    text-align: left;
+  }
+
+  .Gantt-table_weekend {
+    background-color: #eeeeee;
+  }
+
+  .Gantt-table_right .today {
+    background-color: #660099;
+    color: #ffffff;
+  }
+
+  /* .tableList{width: 1500px;height: 40px;position: relative; background-color: white;} */
+  .tableList {
+    width: 1200px;
+    height: 40px;
+    border: 1px solid #DDDDDD;
+    border-left: 0px;
+    border-top: 0px;
+    margin-left: -1px;
+    position: relative;
+    display: flex;
+    align-items: center;
+
+  }
+
+  .tableList:hover {
+    cursor: pointer;
+    background-color: #eeeeee;
+  }
+
+  .tableBar {
+    background: red;
+    width: 200px;
+    height: 15px;
+    top: 15px;
+    position: absolute;
+    border-radius: 10px;
+    left: 200px;
+  }
+
+  .tableNameintro {
+    white-space: nowrap;
+    position: absolute;
+  }
+
+  .tableBar:hover {
+    border-radius: 0px;
+  }
+}

@@ -1,0 +1,1 @@
+{"name":"book_demo","type":"get","table":"book_demo","where":{"relate":"AND","exprs":[{"operator":0,"column":"id","alias":"","from":2,"need":false,"value":"longid"}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","received_time","name","mobile","email","use_case","invite_email","create_gmt","update_gmt"]}

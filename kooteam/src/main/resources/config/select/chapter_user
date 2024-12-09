@@ -1,0 +1,1 @@
+{"name":"chapter_user","type":"select","table":"chapter_user","where":{"relate":"AND","exprs":[{"operator":0,"column":"uid","alias":"","from":2,"need":false,"value":"uid"}],"operator":0,"from":0,"need":false},"role":2,"params":[],"outputs":["id","chapter_id","uid","readonly","create_gmt","update_gmt"],"order":{"name":"id","type":-1}}

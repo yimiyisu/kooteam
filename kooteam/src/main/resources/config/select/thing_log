@@ -1,0 +1,1 @@
+{"name":"thing_log","type":"select","table":"thing_log","where":{"relate":"AND","exprs":[{"operator":0,"column":"thing_id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":2,"params":[],"outputs":["id","thing_id","uid","content","update_gmt"],"order":{"name":"id","type":-1}}

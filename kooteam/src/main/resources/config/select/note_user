@@ -1,0 +1,1 @@
+{"name":"note_user","type":"select","table":"note_user","where":{"relate":"AND","exprs":[{"operator":0,"column":"uid","alias":"","from":2,"need":false,"value":"uid"}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","uid","create_gmt","update_gmt","note_id","type","tag"],"order":{"name":"id","type":-1}}

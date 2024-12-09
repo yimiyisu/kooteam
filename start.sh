@@ -5,8 +5,9 @@ MEMORY=256m
 Download() {
     APP_FILE=./${SERVICE}.tar.gz
     if [ -e ${APP_FILE} ];then rm -rf ${APP_FILE};fi
-    version=`cat ./config/version`
-    result=$(curl -G 'https://www.kooteam.com/home/download.do?app=kooteam&type=upgrade&version='${version})
+    # version=`cat ./config/version`
+    # result=$(curl -G 'https://a.ebus.vip/apps/kooteam.jar?v='${version})
+    result=$(curl -G 'https://a.ebus.vip/apps/kooteam.jar')
     if [ $result = 'newly'  ];then
       echo 'Kooteam version is up to date'
       exit 5
@@ -23,7 +24,7 @@ Start() {
       echo 'Kooteam Is Runing'
       exit 5
     else
-      exec java -server -Xms${MEMORY} -Xmx${MEMORY}  -jar ./${SERVICE}.jar >> ./${SERVICE}.log 2>&1 &
+      nohub exec java -server -Xms${MEMORY} -Xmx${MEMORY}  -jar ./${SERVICE}.jar >> ./${SERVICE}.log 2>&1 &
       echo 'Starting Success'
     fi
 }

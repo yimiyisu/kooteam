@@ -1,0 +1,1 @@
+{"name":"chapterBasic","type":"get","table":"chapter","where":{"relate":"AND","exprs":[{"operator":0,"column":"id","alias":"","from":1,"need":false,"value":"chapterId"}],"operator":0,"from":0,"need":false},"role":2,"params":[],"outputs":["id","title","create_id","update_gmt"]}

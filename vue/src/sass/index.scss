@@ -1,0 +1,17 @@
+@use "../../public/lib/article.scss";
+
+.k-thing {
+    position: relative;
+    cursor: pointer;
+
+    &.finish {
+        color: var(--a-text-color-placeholder);
+    }
+
+    label {
+        display: inline-block;
+        cursor: pointer;
+        padding-right: 6px;
+        transform: scale(1.2);
+    }
+}

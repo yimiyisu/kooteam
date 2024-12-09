@@ -1,0 +1,1 @@
+{"name":"note_log","type":"get","table":"note_log","where":{"relate":"AND","exprs":[{"operator":1,"column":"uid","alias":"","from":1,"need":false,"value":"ddd"}],"operator":0,"from":0,"need":false},"role":2,"params":[],"outputs":["id","note_id"]}

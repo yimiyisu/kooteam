@@ -17,6 +17,14 @@ target/
 *.ear
 *.zip
 *.rar
-
+app.properties
+node_modules
+vue/dist/
+vue/debug/
+.settings/
+.vscode/
+log/
+*.pid
+logs/
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
