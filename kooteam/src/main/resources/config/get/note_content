@@ -1,0 +1,1 @@
+{"name":"note_content","type":"get","table":"note_content","where":{"relate":"AND","exprs":[{"operator":0,"column":"id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","note_id","parent_id","content","type","create_gmt","update_gmt","uid","title"]}

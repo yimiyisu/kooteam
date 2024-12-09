@@ -1,0 +1,1 @@
+{"name":"project","type":"get","table":"project","where":{"relate":"AND","exprs":[{"operator":0,"column":"id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","title","uid","todo_group","create_gmt","update_gmt","state","file_group","group_id","template_id","knowledge"]}

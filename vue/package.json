@@ -1,0 +1,112 @@
+{
+    "name": "kooteam",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "webpack-dev-server --mode=development",
+        "dist": "npm run lint && webpack --mode=production",
+        "local": "npm run lint && webpack --mode=production --env target=local",
+        "deploy": "npm run lint && webpack --mode=production --env target=remote",
+        "init": "yarn",
+        "lint": "eslint --fix --ext .js,.vue ./src"
+    },
+    "dependencies": {
+        "core-js": "^3.6.5"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.23.5",
+        "@babel/plugin-syntax-jsx": "^7.23.3",
+        "@babel/plugin-transform-runtime": "^7.17.0",
+        "@babel/preset-env": "^7.23.5",
+        "@vue/babel-plugin-jsx": "^1.1.5",
+        "@vue/babel-preset-app": "^5.0.8",
+        "@vue/compiler-sfc": "^3.4.15",
+        "babel-eslint": "^10.1.0",
+        "babel-loader": "^8.2.4",
+        "css-loader": "^3.5.3",
+        "dayjs": "^1.11.13",
+        "eslint": "^7.28.0",
+        "eslint-plugin-vue": "^8.4.1",
+        "format": "^0.2.2",
+        "lint-staged": "^12.3.4",
+        "pako": "^2.0.4",
+        "plugin": "^0.3.3",
+        "prettier": "^2.5.1",
+        "prismjs": "^1.22.0",
+        "sass": "^1.81.0",
+        "sass-loader": "^16.0.3",
+        "simple-git": "^3.1.1",
+        "style-loader": "^3.3.1",
+        "terser-webpack-plugin": "^5.3.1",
+        "vue": "^3.4.21",
+        "vue-loader": "^17.3.1",
+        "webpack": "^5.91.0",
+        "webpack-cli": "^5.1.4",
+        "webpack-dev-server": "^4.15.2",
+        "zen-app-plugin": "^0.0.2"
+    },
+    "eslintIgnore": [
+        "public/*",
+        "dist/*"
+    ],
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/vue3-essential",
+            "eslint:recommended"
+        ],
+        "plugins": [
+            "vue"
+        ],
+        "parserOptions": {
+            "parser": "babel-eslint",
+            "sourceType": "module"
+        },
+        "globals": {
+            "zen": true,
+            "$": true,
+            "Vue": true,
+            "mammoth": true,
+            "tinymce": true,
+            "Sortable": true,
+            "EXCALIDRAW_ASSET_PATH": true,
+            "ItemMovement": true,
+            "CalendarScroll": true,
+            "GSTC": true,
+            "mxUtils": true,
+            "STYLE_PATH": true,
+            "STENCIL_PATH": true,
+            "Graph": true,
+            "QRCode": true,
+            "Raphael": true,
+            "mxCodec": true,
+            "mxConstants": true,
+            "mxStencilRegistry": true,
+            "mxStencil": true,
+            "WeekendHighlight": true,
+            "x_spreadsheet": true,
+            "FullCalendar": true,
+            "__webpack_public_path__": true
+        },
+        "rules": {
+            "no-useless-escape": 0,
+            "no-debugger": 0,
+            "vue/multi-word-component-names": 0,
+            "no-case-declaration": 0,
+            "vue/no-mutating-props": 0
+        }
+    },
+    "lint-staged": {
+        "*.{js,jsx,vue}": [
+            "npm run lint"
+        ]
+    },
+    "browserslist": [
+        "last 1 chrome version",
+        "last 1 firefox version",
+        "last 1 safari version"
+    ]
+}

@@ -1,0 +1,1 @@
+{"name":"noteUserByNote","type":"select","table":"note_user","where":{"relate":"AND","exprs":[{"operator":0,"column":"note_id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","uid","note_id","type","update_gmt"],"order":{"name":"id","type":-1}}

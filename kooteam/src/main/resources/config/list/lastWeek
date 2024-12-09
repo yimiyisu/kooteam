@@ -1,0 +1,1 @@
+{"name":"lastWeek","type":"list","table":"week","where":{"relate":"AND","exprs":[{"operator":0,"column":"uid","alias":"","from":2,"need":false,"value":"uid"},{"operator":1,"column":"id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id"]}

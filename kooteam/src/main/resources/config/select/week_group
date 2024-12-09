@@ -1,0 +1,1 @@
+{"name":"week_group","type":"select","table":"week_group","where":{"relate":"AND","exprs":[{"operator":5,"column":"title","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","title","content","update_gmt","create_gmt"],"order":{"name":"id","type":-1}}
