@@ -1,9 +1,9 @@
 <template>
     <div class="a-card is-hover-shadow">
         <div class="title">
-            <z-icon @click="favi" value="star" :style="'--color: var(' + color + ')'" class="hover star" />
-            <el-text @click="detail(value.id)" type="primary">
-                {{ value.title }}
+            <el-text>
+                <z-icon @click="favi" value="star" :style="'--color: var(' + color + ')'" class="hover star" />
+                <span @click="detail(value.id)">{{ value.title }}</span>
             </el-text>
         </div>
         <div class="more">

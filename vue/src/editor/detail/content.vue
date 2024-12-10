@@ -10,11 +10,11 @@
                     :idx="index + 1" @open="open" />
             </el-aside>
         </transition>
-        <el-main ref="main" :class="{ max: !visible || isFulled }">
+        <el-main ref="main">
             <div class="tool">
                 <z-icon v-show="!isFulled" @click="toggle" value="menu" class="hover" />
                 <z-icon @click="fullscreen" :value="isFulled ? 'minimize' : 'maximize'" class="hover" />
-                <z-icon @click="print" value="printer" class="hover" />
+                <!-- <z-icon @click="print" value="printer" class="hover" /> -->
             </div>
             <z-icon value="chevronLeft" v-if="prevId" size="48" @click="() => open(prevId)" class="hover prev" />
             <z-icon value="chevronRight" v-if="nextId" size="48" @click="() => open(nextId)" class="hover next" />
@@ -168,8 +168,8 @@ export default {
     position: relative;
     --a-main-padding: 36px 20px;
 
-    &.max .content {
-        max-width: 1100px;
+    &.fullscreen .content {
+        max-width: 1200px;
     }
 }
 
@@ -220,6 +220,5 @@ export default {
     max-width: 800px;
     height: 100%;
     margin: 0 auto;
-    background: var(--a-bg-color);
 }
 </style>
