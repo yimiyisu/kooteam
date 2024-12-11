@@ -6,7 +6,7 @@
 # 在线体验地址
 
 - [https://kooteam.com](https://kooteam.com)
-- 国内用户源码地址 [https://gitee.com/sinbo/kooteam](https://gitee.com/sinbo/kooteam)
+- 国内用户源码地址 [https://gitee.com/yimiyisu2/kooteam](https://gitee.com/yimiyisu2/kooteam)
 
 # 技术选型
 
