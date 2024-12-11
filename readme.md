@@ -3,9 +3,9 @@
 - kooteam 是一款轻量级的在线团队协作工具，提供各类文档工具、在线思维导图、在线流程图、项目管理、任务分发，知识库管理等工具。
 - kooteam 支持钉钉，企业微信等账号同步登陆，保障企业数据安全。
 
-# 在线体验地址 [https://kooteam.com](https://kooteam.com)
+# 体验地址 [https://kooteam.com](https://kooteam.com)
 
-# gitee 源码地址 [https://gitee.com/yimiyisu/kooteam](https://gitee.com/yimiyisu/kooteam)
+# [gitee 源码地址](https://gitee.com/yimiyisu/kooteam)
 
 # 技术选型
 

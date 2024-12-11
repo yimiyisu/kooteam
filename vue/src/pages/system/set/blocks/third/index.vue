@@ -4,7 +4,7 @@
 <script>
 import Detail from './detail';
 // 需要加密的字段
-const encryptFields = ['weworkAppSecret', 'dingSecret']
+const encryptFields = ['weworkAppSecret', 'dingSecret', 'feishuAppSecret']
 export default {
     data() {
         return {

@@ -1,6 +1,7 @@
 <template>
     <div class="editor">
-        <el-input v-model="text" @focus="focus" @blur="blur" autosize type="textarea" placeholder="请输入评论内容，支持粘贴截图" />
+        <el-input v-model="text" @focus="focus" @blur="blur" :autosize="{ minRows: 3, maxRows: 6 }" type="textarea"
+            placeholder="请输入评论内容，支持粘贴截图" />
         <div class="action">
             <el-button v-show="actived" size="small" type="primary" @click="submit">提交</el-button>
             <el-image v-for="(img, idx) in images" :zoom-rate="1.2" :hide-on-click-modal="true" :initial-index="idx"

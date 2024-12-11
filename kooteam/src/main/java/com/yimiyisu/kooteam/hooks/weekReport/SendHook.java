@@ -29,11 +29,11 @@ public class SendHook implements IHook {
         // 获取分组里的详细用户信息
         List<JsonObject> groups = zenEngine.selectByIds("week_group", groupIds);
         if (groups != null) for (JsonObject group : groups) {
-            JsonArray content = group.getAsJsonArray();
+            JsonArray content = group.get("content").getAsJsonArray();
             if (content == null) return;
             for (JsonElement s : content) {
                 String uid = s.getAsString();
-                if (recieves.contains(s.getAsString())) continue;
+                if (recieves.contains(uid)) continue;
                 recieves.add(uid);
             }
         }

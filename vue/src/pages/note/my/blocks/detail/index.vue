@@ -55,6 +55,7 @@
 import Editor from '@/editor/index';
 import Extend from './extend.vue';
 export default {
+    inject: ['$index'],
     components: { Extend, Editor },
     data() {
         return {
@@ -120,7 +121,10 @@ export default {
                     parent.sons.push(formData)
                 }
             }
-            this.save()
+            await this.save()
+            if (formData.type !== 2) {
+                this.open(formData)
+            }
         },
         remove(node, data) {
             const parent = node.parent
@@ -140,8 +144,10 @@ export default {
             await $.post({ url: "/do/patch/note", data: { id: this.noteId, content: this.content } })
         },
         full() {
-            $.fullscreen(this.$refs['canvas'].$el, this.isFull)
-            this.isFull = !this.isFull
+            const { isFull } = this
+            let nextIndex = isFull ? 0 : this.$index()
+            $.fullscreen(this.$refs['canvas'].$el, nextIndex)
+            this.isFull = !isFull
         },
         saveTitle(result) {
             const id = this.current

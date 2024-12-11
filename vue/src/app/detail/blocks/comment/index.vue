@@ -1,15 +1,13 @@
 <template>
     <div class="comment">
-        <div class="title">
-            <z-icon value="layers" />
-            <strong :class="{ except: isLog }" @click="open"> 评论列表 </strong>
-            |
-            <strong :class="{ except: !isLog }" @click="close">
-                操作记录
-            </strong>
-        </div>
-        <List :value="value" v-show="!isLog" />
-        <Log :value="value" v-if="isLog" />
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="评论列表" name="command" lazy>
+                <List :value="value" />
+            </el-tab-pane>
+            <el-tab-pane label="操作记录" name="operator" lazy>
+                <Log :value="value" />
+            </el-tab-pane>
+        </el-tabs>
     </div>
 </template>
 <script>
@@ -21,29 +19,13 @@ export default {
     props: { value: Object },
     data() {
         return {
-            isLog: false,
+            activeName: 'command'
         };
-    },
-    methods: {
-        close() {
-            this.isLog = true;
-        },
-        open() {
-            this.isLog = false;
-        },
-    },
+    }
 };
 </script>
 <style lang="scss" scoped>
-.title {
-    margin-bottom: 6px;
-}
-
-strong {
-    cursor: pointer;
-
-    &.except {
-        color: var(--a-text-color-secondary)
-    }
+.comment {
+    margin-top: -12px;
 }
 </style>

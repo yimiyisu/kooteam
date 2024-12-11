@@ -1,7 +1,8 @@
 <template>
     <div class="top">
         <z-icon value="edit" />
-        <input v-model="value.title" :disabled="readonly" maxlength="60" @change="change" />
+        <el-input v-model="value.title" type="textarea" :autosize="{ minRows: 1, maxRows: 3 }" :disabled="readonly"
+            maxlength="120" @keyup.enter.prevent.stop="change" @change="change" />
     </div>
     <div class="time">
         <z-user :value="value.createUid" />
@@ -30,9 +31,15 @@ export default {
     methods: {
         // 当改变时 标题显示当前输入的 然后发送数据给
         async change() {
+            let { title } = this.value
+            if (!title) {
+                return
+            }
+            title = title.replace(/\r\n|\n|\r/g, '')
+            this.value.title = title
             await $.post({
                 data: {
-                    title: this.value.title,
+                    title,
                     id: this.value.id,
                 },
                 url: "/do/patch/thing",
@@ -62,27 +69,29 @@ export default {
     margin-left: 10px;
 }
 
-input {
+.a-textarea {
     font-size: 20px;
     font-weight: 600;
-    border: 2px solid var(--a-border-color-extra-light);
-    padding: 8px;
-    cursor: pointer;
+    border: 1px solid var(--a-border-color);
     color: var(--a-text-color-primary);
     background: var(--a-fill-color-light);
     width: 95%;
     border-radius: 3px;
+}
+
+:deep(.a-textarea__inner) {
+    box-shadow: none;
+    background: none;
 
     &:focus {
-        border-color: var(--a-border-color);
-        background: var(--a-fill-color-extra-light);
+        background: var(--a-bg-color);
     }
 }
 
 .time {
     color: var(--a-text-color-secondary);
     font-size: var(--a-font-size-base);
-    margin-top: 6px;
+    margin: 6px 0 12px 24px;
     position: relative;
 }
 </style>

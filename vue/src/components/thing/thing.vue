@@ -85,14 +85,6 @@ export default {
                 data: { thingId: id, content },
                 url: "/do/put/thing_log",
             });
-            // if (this.timer) {
-            //     clearTimeout(this.timer);
-            // }
-            // // 30 秒后，自动清除已完成的任务
-            // this.timer = setTimeout(() => {
-            //     this.$emit('refresh')
-            //     this.timer = null;
-            // }, 30000);
         },
         detail() {
             $.emit("thingDetail", this.data);

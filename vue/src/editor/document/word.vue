@@ -25,8 +25,8 @@ export default {
         beforeInit(config) {
             config.menubar = false
             config.height = '92vh'
-            config.toolbar = 'document save import ' + config.toolbar
-            config.plugins += ' importcss document save import'
+            config.toolbar = 'save import ' + config.toolbar
+            config.plugins += ' importcss save import'
             config.content_css = config.content_css = [zen.lib + '.css', zen.path('lib/article.css')]
             config.setup = () => Plugin()
         },

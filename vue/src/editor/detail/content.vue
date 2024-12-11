@@ -39,6 +39,7 @@ import Other from './other.vue';
 
 export default {
     components: { Chapter, Other },
+    inject: ['$index'],
     props: {
         data: Object
     },
@@ -114,9 +115,11 @@ export default {
             $.print(el)
         },
         fullscreen() {
+            const { isFulled } = this
             let element = this.$refs['main'].$el
-            $.fullscreen(element, this.isFulled)
-            this.isFulled = !this.isFulled
+            let nextIndex = isFulled ? 0 : this.$index()
+            $.fullscreen(element, nextIndex)
+            this.isFulled = isFulled
         },
         getDefaultId(list, current) {
             for (let i = 0; i < list.length; i++) {

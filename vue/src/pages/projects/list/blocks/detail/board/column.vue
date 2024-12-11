@@ -95,12 +95,12 @@ export default {
     padding: 12px;
     cursor: pointer;
     border-radius: 8px;
-    border: 1px solid transparent;
+    border: 1px solid var(--a-border-color-lighter);
 
     &:hover {
         box-shadow: 0 2px 8px 0 rgba(0, 0, 0, .15);
         background: var(--a-bg-color);
-        border-color: var(--a-border-color-lighter);
+        border-color: var(--a-border-color-light);
     }
 }
 

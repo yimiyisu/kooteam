@@ -1,15 +1,17 @@
 <template>
-    <el-dropdown size="small" class="btn" type="warning" split-button @click="archive" @command="cmd">
-        <z-icon value="archive" />归档
+    <el-dropdown size="small" class="btn" type="warning" split-button @click="doFinish" @command="cmd">
+        <span class="a-text" v-if="value.status === 0"><z-icon value="checkSquare" />完成</span>
+        <span class="a-text" v-else><z-icon value="xSquare" />取消完成</span>
         <template #dropdown>
             <el-dropdown-menu>
                 <el-dropdown-item command="transfer">完成并转交</el-dropdown-item>
+                <el-dropdown-item command="archive">归档</el-dropdown-item>
                 <el-dropdown-item command="delete">删除</el-dropdown-item>
             </el-dropdown-menu>
         </template>
     </el-dropdown>
-    <z-action ref="transfer" url="/do/patch/thing" :data="thing" width="480px" title="转交任务" :fields="fields"
-        @finish="finish" />
+    <z-action ref="transfer" url="/do/patch/thing" width="480px" title="转交任务" :fields="fields"
+        :beforeSubmit="transfer" />
 </template>
 <script>
 import StepSelector from './stepSelector.vue';
@@ -27,6 +29,23 @@ export default {
         }
     },
     methods: {
+        async doFinish() {
+            let thing = this.value;
+            let id = thing.id;
+            let status = thing.status === 0 ? 6 : 0;
+            let param = { id, status };
+            await $.post({ data: param, url: "/do/patch/thing" });
+            thing["status"] = status;
+            let parent = this.$parent;
+            if (parent.sort) {
+                parent.sort(id, status);
+            }
+            let content = status ? "完成了任务" : "取消了完成";
+            $.post({
+                data: { thingId: id, content },
+                url: "/do/put/thing_log",
+            });
+        },
         // 完成
         async archive() {
             const { value } = this;
@@ -49,6 +68,9 @@ export default {
         },
         async cmd(command) {
             const { value } = this;
+            if (command === 'archive') {
+                return this.archive()
+            }
             if (command === 'delete') {
                 return $.confirm('确定删除该任务吗？', async () => {
                     await $.post({ url: "/do/delete/thing", data: { id: value.id } })
@@ -58,7 +80,7 @@ export default {
             }
             this.$refs.transfer.show()
         },
-        finish(result, formData) {
+        transfer(result, formData) {
             const { value } = this;
             value.status = 6;
             value.owner = formData.owner;
@@ -74,5 +96,9 @@ export default {
     position: absolute;
     right: 10px;
     top: 0;
+}
+
+.a-text {
+    color: var(--a-color-white);
 }
 </style>
