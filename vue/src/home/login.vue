@@ -1,7 +1,7 @@
 <template>
     <z-action mode="dialog" type="default" :beforeShow="show" class="btn" label="立即登录" size="large">
-        <z-form size="large" label-width="100px" :data="formData" @keyup.enter="submit">
-            <z-form-items :value="formData" :fields="fields" />
+        <z-form v-if="formData" size="large" label-width="100px" :data="formData" @keyup.enter="submit">
+            <z-form-items :fields="fields" />
             <template #action$>
                 <el-button v-if="showQR" type="primary" link @click="qr">使用手机扫码登录</el-button>
                 <el-button type="primary" @click="submit">提交</el-button>
@@ -14,7 +14,7 @@ const QRList = ['dingding', 'wework', 'feishu']
 export default {
     data: function () {
         return {
-            formData: {},
+            formData: null,
             fields: [
                 { name: "username", type: "input", label: "登录用户名" },
                 { name: "password", type: "password", label: "账号密码", rules: { required: true, message: "" } },
@@ -28,7 +28,12 @@ export default {
             if (data.logined) {
                 return this.$router.push("/welcome")
             }
-            const { loginMode } = data;
+            const { loginMode, isDemo } = data;
+            if (isDemo) {
+                this.formData = { username: 'demo', password: 'N2q9dsovEDyzUYjV' }
+            } else {
+                this.formData = {}
+            }
             if (data.passwordMode === "1" || loginMode === 'ladp') {
                 this.showQR = QRList.includes(loginMode);
             } else {

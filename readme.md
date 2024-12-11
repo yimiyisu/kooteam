@@ -3,17 +3,17 @@
 - kooteam 是一款轻量级的在线团队协作工具，提供各类文档工具、在线思维导图、在线流程图、项目管理、任务分发，知识库管理等工具。
 - kooteam 支持钉钉，企业微信等账号同步登陆，保障企业数据安全。
 
-## 在线体验地址
+# 在线体验地址
 
 - [https://kooteam.com](https://kooteam.com)
 
-## 技术选型
+# 技术选型
 
 - 后端框架：[Smart Http](https://smartboot.tech/smart-http/)
 - 前端框架：[Vue 3.0](https://cn.vuejs.org/) + Element-ui Plus
 - 数据库：Mysql
 
-## 功能简介
+# 功能简介
 
 **1. 待办四象限：突出事情优先级，帮助员工合理安排时间，提高工作效率**
 ![待办四象限：突出事情优先级，帮助员工合理安排时间，提高工作效率](https://images.gitee.com/uploads/images/2020/0401/145234_27d3043d_472.jpeg)
@@ -30,7 +30,7 @@
 **5. 在线知识库：在线流程图，在线文档，以及可视化的目录编排，文档管理无忧**
 ![在线知识库：在线流程图，在线文档，以及可视化的目录编排，文档管理无忧](https://images.gitee.com/uploads/images/2020/0401/145236_3368ae12_472.jpeg)
 
-## 本项目基于以下开源项目
+# 本项目基于以下开源项目
 
 - Http Server (Apache 2.0 协议) [smart-http](https://github.com/smartboot/smart-http)
 - 文本编辑器 (GNU 定制协议) [tinymce](https://github.com/tinymce/tinymce)
@@ -39,29 +39,29 @@
 - 在线流程图 (Apache 2.0 协议) [drawio](https://github.com/jgraph/mxgraph-js)
 - 日历看板 (MIT 协议) [fullcalendar](https://github.com/fullcalendar/fullcalendar)
 
-## 开源协议
+# 开源协议
 
 [AGPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.html)
 
 本项目的开源协议为 AGPL-3.0，简要描述就是您可以免费商用，如果进行二次发行则需要保留所 Kooteam 项目的开源版权，源码也需要开源。如果您不想开源，可以联系我们，提供付费的定制服务。
 
-## 可持续发展
+# 可持续发展
 
 - 不少朋友对于开源项目提供的付费服务比较反感，在此阐述一下我的观点。
 
 ```
 1. 开源不等于免费，开源项目提供付费服务是很正常的事，能活下去的开源才能持久更新
-2. 不影响大部分用户使用的前提下开源项目，针对特定人群、企业提供付费项目，更有助于项目的生存和发展
+2. 不影响大部分用户使用的前提下开源项目，针对特定人群、企业提供付费项目，有助于项目的生存和发展
 ```
 
 - 在自用的情况下，本项目可以自己进行二次开发，完成打包和部署，都不受限制。如果需要提供定制服务，可以联系我们。
 
-### 我们提供如下服务
+## 我们提供如下服务
 
 1. 定制打包产物构建
 2. 个性化定制，按工时付费 2000 元/人天
 3. 项目管理咨询服务
 
-### 客服微信
+# 客服微信
 
 - ![二维码](https://images.gitee.com/uploads/images/2020/0401/145236_0ce564f8_472.jpeg)
