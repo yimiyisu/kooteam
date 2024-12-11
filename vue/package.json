@@ -5,8 +5,6 @@
     "scripts": {
         "start": "webpack-dev-server --mode=development",
         "dist": "npm run lint && webpack --mode=production",
-        "local": "npm run lint && webpack --mode=production --env target=local",
-        "deploy": "npm run lint && webpack --mode=production --env target=remote",
         "init": "yarn",
         "lint": "eslint --fix --ext .js,.vue ./src"
     },
