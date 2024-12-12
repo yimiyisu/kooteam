@@ -10,7 +10,7 @@
                         <z-form :fields="fields" url="/do/patch/noteForBasic" :data="result">
                             <template #quit>
                                 <el-form-item label="退出项目">
-                                    <Quit type="danger" @finish="close" label="退出知识库" :noteId="value.noteId" />
+                                    <Quit type="danger" @finish="close" label="退出知识库" :relateId="value.idLeft" />
                                 </el-form-item>
                             </template>
                         </z-form>

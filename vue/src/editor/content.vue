@@ -1,15 +1,13 @@
 <template>
     <div class="main">
-        <div class="tool">
-            <z-icon @click="print" value="printer" class="hover" />
-        </div>
         <div ref="content" class="content">
             <z-block url="/do/get/note_content" :params="params" @finish="renderPlugin">
                 <template #default="result">
                     <h3 class="title2">
                         {{ result.title }}
                     </h3>
-                    <div class="mce-content-body" v-html="result.content"></div>
+                    <div v-if="result.type === 1" class="mce-content-body" v-html="result.content"></div>
+                    <Other v-else :data="result" :key="result.id" />
                 </template>
             </z-block>
         </div>
@@ -17,17 +15,15 @@
 </template>
 <script>
 // import Plugin from './blocks/index';
+import Other from './detail/other.vue';
 export default {
+    components: { Other },
     computed: {
         params() {
             return { id: this.$route.params.id }
         }
     },
     methods: {
-        print() {
-            const el = this.$refs['content']
-            $.print(el)
-        },
         renderPlugin(data, el) {
             this.$nextTick(() => {
                 const sons = el.getElementsByClassName('k-doc')
@@ -44,7 +40,7 @@ export default {
 .main {
     background: var(--a-bg-color);
     position: relative;
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 20px auto;
 }
 

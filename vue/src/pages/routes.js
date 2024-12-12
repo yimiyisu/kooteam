@@ -1,9 +1,9 @@
+import bookDemo from "../bookDemo/bookDemo.vue";
 import content from "../editor/content.vue";
 import detail from "../editor/detail/index.vue";
 import editor from "../editor/index";
 import home from "../home/home.vue";
 import pages from "./index";
-import bookDemo from "../bookDemo/bookDemo.vue"
 function register(pages) {
     let isExist;
     Object.keys(pages).forEach((pagePath) => {
@@ -28,7 +28,10 @@ let routes = [
     { path: "/", redirect: "/home" },
     {
         name: "_portal_",
-        children: [{ path: "/home", component: home },{path:"/bookDemo", component:bookDemo}],
+        children: [
+            { path: "/home", component: home },
+            { path: "/bookDemo", component: bookDemo },
+        ],
     },
     {
         name: "_editor_",

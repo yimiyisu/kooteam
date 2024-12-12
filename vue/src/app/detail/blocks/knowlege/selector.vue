@@ -2,10 +2,9 @@
     <div>
         <el-row :gutter="30">
             <el-col :span="12">
-                <z-table url="/do/select/note_user" :condition="condition" :columns="columns" size="10"
-                    @finish="finish">
+                <z-table url="/do/join/myNote" :condition="condition" :columns="columns" size="10" @finish="finish">
                     <template #title="{ row }">
-                        <z-text @click="select(row)" :modelValue="row.noteId" depend="note" />
+                        <el-link @click="select(row)">{{ row.title }}</el-link>
                     </template>
                 </z-table>
             </el-col>
@@ -42,7 +41,8 @@ export default {
                 this.select(result.list[0])
             }
         },
-        async select({ noteId }) {
+        async select(result) {
+            const { id: noteId } = result
             if (this.current === noteId) {
                 return
             }
