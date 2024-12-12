@@ -59,11 +59,13 @@ export default {
                     status: value.status,
                     owner: value.owner
                 };
-                // await $.post({ url: '/api/archive/put', data: { id: value.id,content:JSON.stringify(value) } })
-                await $.post({ url: '/do/put/thing_archive', data: data })
-                this.log("归档了任务", true);
-                await $.post({ url: "/do/delete/thing", data: { id: value.id } })
-                $.emit("thingUpdate", value, 'remove');
+                await $.post({
+                    url: '/do/put/thing_archive', data: data, success: async () => {
+                        this.log("归档了任务", true);
+                        await $.post({ url: "/do/delete/thing", data: { id: value.id } })
+                        $.emit("thingUpdate", value, 'remove');
+                    }
+                })
             })
         },
         async cmd(command) {
@@ -80,13 +82,16 @@ export default {
             }
             this.$refs.transfer.show()
         },
-        transfer(result, formData) {
+        transfer(formData) {
             const { value } = this;
             value.status = 6;
             value.owner = formData.owner;
-            $.post({ url: '/do/patch/thing', data: value })
-            $.emit("thingUpdate", value, 'remove');
-            this.log("将任务转交给了：" + $.nick(formData.owner))
+            $.post({
+                url: '/do/patch/thing', data: value, success: () => {
+                    $.emit("thingUpdate", value, 'remove');
+                    this.log("将任务转交给了：" + $.nick(formData.owner))
+                }
+            })
         }
     },
 };

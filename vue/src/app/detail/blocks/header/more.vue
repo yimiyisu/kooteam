@@ -20,23 +20,27 @@
 export default {
     inject: ['log', '$dict'],
     props: {
-        value: Object
+        value: Object,
+        readonly: Boolean
     },
     methods: {
         async change(type) {
-            const { value } = this
+            const { value, readonly } = this
+            if (readonly) {
+                return
+            }
             await $.post({ url: '/do/patch/thing', data: value })
             let message;
             if (type === 'owner') {
                 message = "修改责任人为：" + $.nick(value.owner)
             } else if (type === 'thingStatus') {
-                    const dict = this.$dict(type,value.status)
-                    message = '修改状态为：' + dict.label
-                    console.log('dict.label',dict.label)
-                } else {
-                    const dict = this.$dict(type, value.quadrant)
-                    message = '调整优先级为：' + dict.label
-                }
+                const dict = this.$dict(type, value.status)
+                message = '修改状态为：' + dict.label
+                console.log('dict.label', dict.label)
+            } else {
+                const dict = this.$dict(type, value.quadrant)
+                message = '调整优先级为：' + dict.label
+            }
             // $.emit("thingUpdate", value, 'remove');
             this.log(message)
         }

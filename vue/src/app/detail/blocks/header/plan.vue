@@ -19,7 +19,7 @@ const defTime = new Date()
 export default {
     name: "detailPlan",
     inject: ['log'],
-    props: { value: Object },
+    props: { value: Object, readonly: Boolean },
     computed: {
         start() {
             return this.value.start || $.dayjs().unix()
@@ -97,7 +97,7 @@ export default {
     },
     methods: {
         calChange(data) {
-            if (!data) {
+            if (!data || this.readonly) {
                 return
             }
             // 修复默认时间为早上九点

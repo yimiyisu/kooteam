@@ -27,6 +27,7 @@ export default {
             type: Boolean,
             default: false
         },
+        archived: Boolean,
         now: Number
     },
     data() {
@@ -87,7 +88,8 @@ export default {
             });
         },
         detail() {
-            $.emit("thingDetail", this.data);
+            const { archived, data } = this
+            $.emit("thingDetail", { archived, id: data.id });
         },
         dblclick(evt) {
             evt.preventDefault();

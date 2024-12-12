@@ -24,6 +24,7 @@ export default {
     async created() {
         await $.lib('drag-drop.js')
         this.loaded = true
+        $.on("thingUpdate", this.thingChange);
         const { todoGroup, id: projectId } = this.value;
         this.columns = [...todoGroup, { title: '未分类', id: '-1' }];
         this.columns.forEach((item) => {
@@ -46,6 +47,7 @@ export default {
     methods: {
         // 监听外部事件状态变更
         thingChange(thing, action) {
+            debugger
             let column = this.getColumn(thing.tag);
             if (!column) {
                 return;

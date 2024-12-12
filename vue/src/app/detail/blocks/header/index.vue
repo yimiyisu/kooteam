@@ -9,10 +9,10 @@
         创建于：
         <z-idate :value="value.id"></z-idate>
         <z-text v-if="value.projectId" depend="project" :modelValue="value.projectId" />
-        <Action :value="value" />
+        <Action v-if="!readonly" :value="value" />
     </div>
-    <More :value="value" />
-    <Plan :value="value" />
+    <More :readonly="readonly" :value="value" />
+    <Plan :readonly="readonly" :value="value" />
 </template>
 <script>
 import Action from './action.vue';

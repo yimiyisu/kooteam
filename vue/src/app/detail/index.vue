@@ -1,9 +1,9 @@
 <template>
     <el-row v-if="loaded" :gutter="24">
         <el-col :span="16">
-            <Header :value="item" :readonly="!!archiveId" />
-            <Describe :value="item" :readonly="!!archiveId" />
-            <z-block url="/do/list/thingByParent" :params="parent">
+            <Header :value="item" :readonly="archived" />
+            <Describe :value="item" :readonly="archived" />
+            <z-block url="/do/list/thingByParent" v-if="!archived" :params="parent">
                 <template #default="list">
                     <SubTodo :list="list" :archiveId="archiveId" :value="item" />
                 </template>
@@ -27,7 +27,6 @@ export default {
     inject: ["$button"],
     props: {
         data: Object,
-        archived: Boolean,
     },
     components: {
         Comment,
@@ -43,7 +42,7 @@ export default {
             item: {},
             overtime: false,
             parent: null,
-            archiveId: null,
+            archived: null,
         };
     },
     //注入
@@ -66,13 +65,17 @@ export default {
         //params参数个数
         async load(params) {
             let url = "/do/get/thing";
-            const { archived } = this
-            let { id } = params;
+            let { id, archived } = params;
+            this.archived = archived
             this.parent = { parentId: id }
-            if (archived === 1) {
-                url = "/do/get/archive";
+            if (archived) {
+                url = "/do/get/thing_archive";
             }
             let result = await $.post({ data: { id: id }, url });
+            // 查询归档的待办
+            if (!result && !archived) {
+                return this.load({ id, archived: true })
+            }
             let data = archived ? JSON.parse(result.content) : result;
             !data.end && (data.end = 0);
             this.item = data;
