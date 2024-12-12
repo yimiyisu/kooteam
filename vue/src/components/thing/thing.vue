@@ -6,7 +6,7 @@
             <z-icon value="square" v-else />
         </label>
         <el-text truncated>
-            <z-icon value="alertCircle" v-if="overtime" />
+            <z-icon type="warning" value="alertCircle" v-if="overtime" />
             <span :style="'--qcolor:' + quadrant.color" class="quadrant" v-if="quadrant">
                 {{ quadrant.label }}
             </span>
@@ -20,7 +20,7 @@ const quadrantOptions = {
     2: { color: '#BF9F03', label: 'P2' }
 }
 export default {
-    inject: ['$dict'],
+    inject: ['$dict', '$table'],
     props: {
         data: Object,
         quadrantable: {
@@ -34,9 +34,6 @@ export default {
         return {
             timer: null,
         }
-    },
-    created() {
-        $.on("thingUpdate", this.watchStatus);
     },
     computed: {
         quadrant() {
@@ -59,16 +56,11 @@ export default {
         },
     },
     methods: {
-        watchStatus(thing) {
-            const { id, title, status, quadrant } = thing
-            if (this.data.id !== id) {
-                return;
+        change() {
+            const { $table } = this
+            if ($table) {
+                $table.reload()
             }
-            if (quadrant !== this.data.quadrant) {
-                console.log('修改了优先级')
-            }
-            title && (this.data.title = title)
-            this.data.status = status
         },
         async doFinish() {
             let thing = this.data,
@@ -89,6 +81,7 @@ export default {
         },
         detail() {
             const { archived, data } = this
+            $.once('thingUpdate', this.change)
             $.emit("thingDetail", { archived, id: data.id });
         },
         dblclick(evt) {

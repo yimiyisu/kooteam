@@ -7,7 +7,7 @@
 </template>
 <script>
 import Column from "./column";
-
+const watchAttrs = ['title', 'status', 'quadrant', 'owner', 'watchers']
 export default {
     components: { Column },
     props: {
@@ -47,8 +47,7 @@ export default {
     methods: {
         // 监听外部事件状态变更
         thingChange(thing, action) {
-            debugger
-            let column = this.getColumn(thing.tag);
+            let column = this.getColumn(thing.step);
             if (!column) {
                 return;
             }
@@ -61,7 +60,12 @@ export default {
                     if (action === "remove") {
                         things.splice(i, 1);
                     } else {
-                        things[i][action] = thing[action];
+                        // 同步更新样式
+                        watchAttrs.forEach(attr => {
+                            if (thing[attr] !== undefined && thing[attr] !== things[i][attr]) {
+                                things[i][attr] = thing[attr]
+                            }
+                        })
                     }
                     return;
                 }

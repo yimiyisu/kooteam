@@ -40,10 +40,7 @@ export default {
             let url = "/do/patch/thing";
             await $.post({
                 url,
-                data: {
-                    content,
-                    id
-                }
+                data: { content, id }
             });
             this.value.content = content;
             this.editable = false;

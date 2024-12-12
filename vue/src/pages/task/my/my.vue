@@ -7,6 +7,7 @@
 </template>
 <script>
 import Quadrant from "./quadrant";
+const watchAttrs = ['title', 'status', 'owner']
 export default {
     name: "task-my",
     components: { Quadrant },
@@ -70,11 +71,24 @@ export default {
                     if (action === "remove") {
                         things.splice(i, 1);
                     } else {
-                        things[i][action] = thing[action];
+                        watchAttrs.forEach(attr => {
+                            if (thing[attr] !== undefined && thing[attr] !== things[i][attr]) {
+                                things[i][attr] = thing[attr]
+                            }
+                        })
                     }
                     return;
                 }
             }
+            // 变更了优先级
+            const oldQuadrant = this.getQuadrant(action)
+            for (let i = 0; i < oldQuadrant.sons.length; i++) {
+                if (oldQuadrant.sons[i].id === thing.id) {
+                    oldQuadrant.sons.splice(i, 1)
+                    break;
+                }
+            }
+            quadrant.sons.unshift(thing)
         },
         getQuadrant(quadrant) {
             let data;

@@ -23,6 +23,14 @@ export default {
         value: Object,
         readonly: Boolean
     },
+    data() {
+        return {
+            quadrant: null
+        }
+    },
+    created() {
+        this.quadrant = this.value.quadrant
+    },
     methods: {
         async change(type) {
             const { value, readonly } = this
@@ -41,7 +49,7 @@ export default {
                 const dict = this.$dict(type, value.quadrant)
                 message = '调整优先级为：' + dict.label
             }
-            // $.emit("thingUpdate", value, 'remove');
+            $.emit("thingUpdate", value, this.quadrant);
             this.log(message)
         }
     },

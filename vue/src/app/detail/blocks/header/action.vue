@@ -1,7 +1,7 @@
 <template>
     <el-dropdown size="small" class="btn" type="warning" split-button @click="doFinish" @command="cmd">
-        <span class="a-text" v-if="value.status === 0"><z-icon value="checkSquare" />完成</span>
-        <span class="a-text" v-else><z-icon value="xSquare" />取消完成</span>
+        <span class="a-text" v-if="value.status === 6"><z-icon value="xSquare" />取消完成</span>
+        <span class="a-text" v-else><z-icon value="checkSquare" />完成</span>
         <template #dropdown>
             <el-dropdown-menu>
                 <el-dropdown-item command="transfer">完成并转交</el-dropdown-item>
