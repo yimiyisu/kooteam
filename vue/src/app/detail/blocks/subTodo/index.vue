@@ -57,7 +57,7 @@ export default {
         },
         addFinish(result, formData) {
             this.log("添加了子任务:" + formData.title);
-            $.emit('thingUpdate', result, 'add')
+            $.emit('thingUpdate', { ...formData, ...result }, 'add')
         }
     },
 };

@@ -119,7 +119,7 @@ export default {
             let element = this.$refs['main'].$el
             let nextIndex = isFulled ? 0 : this.$index()
             $.fullscreen(element, nextIndex)
-            this.isFulled = isFulled
+            this.isFulled = !isFulled
         },
         getDefaultId(list, current) {
             for (let i = 0; i < list.length; i++) {

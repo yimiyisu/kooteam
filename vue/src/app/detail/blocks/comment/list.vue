@@ -1,6 +1,6 @@
 <template>
     <Editor :value="value" @finish="refresh" />
-    <z-table ref="table" url="/do/select/comment" :size="10" :params="params">
+    <z-table ref="table" url="/do/select/comment" :size="6" :params="params">
         <template #default="{ row }">
             <el-row :key="row.id" class="item">
                 <el-col :span="4">
@@ -75,7 +75,10 @@ export default {
 
 .images {
     .a-image {
-        margin-top: 4px;
+        &+.a-image {
+            margin-left: 4px;
+        }
+
         width: 40px;
         height: 40px;
         overflow: hidden;

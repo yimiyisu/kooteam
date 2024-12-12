@@ -12,7 +12,7 @@
             <z-action mode="popover" url="/do/patch/thing" :data="value" :fields="fields" width="420px" type="text"
                 icon="edit3" />
             <z-action type="text" url="/do/delete/thing" :data="value" icon="trash" @finish="remove" />
-            <z-avatar :tip="false" :value="value.owner" />
+            <z-avatar size="20px" :tip="false" :value="value.owner" />
         </div>
     </div>
 </template>
@@ -43,8 +43,9 @@ export default {
                 url: "/do/patch/thing",
             });
             let msg = status === 0 ? "取消完成" : "完成了";
+            value.status = status
             this.log(msg + "子任务:" + value.title);
-            $.emit('thingUpdate', this.thing)
+            $.emit('thingUpdate', value)
         },
     },
 };
@@ -52,22 +53,17 @@ export default {
 <style lang="scss" scoped>
 .k-thing {
     position: relative;
-    margin-bottom: 12px;
+    padding: 6px;
+    border-radius: 4px;
 
-    &:hover :deep(.a-tooltip__trigger) {
-        display: inline-block;
+    &:hover {
+        background: var(--a-fill-color);
+
+        :deep(.action .a-icon) {
+
+            display: inline-block;
+        }
     }
-}
-
-.action {
-    position: absolute;
-    top: 38px;
-    right: 0;
-
-}
-
-:deep(.a-tooltip__trigger) {
-    display: none;
 }
 
 .content {
@@ -78,9 +74,10 @@ export default {
     position: absolute;
     text-align: right;
     top: 4px;
-    right: 0;
+    right: 6px;
 
     :deep(.a-icon) {
+        display: none;
         padding-right: 10px;
     }
 }

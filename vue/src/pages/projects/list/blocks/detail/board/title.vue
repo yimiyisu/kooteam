@@ -11,8 +11,7 @@
                     <z-icon value="plus" size="18" class="hover" @click="toggle" />
                 </template>
             </el-popover>
-            <!-- 更多--重命名、导出卡片 -->
-            <el-dropdown :hide-on-click="false">
+            <!-- <el-dropdown :hide-on-click="false">
                 <z-icon size="18" value="moreHorizontal" class="hover" />
                 <template #dropdown>
                     <el-dropdown-menu>
@@ -20,7 +19,7 @@
                         <el-dropdown-item>导出卡片</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
-            </el-dropdown>
+            </el-dropdown> -->
         </div>
     </div>
 </template>
