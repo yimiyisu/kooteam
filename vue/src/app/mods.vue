@@ -1,8 +1,4 @@
 <template>
-    <el-dropdown-item>
-        <z-action link v-if="profile.role === 5" width="800" from="/api/system/mods" :fields="fields"
-            url="/api/system/mods" label="微模块" />
-    </el-dropdown-item>
     <el-dropdown-item v-if="profile.env === 'demo'">
         <el-link target="_blank" href="https://gitee.com/yimiyisu/kooteam">源码地址</el-link>
     </el-dropdown-item>
