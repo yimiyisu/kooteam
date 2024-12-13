@@ -4,10 +4,6 @@
     position: relative;
     cursor: pointer;
 
-    &.finish {
-        color: var(--a-text-color-placeholder);
-    }
-
     label {
         display: inline-block;
         cursor: pointer;
