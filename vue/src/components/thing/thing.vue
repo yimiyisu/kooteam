@@ -6,7 +6,7 @@
             <z-icon value="square" v-else />
         </label>
         <el-text truncated>
-            <z-icon type="warning" value="alertCircle" v-if="overtime" />
+            <z-icon type="warning" tooltip="已延期" value="alertCircle" v-if="overtime" />
             <span :style="'--qcolor:' + quadrant.color" class="quadrant" v-if="quadrant">
                 {{ quadrant.label }}
             </span>
