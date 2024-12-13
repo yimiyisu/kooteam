@@ -21,11 +21,11 @@ Start() {
     proc=$(ps -ef | grep ${SERVICE}.jar | grep -v grep | wc -l)
     if [ $proc != 0  ];then
       sleep 3
-      echo 'Kooteam Is Runing'
+      echo 'Kooteam Is Runing! http://127.0.0.1:7053'
       exit 5
     else
-      nohub exec java -server -Xms${MEMORY} -Xmx${MEMORY}  -jar ./${SERVICE}.jar >> ./${SERVICE}.log 2>&1 &
-      echo 'Starting Success'
+      java -server -Xms${MEMORY} -Xmx${MEMORY}  -jar ./${SERVICE}.jar >> ./${SERVICE}.log &
+      echo 'Starting Success! http://127.0.0.1:7053'
     fi
 }
 
