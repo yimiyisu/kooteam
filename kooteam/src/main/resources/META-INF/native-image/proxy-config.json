@@ -1,0 +1,11 @@
+[
+  {
+    "interfaces":["java.sql.CallableStatement"]
+  },
+  {
+    "interfaces":["java.sql.Connection"]
+  },
+  {
+    "interfaces":["java.sql.ResultSet"]
+  }
+]

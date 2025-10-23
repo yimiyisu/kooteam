@@ -1,0 +1,1 @@
+{"name":"manhour_my","type":"list","table":"manhour","where":{"relate":"AND","exprs":[{"operator":0,"column":"uid","alias":"","from":2,"need":false,"value":"uid"}],"operator":0,"from":0,"need":false},"role":2,"params":[],"outputs":["id","creator","create_gmt","update_gmt","duration","project_id","uid","role","status"],"order":{"name":"create_gmt","type":-1}}

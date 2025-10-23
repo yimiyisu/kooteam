@@ -7,12 +7,12 @@
             </div>
         </el-col>
         <el-col :span="18">
-            <el-image src="https://a.ebus.vip/kooteam/banner/todo.jpg" />
+            <el-image src="https://a.ebus.vip/banner/todo.jpg" />
         </el-col>
     </el-row>
     <el-row class="blocks">
         <el-col :span="18">
-            <el-image src="https://a.ebus.vip/kooteam/banner/project.jpg" />
+            <el-image src="https://a.ebus.vip/banner/project.jpg" />
         </el-col>
         <el-col :span="6">
             <div class="wrap-rights">
@@ -29,12 +29,12 @@
             </div>
         </el-col>
         <el-col :span="18">
-            <el-image src="https://a.ebus.vip/kooteam/banner/wiki.jpg" />
+            <el-image src="https://a.ebus.vip/banner/wiki.jpg" />
         </el-col>
     </el-row>
     <el-row class="blocks">
         <el-col :span="18">
-            <el-image src="https://a.ebus.vip/kooteam/banner/week.jpg" />
+            <el-image src="https://a.ebus.vip/banner/week.jpg" />
         </el-col>
         <el-col :span="6">
             <div class="wrap-rights">

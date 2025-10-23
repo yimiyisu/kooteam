@@ -1,3 +1,4 @@
+import TaskAllList from "./allList/allList";
 import TaskArchive from "./archive/archive";
 import TaskCalendar from "./calendar/calendar";
 import TaskGantt from "./gantt/gantt";
@@ -6,6 +7,7 @@ import TaskMy from "./my/my";
 import TaskWatch from "./watch/watch";
 
 export default {
+	'task/allList': TaskAllList,
 	'task/archive': TaskArchive,
 	'task/calendar': TaskCalendar,
 	'task/gantt': TaskGantt,

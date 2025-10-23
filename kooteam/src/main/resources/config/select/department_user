@@ -1,0 +1,1 @@
+{"name":"department_user","type":"select","table":"department_user","where":{"relate":"AND","exprs":[{"operator":7,"column":"department_id","alias":"","from":1,"need":false}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","department_id","create_gmt","update_gmt","role"]}

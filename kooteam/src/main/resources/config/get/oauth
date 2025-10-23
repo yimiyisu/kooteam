@@ -1,0 +1,1 @@
+{"name":"oauth","type":"get","table":"oauth","where":{"relate":"AND","exprs":[{"operator":0,"column":"","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","creator","update_gmt","domain","access_key","secret_key"]}

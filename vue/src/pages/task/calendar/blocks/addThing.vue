@@ -1,6 +1,6 @@
 <template>
     <div class="add">
-        <el-input v-model="title" ref="input" autosize type="textarea" :rows="4" placeholder="请输入要处理的事项" @keydown.stop="keyup" />
+        <el-input v-model="title" ref="input" autosize type="textarea" :rows="4" placeholder="请输入要处理的事项" @keydown.stop="keydown" />
         <div class="z-form-action prority">
             <div class="dict">
                 <z-dict code="quadrantType" v-model="quadrant" />
@@ -26,10 +26,10 @@ export default {
         this.$refs['input'].focus()
     },
     methods: {
-        keyup(event) {
+        keydown(event) {
             event.stopPropagation();
-            let code = event.keyCode;
-            if (code === 13) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
                 this.save();
                 return this.title = "";
             }

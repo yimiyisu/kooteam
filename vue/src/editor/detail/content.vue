@@ -19,7 +19,7 @@
             <z-icon value="chevronLeft" v-if="prevId" size="48" @click="() => open(prevId)" class="hover prev" />
             <z-icon value="chevronRight" v-if="nextId" size="48" @click="() => open(nextId)" class="hover next" />
             <div ref="content" class="content">
-                <z-block url="/do/get/note_content" :params="params" @finish="renderPlugin">
+                <z-block v-if="data != -1" url="/api/home/noteContent" :params="params" @finish="renderPlugin">
                     <template #default="result">
                         <h3 class="title2">
                             {{ result.title }}
@@ -61,7 +61,9 @@ export default {
         if (!this.data || !this.data.content) {
             return this.empty = true
         }
-        const { article } = this.$route.query;
+        const params = $.getParams()
+        console.log(params)
+        const { article } = params;
         if (article) {
             this.current = article
             this.params = { id: article }
@@ -70,19 +72,17 @@ export default {
             this.current = id
             this.params = { id }
         }
-
+        console.log(this.params)
     },
     methods: {
         open(item) {
             const id = item.id ? item.id : item
-            const { query } = this.$route
             this.current = id
             this.params = { id }
             this.nextId = null
             this.prevId = null
             this.isNext = false
             this.initNavId(this.data.content)
-            this.$router.push({ query: { ...query, article: id } })
         },
         initNavId(list) {
             for (let i = 0; i < list.length; i++) {
@@ -220,7 +220,7 @@ export default {
 }
 
 .content {
-    max-width: 800px;
+    max-width: 1050px;
     height: 100%;
     margin: 0 auto;
 }

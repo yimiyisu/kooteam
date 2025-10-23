@@ -1,5 +1,5 @@
 <template>
-  <z-table name="tquveqrop7u">
+  <z-table name="tquveqrop7u" :entitys="entitys">
   </z-table>
 </template>
 
@@ -8,9 +8,16 @@ import configs from './.lowcode/configs';
 
 export default {
   name: 'p-tquveqrop7u',
-  provide: { configs },
+    provide: { configs },
   data() {
-    return {}
+      return {
+        entitys:{
+                role:{
+                    name: "role",
+                    default: 5
+                }
+            }
+    }
   },
 }
 </script>

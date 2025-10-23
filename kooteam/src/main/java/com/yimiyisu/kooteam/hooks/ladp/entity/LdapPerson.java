@@ -39,7 +39,7 @@ public class LdapPerson implements LdapEntry {
     private String gidNumber;
 
     /**
-     * common name
+     * common title
      */
     private String cn;
     /**
@@ -56,7 +56,7 @@ public class LdapPerson implements LdapEntry {
      */
     private String givenName;
     /**
-     * display name，显示名
+     * display title，显示名
      */
     private String displayName;
     /**

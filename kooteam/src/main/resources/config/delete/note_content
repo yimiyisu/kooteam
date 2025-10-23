@@ -1,1 +1,1 @@
-{"name":"note_content","type":"delete","table":"note_content","msg":"操作成功！","where":{"relate":"AND","exprs":[{"operator":0,"column":"id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id"]}
+{"name":"note_content","type":"delete","table":"note_content","msg":"","where":{"relate":"AND","exprs":[{"operator":0,"column":"id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":[]}

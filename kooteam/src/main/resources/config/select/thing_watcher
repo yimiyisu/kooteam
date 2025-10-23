@@ -1,1 +1,0 @@
-{"name":"thing_watcher","type":"select","table":"thing_watcher","where":{"relate":"AND","exprs":[{"operator":0,"column":"uid","alias":"","from":2,"need":false,"value":"uid"}],"operator":0,"from":0,"need":false},"role":2,"params":[],"outputs":["thing_id"],"order":{"name":"id","type":-1}}

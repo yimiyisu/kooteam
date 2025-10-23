@@ -8,12 +8,12 @@ import com.zen.ZenApp;
 
 
 public class Application extends ZenApp {
+
     public static void main(String[] args) {
         // 应用端口
         int listenPort = 7053;
         String appName = "kooteam";
         ZenApp app = new Application();
-        app.scanController();
         app.start(args, appName, listenPort);
     }
 }

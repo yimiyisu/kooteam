@@ -3,9 +3,9 @@
         <el-col :span="16">
             <Header :value="item" :readonly="archived" />
             <Describe :value="item" :readonly="archived" />
-            <z-block url="/do/list/thingByParent" v-if="!archived" :params="parent">
+            <z-block ref="subtask" url="/do/list/thingByParent" v-if="!archived" :params="parent">
                 <template #default="list">
-                    <SubTodo :list="list" :archiveId="archiveId" :value="item" />
+                    <SubTodo :list="list" :archived="archived" :value="item" @thingUpdate="update" />
                 </template>
             </z-block>
             <Knowlege :value="item" />
@@ -92,6 +92,10 @@ export default {
                 url: "/do/put/thing_log",
             });
             closed && this.$button.close()
+        },
+        update(params) {
+            console.log(params)
+            this.$refs.subtask.refresh();
         },
     },
 };

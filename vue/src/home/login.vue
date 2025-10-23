@@ -24,16 +24,13 @@ export default {
     },
     methods: {
         async show() {
-            const data = await $.post({ url: "/api/auth/check", data: { host: location.origin } });
+            const redirect = location.origin + '/kooteam/welcome'
+            const data = await $.post({ url: "/api/auth/check", data: { redirect } });
             if (data.logined) {
                 return this.$router.push("/welcome")
             }
-            const { loginMode, isDemo } = data;
-            if (isDemo) {
-                this.formData = { username: 'demo', password: 'N2q9dsovEDyzUYjV' }
-            } else {
-                this.formData = {}
-            }
+            const { loginMode } = data;
+            this.formData = {}
             if (data.passwordMode === "1" || loginMode === 'ladp') {
                 this.showQR = QRList.includes(loginMode);
             } else {

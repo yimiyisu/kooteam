@@ -1,0 +1,1 @@
+{"name":"approval_group","type":"select","table":"approval_group","where":{"relate":"AND","exprs":[{"operator":5,"alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","creator","create_gmt","update_gmt","title","desc"],"order":{"name":"id","type":-1}}

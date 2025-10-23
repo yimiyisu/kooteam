@@ -20,6 +20,11 @@
                 <Mail v-if="current === 'mail'" />
             </div>
         </el-tab-pane>
+        <el-tab-pane label="应用管理" name="app">
+            <div style="width:960px">
+                <Apps v-if="current === 'app'" />
+            </div>
+        </el-tab-pane>
         <!-- <el-tab-pane label="开发平台配置" name="open">
             <div style="width:720px">
                 <Open v-if="current === 'open'" />
@@ -28,11 +33,13 @@
     </el-tabs>
 </template>
 <script>
+import Apps from './blocks/apps.vue';
 import Mail from './blocks/mail.vue';
 import Storage from './blocks/storage/index.vue';
 import Third from './blocks/third/index.vue';
+
 export default {
-    components: { Third, Storage, Mail },
+    components: { Third, Storage, Mail, Apps },
     data() {
         return {
             current: 'basic',
@@ -43,7 +50,7 @@ export default {
                 { label: "ICP备案号", name: "icp" },
                 { label: "默认主题色", name: "color", type: "color" },
                 { label: "禁用多主题", name: "theme", type: "switch" },
-                // { label: "系统Logo", name: "logo", type: "image", tip: "建议尺寸64x64" },
+                { label: "系统Logo", name: "logo", type: "image", tip: "建议尺寸64x64" },
                 // { label: "欢迎背景图", name: "bg", type: "image", tip: "建议尺寸900x1500" }
             ]
         }

@@ -3,6 +3,9 @@
         <template #header$>
             <z-action label="添加用户" width="520" :fields="addFields" url="/api/zen/addUser" />
         </template>
+        <template #id="{ row }">
+            <z-idate :value="row.id" />
+        </template>
         <template #status="{ row }">
             <el-tag v-if="hasTag(row.tag, 12)" type="info">已禁用</el-tag>
             <el-tag v-else type="success">正常</el-tag>
@@ -25,7 +28,7 @@ export default {
     provide: { configs: { entitys: configs } },
     data() {
         return {
-            columns: ['nick', 'role', 'username', 'status', 'createGmt'],
+            columns: ['nick', 'role', 'username', 'status', 'id'],
             addFields: ['username', 'nick', 'password', 'password2'],
             editFields: ['password', 'password2'],
             roleFields: ['role'],

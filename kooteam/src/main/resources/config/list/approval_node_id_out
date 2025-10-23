@@ -1,0 +1,1 @@
+{"name":"approval_node_id_out","type":"list","table":"approval_node","where":{"relate":"AND","exprs":[{"operator":0,"column":"approval_id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","out_id"]}

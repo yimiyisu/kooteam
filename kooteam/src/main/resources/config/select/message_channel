@@ -1,0 +1,1 @@
+{"name":"message_channel","type":"select","table":"message_channel","where":{"relate":"AND","exprs":[{"operator":0,"column":"","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","type","title","config","configs","message_type"],"order":{"name":"update_gmt","type":-1}}

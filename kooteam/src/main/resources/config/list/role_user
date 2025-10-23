@@ -1,0 +1,1 @@
+{"name":"role_user","type":"list","table":"role_user","msg":"","where":{"relate":"AND","exprs":[{"operator":0,"column":"role_id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["uid","role_id","id"],"order":{"name":"id","type":-1}}

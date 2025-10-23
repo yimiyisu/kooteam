@@ -10,8 +10,8 @@ export default {
     data() {
         return {
             urls: [
-                "https://a.ebus.vip/kooteam/banner/1.jpg",
-                "https://a.ebus.vip/kooteam/banner/2.jpg",
+                "https://a.ebus.vip/banner/1.jpg",
+                "https://a.ebus.vip/banner/2.jpg",
             ],
         };
     },

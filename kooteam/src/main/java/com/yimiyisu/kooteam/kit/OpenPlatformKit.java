@@ -4,8 +4,13 @@ import com.yimiyisu.kooteam.kit.openPlatform.DefaultPlatform;
 import com.yimiyisu.kooteam.kit.openPlatform.DingdingPlatform;
 import com.yimiyisu.kooteam.kit.openPlatform.IOpenPlatform;
 import com.yimiyisu.kooteam.kit.openPlatform.WeworkPlatform;
+import com.zen.domain.MessageDO;
 import com.zen.domain.ZenUser;
 import com.zen.kit.ConfigKit;
+import com.zen.kit.UserKit;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OpenPlatformKit {
     private static IOpenPlatform openPlatform = null;
@@ -33,4 +38,16 @@ public class OpenPlatformKit {
         i().completeUser(user);
     }
 
+    /*
+    * 获取平台openId
+    * */
+    public static String getOpenId(MessageDO messageDO, String delimiter) {
+        List<String> recievers = messageDO.getRecievers();
+        List<String> uidList = new ArrayList<>();
+        for (String uid : recievers) {
+            ZenUser zenUser = UserKit.get(uid);
+            uidList.add(zenUser.getOpenId());
+        }
+        return String.join(delimiter, uidList);
+    }
 }

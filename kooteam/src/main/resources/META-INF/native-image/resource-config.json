@@ -1,0 +1,100 @@
+{
+  "resources": {
+    "includes": [
+      {
+        "pattern": "\\QMETA-INF/services/ch.qos.logback.classic.spi.Configurator\\E"
+      },
+      {
+        "pattern": "\\QMETA-INF/services/io.opentelemetry.context.ContextStorageProvider\\E"
+      },
+      {
+        "pattern": "\\QMETA-INF/services/java.lang.System$LoggerFinder\\E"
+      },
+      {
+        "pattern": "\\QMETA-INF/services/java.net.spi.InetAddressResolverProvider\\E"
+      },
+      {
+        "pattern": "\\QMETA-INF/services/java.net.spi.URLStreamHandlerProvider\\E"
+      },
+      {
+        "pattern": "\\QMETA-INF/services/java.nio.channels.spi.SelectorProvider\\E"
+      },
+      {
+        "pattern": "\\QMETA-INF/services/java.nio.file.spi.FileSystemProvider\\E"
+      },
+      {
+        "pattern": "\\QMETA-INF/services/java.time.zone.ZoneRulesProvider\\E"
+      },
+      {
+        "pattern": "\\QMETA-INF/services/java.util.spi.ResourceBundleControlProvider\\E"
+      },
+      {
+        "pattern": "\\QMETA-INF/services/javax.xml.parsers.SAXParserFactory\\E"
+      },
+      {
+        "pattern": "\\QMETA-INF/services/org.slf4j.spi.SLF4JServiceProvider\\E"
+      },
+      {
+        "pattern": "\\Q\\E"
+      },
+      {
+        "pattern": "\\Qcom/mysql/cj/TlsSettings.properties\\E"
+      },
+      {
+        "pattern": "\\Qcom/yimiyisu/kooteam\\E"
+      },
+      {
+        "pattern": "\\Qconfig/app\\E"
+      },
+      {
+        "pattern": "\\Qconfig/tables\\E"
+      },
+      {
+        "pattern": "\\Qlogback-test.scmo\\E"
+      },
+      {
+        "pattern": "\\Qlogback-test.xml\\E"
+      },
+      {
+        "pattern": "\\Qlogback.scmo\\E"
+      },
+      {
+        "pattern": "\\Qlogback.xml\\E"
+      },
+      {
+        "pattern": "java.base:\\Qjdk/internal/icu/impl/data/icudt72b/nfc.nrm\\E"
+      },
+      {
+        "pattern": ".*"
+      },
+      {
+        "pattern": ".*\\.html"
+      },
+      {
+        "pattern": ".*\\.css"
+      },
+      {
+        "pattern": ".*\\.js"
+      },
+      {
+        "pattern": ".*\\.(svg|png|jpg|jpeg|gif|ico|woff2?)"
+      },
+      {
+        "pattern": "config/.*"
+      }
+    ]
+  },
+  "bundles": [
+    {
+      "name": "com.mysql.cj.LocalizedErrorMessages",
+      "locales": [
+        ""
+      ]
+    }
+  ],
+  "excludes": [
+    {
+      "pattern": "*\\.properties"
+    }
+  ]
+}

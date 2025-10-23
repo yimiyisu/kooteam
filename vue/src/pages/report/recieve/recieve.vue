@@ -5,7 +5,7 @@
         </template>
     </z-table>
     <z-action ref="action" title="周报详情" width="1000px">
-        <Detail :weekId="weekId" />
+        <Detail :week="week" />
     </z-action>
 </template>
 
@@ -19,12 +19,12 @@ export default {
     provide: { configs },
     data() {
         return {
-            weekId: null
+            week: null
         }
     },
     methods: {
         show(row) {
-            this.weekId = row.weekId
+            this.week = row
             this.$refs['action'].show()
         }
     }

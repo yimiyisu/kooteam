@@ -1,9 +1,12 @@
 <template>
     <div class="a-card is-hover-shadow">
         <div class="title">
-            <el-text>
+            <el-text class="title-container">
+                <div class="left-items">
                 <z-icon @click="favi" value="star" :style="'--color: var(' + color + ')'" class="hover star" />
                 <span @click="detail(value.id)" class="hover">{{ value.title }}</span>
+                </div>
+                <z-icon @click="exit(value)" value="logOut" class="exit-icon"/>
             </el-text>
         </div>
         <div class="more">
@@ -40,6 +43,18 @@ export default {
             const newTag = tagLeft ? 0 : 1
             await $.post({ url: '/do/patch/note_user', data: { tag: newTag, id: idLeft } })
             this.value.tagLeft = newTag
+        },
+        async exit(value) {
+            const { relateId } = value.idLeft;
+            $.confirm("确定退出知识库吗？",
+                async () => {
+                    if (value.typeLeft == 9) {
+                        $.fail("管理员不能退出知识库")
+                        return
+                    }
+                    await $.post({ url: '/do/delete/note_user', data: { id: relateId } })
+                },
+            )
         }
     },
 }
@@ -60,6 +75,32 @@ export default {
     .a-text {
         cursor: pointer;
     }
+}
+
+.title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.left-items {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  flex: 1;
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+  }
+}
+
+.exit-icon {
+  flex-shrink: 0;
+  margin-left: 10px;
 }
 
 .more {

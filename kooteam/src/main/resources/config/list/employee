@@ -1,0 +1,1 @@
+{"name":"employee","type":"list","table":"employee","where":{"relate":"AND","exprs":[{"operator":3,"column":"update_gmt","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":2,"params":[],"outputs":["id","update_gmt"]}

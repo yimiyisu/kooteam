@@ -1,5 +1,3 @@
-import content from "../editor/content.vue";
-import detail from "../editor/detail/index.vue";
 import editor from "../editor/index";
 import home from "../home/home.vue";
 import pages from "./index";
@@ -24,7 +22,10 @@ function register(pages) {
 }
 
 let routes = [
-    { path: "/", redirect: "/home" },
+    // { path: "/", redirect: "/system/stat" },
+    // { path: "/welcome", redirect: "/system/stat" },
+    { path: "/", redirect: "/task/my" },
+    { path: "/welcome", redirect: "/task/my" },
     {
         name: "_portal_",
         children: [{ path: "/home", component: home }],
@@ -33,11 +34,10 @@ let routes = [
         name: "_editor_",
         children: [
             { path: "/editor", component: editor },
-            { path: "/knowledge", component: detail },
-            { path: "/knowledge/:id", component: content },
+            // { path: "/knowledge", component: detail },
+            // { path: "/knowledge/:id", component: content },
         ],
     },
-    { path: "/welcome", redirect: "/task/my" },
 ];
 
 register(pages);

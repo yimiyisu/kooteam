@@ -1,0 +1,876 @@
+[
+  {
+    "name":"apple.security.AppleProvider",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"ch.qos.logback.classic.encoder.PatternLayoutEncoder",
+    "queryAllPublicMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"ch.qos.logback.classic.joran.SerializedModelConfigurator",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"ch.qos.logback.classic.pattern.DateConverter",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"ch.qos.logback.classic.pattern.LevelConverter",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"ch.qos.logback.classic.pattern.LineSeparatorConverter",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"ch.qos.logback.classic.pattern.LoggerConverter",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"ch.qos.logback.classic.pattern.MessageConverter",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"ch.qos.logback.classic.pattern.ThreadConverter",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"ch.qos.logback.classic.util.DefaultJoranConfigurator",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"ch.qos.logback.core.ConsoleAppender",
+    "queryAllPublicMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"ch.qos.logback.core.FileAppender",
+    "queryAllPublicMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setFile","parameterTypes":["java.lang.String"] }]
+  },
+  {
+    "name":"ch.qos.logback.core.OutputStreamAppender",
+    "methods":[{"name":"setEncoder","parameterTypes":["ch.qos.logback.core.encoder.Encoder"] }]
+  },
+  {
+    "name":"ch.qos.logback.core.encoder.Encoder",
+    "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
+  },
+  {
+    "name":"ch.qos.logback.core.encoder.LayoutWrappingEncoder",
+    "methods":[{"name":"setParent","parameterTypes":["ch.qos.logback.core.spi.ContextAware"] }]
+  },
+  {
+    "name":"ch.qos.logback.core.pattern.PatternLayoutEncoderBase",
+    "methods":[{"name":"setPattern","parameterTypes":["java.lang.String"] }]
+  },
+  {
+    "name":"ch.qos.logback.core.spi.ContextAware",
+    "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
+  },
+  {
+    "name":"com.google.common.util.concurrent.AbstractFutureState",
+    "fields":[{"name":"listeners"}, {"name":"value"}, {"name":"waiters"}]
+  },
+  {
+    "name":"com.google.common.util.concurrent.AbstractFutureState$Waiter",
+    "fields":[{"name":"next"}, {"name":"thread"}]
+  },
+  {
+    "name":"com.mysql.cj.conf.url.SingleConnectionUrl",
+    "methods":[{"name":"<init>","parameterTypes":["com.mysql.cj.conf.ConnectionUrlParser","java.util.Properties"] }]
+  },
+  {
+    "name":"com.mysql.cj.jdbc.AbandonedConnectionCleanupThread"
+  },
+  {
+    "name":"com.mysql.cj.jdbc.Driver",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.mysql.cj.log.StandardLogger",
+    "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+  },
+  {
+    "name":"com.mysql.cj.protocol.StandardSocketFactory",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.sun.crypto.provider.AESCipher$General",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.sun.crypto.provider.ARCFOURCipher",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.sun.crypto.provider.ChaCha20Cipher$ChaCha20Poly1305",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.sun.crypto.provider.DESCipher",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.sun.crypto.provider.DESedeCipher",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.sun.crypto.provider.DHParameters",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.sun.crypto.provider.GaloisCounterMode$AESGCM",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.sun.crypto.provider.HmacCore$HmacSHA384",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.sun.crypto.provider.TlsMasterSecretGenerator",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.Application"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.controller.Archive",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.controller.Home",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.controller.Pay",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.controller.Project",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.controller.System",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.controller.User",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.domain.LogDO"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.domain.MonitorInfoDO"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.domain.PermissionAppDO"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.domain.PermissionConfigDO"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.domain.PermissionPageDO"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.domain.ThreadInfoDo"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.CleanTokenLoopEvent",
+    "allDeclaredFields":true,
+    "queryAllDeclaredMethods":true,
+    "queryAllPublicMethods":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.NewUserEvent",
+    "allDeclaredFields":true,
+    "queryAllDeclaredMethods":true,
+    "queryAllPublicMethods":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.WeekReportEvent",
+    "allDeclaredFields":true,
+    "queryAllDeclaredMethods":true,
+    "queryAllPublicMethods":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.DepartmentEvent",
+    "allDeclaredFields":true,
+    "queryAllDeclaredMethods":true,
+    "queryAllPublicMethods":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.DepartmentLoopEvent",
+    "allDeclaredFields":true,
+    "queryAllDeclaredMethods":true,
+    "queryAllPublicMethods":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.domain.DepartmentDO"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.domain.DepartmentUserDO"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.model.DepartmentEventModel"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.model.DepartmentLoopEventModel",
+    "queryAllPublicConstructors":true
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.DingDing"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.FeiShu"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.IDepartmentSync"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.WeWork"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.accessToken.AccessToken"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.accessToken.FeishuAccessToken"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.result.DingDingResult"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.result.DingDingResult$Result"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.result.DingdingDepartmentResult"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.result.DingdingDepartmentResult$Result"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.result.DingdingUserResult"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.result.FeishuDepartment"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.result.FeishuDepartment$departmentLeader"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.result.FeishuDepartment$department_i18n_name"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.result.FeishuDepartment$status"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.result.FeishuResult"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.result.FeishuResult$FeishuData"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.result.WeWorkDepartmentResult"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.result.WeWorkDepartmentResult$Result"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.result.WeWorkResult"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.result.WeWorkResult$Result"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.result.WeWorkUserResult"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.department.third.res.result.WeWorkUserResult$UserResult"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.IMessage"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.MessageEvent",
+    "allDeclaredFields":true,
+    "queryAllDeclaredMethods":true,
+    "queryAllPublicMethods":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.MessageLoopEvent",
+    "allDeclaredFields":true,
+    "queryAllDeclaredMethods":true,
+    "queryAllPublicMethods":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.DingdingMessage"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.EmailMessage"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.EmailMessage$1"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.FeishuMessage"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.WechatMessage"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.WeworkMessage"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.WldMessage"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.AttachDataSource"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.ChannelInfo"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.DingdingMessageDO"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.DingdingMessageDO$ActionCardContent"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.DingdingMessageDO$ActionCardContent$Button"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.DingdingMessageDO$FileContent"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.DingdingMessageDO$ImageContent"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.DingdingMessageDO$LinkContent"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.DingdingMessageDO$MarkdownContent"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.DingdingMessageDO$Msg"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.DingdingMessageDO$OAContent"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.DingdingMessageDO$OAContent$OABody"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.DingdingMessageDO$OAContent$OABody$Form"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.DingdingMessageDO$OAContent$OABody$Rich"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.DingdingMessageDO$OAContent$OAHead"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.DingdingMessageDO$OAContent$StatusBar"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.DingdingMessageDO$TextContent"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.DingdingMessageDO$VoiceContent"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.FeishuMessageDO"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.FeishuMessageDO$FeishuMessageDOBuilder"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.FeishuMessageDO$TextContent"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.FeishuMessageDO$TextContent$TextContentBuilder"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.WeworkTextMessageDO"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.WeworkTextMessageDO$TextContent"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.messageenum.DingdingMsgType"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.messageenum.FeishuMsgReceiveIdType"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.channels.domain.messageenum.FeishuMsgType"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.domain.MessageLoopModel",
+    "queryAllPublicConstructors":true
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.domain.MessageResultDO"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.message.domain.TemplateDO"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.model.CleanTokenModel",
+    "queryAllPublicConstructors":true
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.model.WeekReportModel"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.events.util.Email"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.approval.PutHook",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.ladp.LadpHook",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.ladp.LdapClient"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.ladp.LdapSession"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.ladp.LdapSessionDefault"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.ladp.entity.LdapEntry"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.ladp.entity.LdapGroup"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.ladp.entity.LdapPerson"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.ladp.exception.IllegalConfigException"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.ladp.exception.IllegalGroupException"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.ladp.exception.IllegalPaaswordException"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.ladp.exception.IllegalPersonException"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.ladp.utils.Base64Utils"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.ladp.utils.PasswordUtils"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.note.DeleteHook",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.note.PutHook",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.project.PutProjectHook",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.project.PutProjectUserHook",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.role.DeletetHook",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.role.GetHook",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.role.PutHook",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.thing.PatchHook",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.thing.PutThingHook",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.weekReport.SendHook",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.hooks.zen.ZenMenuHook",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.kit.OpenPlatformKit"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.kit.PerformanceKit"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.kit.openPlatform.DefaultPlatform"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.kit.openPlatform.DingdingPlatform"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.kit.openPlatform.FeishuPlatform"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.kit.openPlatform.IOpenPlatform"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.kit.openPlatform.WeworkPlatform"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.service.LogGetService"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.service.PermissionService",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.yimiyisu.kooteam.service.impl.HuoShanLogGetService"
+  },
+  {
+    "name":"com.yimiyisu.kooteam.service.impl.TencentLogGetService"
+  },
+  {
+    "name":"com.zen.ZenEngine",
+    "allDeclaredFields":true
+  },
+  {
+    "name":"com.zen.c.a",
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.zen.c.b",
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.zen.domain.model.Column",
+    "allDeclaredFields":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.zen.domain.model.Index",
+    "allDeclaredFields":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.zen.domain.model.TableSchema",
+    "allDeclaredFields":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.zen.e.b.a.c",
+    "allDeclaredFields":true
+  },
+  {
+    "name":"com.zen.g.b.a",
+    "queryAllDeclaredMethods":true
+  },
+  {
+    "name":"com.zen.g.b.b",
+    "queryAllDeclaredMethods":true,
+    "methods":[{"name":"a","parameterTypes":["com.zen.g.a.b"] }]
+  },
+  {
+    "name":"com.zen.interfaces.IEvent",
+    "queryAllDeclaredMethods":true
+  },
+  {
+    "name":"io.opentelemetry.api.GlobalOpenTelemetry"
+  },
+  {
+    "name":"io.opentelemetry.sdk.autoconfigure.AutoConfiguredOpenTelemetrySdk"
+  },
+  {
+    "name":"java.io.FilePermission"
+  },
+  {
+    "name":"java.lang.Class",
+    "methods":[{"name":"getRecordComponents","parameterTypes":[] }, {"name":"isRecord","parameterTypes":[] }]
+  },
+  {
+    "name":"java.lang.Object",
+    "queryAllDeclaredMethods":true
+  },
+  {
+    "name":"java.lang.RuntimePermission"
+  },
+  {
+    "name":"java.lang.Thread",
+    "fields":[{"name":"threadLocalRandomProbe"}]
+  },
+  {
+    "name":"java.lang.invoke.VarHandle"
+  },
+  {
+    "name":"java.lang.reflect.RecordComponent",
+    "methods":[{"name":"getName","parameterTypes":[] }, {"name":"getType","parameterTypes":[] }]
+  },
+  {
+    "name":"java.net.NetPermission"
+  },
+  {
+    "name":"java.net.SocketPermission"
+  },
+  {
+    "name":"java.net.URLPermission",
+    "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String"] }]
+  },
+  {
+    "name":"java.security.AlgorithmParametersSpi"
+  },
+  {
+    "name":"java.security.AllPermission"
+  },
+  {
+    "name":"java.security.SecureRandomParameters"
+  },
+  {
+    "name":"java.security.SecurityPermission"
+  },
+  {
+    "name":"java.security.interfaces.RSAPrivateKey"
+  },
+  {
+    "name":"java.security.interfaces.RSAPublicKey"
+  },
+  {
+    "name":"java.sql.Date"
+  },
+  {
+    "name":"java.util.PropertyPermission"
+  },
+  {
+    "name":"java.util.concurrent.atomic.AtomicBoolean",
+    "fields":[{"name":"value"}]
+  },
+  {
+    "name":"java.util.concurrent.atomic.AtomicReference",
+    "fields":[{"name":"value"}]
+  },
+  {
+    "name":"java.util.concurrent.atomic.Striped64",
+    "fields":[{"name":"base"}, {"name":"cellsBusy"}]
+  },
+  {
+    "name":"javax.security.auth.x500.X500Principal",
+    "fields":[{"name":"thisX500Name"}],
+    "methods":[{"name":"<init>","parameterTypes":["sun.security.x509.X500Name"] }]
+  },
+  {
+    "name":"javax.smartcardio.CardPermission"
+  },
+  {
+    "name":"org.smartboot.socket.timer.HashedWheelTimer$HashedWheelTimerTask",
+    "fields":[{"name":"state"}]
+  },
+  {
+    "name":"org.stone.beecp.BeeDataSourceConfig",
+    "allDeclaredFields":true
+  },
+  {
+    "name":"org.stone.beecp.pool.Borrower",
+    "fields":[{"name":"state"}]
+  },
+  {
+    "name":"org.stone.beecp.pool.FastConnectionPool",
+    "fields":[{"name":"poolState"}, {"name":"servantState"}, {"name":"servantTryCount"}],
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"org.stone.beecp.pool.PooledConnection",
+    "fields":[{"name":"state"}]
+  },
+  {
+    "name":"org.stone.beecp.pool.ProxyConnection"
+  },
+  {
+    "name":"org.stone.beecp.pool.ProxyCsStatement"
+  },
+  {
+    "name":"org.stone.beecp.pool.ProxyDatabaseMetaData"
+  },
+  {
+    "name":"org.stone.beecp.pool.ProxyPsStatement"
+  },
+  {
+    "name":"org.stone.beecp.pool.ProxyResultSet"
+  },
+  {
+    "name":"org.stone.beecp.pool.ProxyStatement"
+  },
+  {
+    "name":"sun.misc.Unsafe",
+    "fields":[{"name":"theUnsafe"}]
+  },
+  {
+    "name":"sun.security.provider.DSA$SHA224withDSA",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"sun.security.provider.DSA$SHA256withDSA",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"sun.security.provider.MD5",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"sun.security.provider.NativePRNG",
+    "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"<init>","parameterTypes":["java.security.SecureRandomParameters"] }]
+  },
+  {
+    "name":"sun.security.provider.SHA",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"sun.security.provider.SHA2$SHA224",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"sun.security.provider.SHA2$SHA256",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"sun.security.provider.SHA5$SHA384",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"sun.security.provider.SHA5$SHA512",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"sun.security.provider.X509Factory",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"sun.security.rsa.PSSParameters",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"sun.security.rsa.RSAKeyFactory$Legacy",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"sun.security.rsa.RSAPSSSignature",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"sun.security.rsa.RSASignature$SHA224withRSA",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"sun.security.ssl.KeyManagerFactoryImpl$SunX509",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"sun.security.ssl.SSLContextImpl$TLSContext",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"sun.security.ssl.TrustManagerFactoryImpl$PKIXFactory",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name": "sun.security.x509.BasicConstraintsExtension",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "java.lang.Boolean",
+          "java.lang.Object"
+        ]
+      }
+    ]
+  },
+  {
+    "name":"com.zen.domain.ZenUser;",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.zen.enums.UserBasicTag;",
+    "allDeclaredFields":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  }
+]

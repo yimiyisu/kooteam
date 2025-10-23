@@ -15,11 +15,9 @@ public class Project extends ZenController {
 
     public ZenResult my(ZenData data) {
         ZenResult myProject = zenEngine.execute("select/project_user", data);
-        if (myProject.isEmpty()){
-            return ZenResult.success();
-        }
+        if (myProject.isEmpty()) return ZenResult.success();
         Object myData = myProject.getData();
-        if (myData!=null){
+        if (myData != null) {
 
         }
 //        HashMap<String,Object>

@@ -1,0 +1,1 @@
+{"name":"wx_auth","type":"get","table":"wx_auth","where":{"relate":"AND","exprs":[{"operator":0,"column":"id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","creator","create_gmt","update_gmt","app_title","app_name","domain","appid"]}

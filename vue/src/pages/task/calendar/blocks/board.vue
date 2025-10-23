@@ -27,7 +27,7 @@ export default {
     },
     async mounted() {
         const quadrants = this.$dict('quadrantType')
-        quadrants.forEach(item => {
+        quadrants.v.forEach(item => {
             this.colors[item.value] = item.color
         });
         Lang();
@@ -84,11 +84,16 @@ export default {
             $.post({ data, url: "/do/patch/thing" });
         },
         update(thing) {
-            if (thing.owner !== this.profile.id) {
+            if (!thing) {
+                return
+            }
+            if (this.profile && thing.owner !== this.profile.id) {
                 return this.remove(thing.id);
             }
             let event = this.calendar.getEventById(thing.id);
-            event.remove();
+            if (event) {
+                event.remove();
+            }
             let result = {
                 color: this.colors[thing.quadrant],
                 id: thing.id,

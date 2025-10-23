@@ -1,0 +1,1 @@
+{"name":"oauth","type":"select","table":"oauth","where":{"relate":"AND","exprs":[{"operator":5,"column":"domain","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","create_gmt","creator","update_gmt","domain","access_key","secret_key"],"order":{"name":"id","type":-1}}

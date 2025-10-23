@@ -1,17 +1,14 @@
 <template>
     <z-block url="/do/get/week" :params="params">
         <template #default="data">
-            <!-- {{ id }}----
-            {{ params }} -->
             <div class="mce-content-body">
                 <el-descriptions border>
                     <el-descriptions-item label="发送人">
                         <z-user :plain="false" :value="data.uid" />
                     </el-descriptions-item>
                     <el-descriptions-item label="发送时间">
-                        <z-idate v-if="status" :value="data.updateGmt">
-                        </z-idate>
-                        <el-text type="info" v-else>未发送</el-text>
+                        <z-date v-if="data.status" :value="data.updateGmt" />
+                        <el-text v-else type="info">未发送</el-text>
                     </el-descriptions-item>
                 </el-descriptions>
                 <div v-html="data.content"></div>

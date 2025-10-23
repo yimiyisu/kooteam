@@ -1,0 +1,44 @@
+.k-calendar {
+    --fc-button-bg-color: var(--a-color-primary);
+    --fc-button-active-bg-color: var(--a-color-primary-light-3);
+    --fc-button-hover-bg-color: var(--a-color-primary-light-3);
+    --fc-highlight-color: var(--a-color-primary-light-5);
+    --fc-today-bg-color: var(--a-color-primary-light-9);
+    --fc-border-color: var(--a-border-color-lighter);
+
+    .fc .fc-button {
+        border: 0;
+    }
+
+    button:focus {
+        outline: 0;
+    }
+
+    td {
+        color: var(--a-text-color-regular);
+
+        &.fc-widget-content {
+            border-color: var(--a-table-border);
+        }
+    }
+
+    h2 {
+        font-weight: normal;
+        font-size: 1rem;
+    }
+
+    .fc-head {
+        background: var(--a-table-header-bg-color);
+
+        thead {
+            border: 0;
+        }
+
+        th {
+            font-weight: normal;
+            color: var(--a-text-color-regular);
+            padding: 3px 0;
+            //border: 0;
+        }
+    }
+}

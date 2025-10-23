@@ -1,4 +1,4 @@
-const docs = { 3: "mindmap", 4: "flow", 5: "xspreadsheet", 6: "excalidraw" };
+const docs = { 3: "mindmap", 4: "flowable", 5: "xspreadsheet", 6: "excalidraw" };
 
 export default function (type, id, readonly = false) {
     const file = docs[type];

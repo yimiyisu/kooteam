@@ -1,5 +1,5 @@
 <template>
-    <z-action fixed="noteDetail" ref="action" :beforeShow="show" width="95%" mode="drawer">
+    <z-action fixed="noteDetail" ref="action" :beforeShow="show" width="95%" mode="drawer" >
         <el-container>
             <el-aside width="260px">
                 <h2 class="title1">
@@ -34,13 +34,9 @@
                         :fields="titleFields" title="修改标题" icon="edit2" :beforeSubmit="saveTitle" />
                 </h3>
                 <div class="close">
-                    <div v-if="isFull">
-                        <z-icon size="16" @click="full" tooltip="退出全屏" value="minimize" />
-                    </div>
-                    <div v-else>
-                        <z-icon size="16" @click="full" tooltip="全屏模式" value="maximize" />
-                        <z-icon tooltip="关闭文档" value="x" size="18" @click="close" />
-                    </div>
+                    <z-icon v-if="isFull" size="18" @click="full" tooltip="退出全屏" value="minimize" />
+                    <z-icon v-else size="18" @click="full" tooltip="全屏模式" value="maximize" />
+                    <!-- <z-icon tooltip="关闭文档" value="x" size="18" @click="close" /> -->
                 </div>
                 <div class="detail">
                     <Editor v-if="params" :params="params" />
@@ -138,7 +134,7 @@ export default {
             this.save()
         },
         view() {
-            $.open('/kooteam/knowledge?id=' + this.noteId)
+            $.open('/kooteam/view.html?id=' + this.noteId)
         },
         async save() {
             await $.post({ url: "/do/patch/note", data: { id: this.noteId, content: this.content } })
@@ -264,8 +260,8 @@ export default {
 
 .close {
     position: absolute;
-    top: 14px;
-    right: 18px;
+    top: 12px;
+    right: 58px;
     text-align: right;
 }
 

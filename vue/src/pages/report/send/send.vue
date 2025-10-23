@@ -23,7 +23,6 @@ export default {
     provide: { configs },
     data() {
         return {
-            data: null
         }
     }
 }

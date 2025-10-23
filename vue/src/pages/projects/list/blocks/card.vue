@@ -1,9 +1,12 @@
 <template>
     <div class="a-card is-hover-shadow">
         <div class="title">
-            <el-text>
-                <z-icon @click="favi" value="star" :style="'--color: var(' + color + ')'" class="hover star" />
-                <span @click="detail(value.id)">{{ value.title }}</span>
+            <el-text class="title-container">
+                <div class="left-items">
+                    <z-icon @click="favi" value="star" :style="'--color: var(' + color + ')'" class="hover star" />
+                    <span @click="detail(value.id)">{{ value.title }}</span>
+                </div>
+                <z-icon @click="exit(value)" value="logOut" class="exit-icon" />
             </el-text>
         </div>
         <div class="more">
@@ -40,6 +43,17 @@ export default {
             const newTag = tagLeft ? 0 : 1
             await $.post({ url: '/do/patch/projectUserForTag', data: { tag: newTag, id: idLeft } })
             this.value.tagLeft = newTag
+        },
+        async exit(value) {
+            $.confirm("确定退出该项目吗？",
+                async () => {
+                    if (value.roleLeft == 5) {
+                        $.fail("管理员不能退出项目")
+                        return
+                    }
+                    await $.post({ url: '/do/delete/projectUserForQuit', data: { projectId:value.id } })
+                },
+            )
         }
     },
 }
@@ -60,6 +74,32 @@ export default {
     .a-text {
         cursor: pointer;
     }
+}
+
+.title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.left-items {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  flex: 1;
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+  }
+}
+
+.exit-icon {
+  flex-shrink: 0;
+  margin-left: 10px;
 }
 
 .more {

@@ -1,0 +1,1 @@
+{"name":"note","type":"count","table":"note","where":{"relate":"AND","exprs":[{"operator":0,"column":"pub","alias":"","from":1,"need":false,"value":""},{"operator":0,"column":"id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":[]}

@@ -9,7 +9,7 @@ import com.zen.interfaces.IHook;
 public class DeleteHook implements IHook {
     @Override
     public ZenResult before(ZenData data) {
-        if (!data.contains("uid")) data.put("uid", data.getUid());
+        if (data.isEmpty("uid")) data.put("uid", data.getUid());
         // 进行权限校验
         return IHook.super.before(data);
     }

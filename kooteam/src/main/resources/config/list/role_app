@@ -1,0 +1,1 @@
+{"name":"role_app","type":"list","table":"role_app","where":{"relate":"AND","exprs":[{"operator":9,"column":"role_id","alias":"roleId","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","creator","create_gmt","update_gmt","role_id","app"]}

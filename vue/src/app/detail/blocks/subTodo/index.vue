@@ -5,9 +5,9 @@
         </el-col>
         <el-col :span="23">
             <strong>子任务列表</strong>
-            <z-action mode="popover" v-if="!archiveId" url="/do/put/thing" :beforeSubmit="beforeAdd" @finish="addFinish"
-                :fields="fields" width="420px" size="small" class="right" label="添加子任务" />
-            <el-progress v-if="list.length > 0" status="success" :percentage="percent" />
+            <z-action mode="popover" v-if="!archived" url="/do/put/thing" :beforeSubmit="beforeAdd" @finish="addFinish"
+                :fields="fields" width="540px" size="small" class="right" label="添加子任务" />
+            <el-progress v-if="list && list.length > 0" status="success" :percentage="percent" />
             <div class="empty" v-else>暂无子任务</div>
             <Thing v-for="(item) in list" :fields="fields" :key="item.id" :value="item" />
         </el-col>
@@ -21,7 +21,7 @@ export default {
     props: {
         value: Object,
         list: Array,
-        archiveId: String
+        archived: Boolean
     },
     data() {
         return {
@@ -57,7 +57,7 @@ export default {
         },
         addFinish(result, formData) {
             this.log("添加了子任务:" + formData.title);
-            $.emit('thingUpdate', { ...formData, ...result }, 'add')
+            $.emit('thingUpdate', 1)
         }
     },
 };

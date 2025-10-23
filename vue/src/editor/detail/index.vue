@@ -1,5 +1,5 @@
 <template>
-    <z-block url="/do/get/note" :params="params">
+    <z-block url="/api/home/note" :params="params">
         <template #default="data">
             <Content :data="data" />
         </template>
@@ -10,10 +10,13 @@ import Content from './content.vue';
 export default {
     components: { Content },
     data() {
-        return { params: null }
+        return {
+            params: null,
+            url:null,
+         }
     },
     created() {
-        this.params = { id: this.$route.query.id }
+        this.params = $.getParams()
     }
 }
 </script>

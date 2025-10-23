@@ -23,11 +23,11 @@ public class Archive extends ZenController {
     public ZenResult put(ZenData data) {
         ZenResult thingResult = zenEngine.execute("get/thing", data);
         if (thingResult.isEmpty()) return ZenResult.fail("该待办不存在");
-        ZenData archiveData = new ZenData(data);
+        ZenData archiveData = ZenData.create(data);
         archiveData.put("id", thingResult.get("id"));
         archiveData.put("title", thingResult.get("title"));
         archiveData.put("content", JsonKit.stringify(thingResult.getData()));
-        archiveData.put("parentId", thingResult.get("parentId"));
+        archiveData.put("outParentId", thingResult.get("outParentId"));
         archiveData.put("projectId", thingResult.get("projectId"));
         archiveData.put("uid", thingResult.get("createUid"));
         archiveData.put("owner", thingResult.get("owner"));
@@ -39,9 +39,7 @@ public class Archive extends ZenController {
 
     public ZenResult restore(ZenData data) {
         ZenResult result = zenEngine.execute("get/thing_archive", data);
-        if (result.isEmpty()) {
-            return ZenResult.fail("该存档不存在");
-        }
+        if (result.isEmpty()) return ZenResult.fail("该存档不存在");
         ZenData restoreData = result.getZenData("content", data);
         zenEngine.execute("put/thingByRestore", restoreData);
         return zenEngine.execute("delete/thing_archive", data);

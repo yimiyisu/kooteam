@@ -1,0 +1,1 @@
+{"name":"role_app","type":"patch","table":"role_app","msg":"操作成功！","where":{"relate":"AND","exprs":[{"operator":0,"column":"id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":4,"params":[{"name":"update_gmt","value":"current","from":2},{"name":"permissions","value":"","from":1},{"name":"points","value":"","from":1}],"outputs":["id"]}

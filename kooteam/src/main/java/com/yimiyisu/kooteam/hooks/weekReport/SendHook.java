@@ -1,20 +1,27 @@
 package com.yimiyisu.kooteam.hooks.weekReport;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.yimiyisu.kooteam.events.util.Email;
+import com.yimiyisu.kooteam.service.EmailService;
 import com.zen.ZenData;
 import com.zen.ZenEngine;
+import com.zen.ZenMessage;
 import com.zen.ZenResult;
 import com.zen.annotation.Inject;
 import com.zen.annotation.ZenHook;
+import com.zen.domain.MessageDO;
 import com.zen.interfaces.IHook;
+import com.zen.kit.EventKit;
+import com.zen.kit.MessageKit;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @ZenHook("patch/weekSend")
 public class SendHook implements IHook {
+
+
     @Inject
     private ZenEngine zenEngine;
 
@@ -22,25 +29,20 @@ public class SendHook implements IHook {
     public void after(ZenData data, ZenResult result) {
         ZenResult reportData = zenEngine.execute("get/weekByOwner", data);
         if (reportData.isEmpty()) return;
-        List<String> recieves = reportData.getAsStringList("recievers");
-        if (recieves == null) recieves = new ArrayList<>();
-        // 获取分组ID
+
+        Set<String> receivers = Optional.ofNullable(reportData.getAsStringList("recievers"))
+                .map(HashSet::new)
+                .orElse(new HashSet<>());
         List<String> groupIds = reportData.getAsStringList("groups");
-        // 获取分组里的详细用户信息
-        List<JsonObject> groups = zenEngine.selectByIds("week_group", groupIds);
-        if (groups != null) for (JsonObject group : groups) {
-            JsonArray content = group.get("content").getAsJsonArray();
-            if (content == null) return;
-            for (JsonElement s : content) {
-                String uid = s.getAsString();
-                if (recieves.contains(uid)) continue;
-                recieves.add(uid);
-            }
-        }
-        data.put("weekId", data.get("id"));
-        recieves.forEach((uid) -> {
-            data.put("uid", uid).refresh();
-            zenEngine.execute("put/week_recieve", data);
-        });
+        List<String> email = EmailService.getUidByGroupIds(receivers, groupIds, data.getId(), data.getUid());
+        ZenMessage zenMessage = new ZenMessage(EmailService.TEMPLATENAME);
+        zenMessage.setTitle(reportData.get("title"));
+        zenMessage.setFrom(reportData.get("uid"));
+        zenMessage.setContent(Email.getTemplate(reportData.get("uid"), reportData.get("content")));
+
+        String messageId = zenMessage.send(email);
+        MessageDO messageDO = MessageKit.get(messageId);
+        EventKit.trigger(messageDO);
     }
+
 }

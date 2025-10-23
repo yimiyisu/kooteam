@@ -3,10 +3,12 @@
     "version": "0.0.1",
     "private": true,
     "scripts": {
-        "start": "webpack-dev-server --mode=development",
-        "dist": "npm run lint && webpack --mode=production",
-        "local": "npm run lint && webpack --mode=production --env target=local",
-        "deploy": "npm run lint && webpack --mode=production --env target=remote",
+        "start": "webpack-dev-server --mode=development --host=127.0.0.1",
+        "mini": "cd ../mini && npm install -d && npm run lint && webpack --mode=production && cd ../vue",
+        "dist": "npm run mini && nnpm run lint && webpack --mode=production",
+        "local": "npm run mini && npm run lint && webpack --mode=production --env target=local && npm run java",
+        "java": "cd ../kooteam && mvn clean package -DskipTests -Dlocal=true",
+        "deploy": "npm run mini && npm run lint && webpack --mode=production --env target=tos && npm run java",
         "init": "yarn",
         "lint": "eslint --fix --ext .js,.vue ./src"
     },
@@ -40,10 +42,11 @@
         "terser-webpack-plugin": "^5.3.1",
         "vue": "^3.4.21",
         "vue-loader": "^17.3.1",
-        "webpack": "^5.91.0",
-        "webpack-cli": "^5.1.4",
+        "webpack": "^5.99.8",
+        "webpack-cli": "^6.0.1",
         "webpack-dev-server": "^4.15.2",
-        "zen-app-plugin": "^0.0.5"
+        "zen-app-icon": "^0.1.0",
+        "zen-app-plugin": "^0.5.10"
     },
     "eslintIgnore": [
         "public/*",

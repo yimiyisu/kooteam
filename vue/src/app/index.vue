@@ -1,50 +1,26 @@
 <template>
-  <z-layout>
-    <template #logo>
-      <div class="title">
-        <logo />
-      </div>
-    </template>
-    <template #profile>
-      <mods />
-    </template>
-    <template #default="{ data }">
-      <span v-if="data.env === 'demo'">
-        演示环境数据每日自动清理，请勿存储个人数据
-      </span>
-      <z-action
-        title="待办详情"
-        :later="300"
-        fixed="thingDetail"
-        width="1024px"
-      >
-        <template #default="data">
-          <detail :data="data" />
+    <z-layout>
+        <template #logoExtra>
+            <AppList />
+            <z-action title="待办详情" :later="300" fixed="thingDetail" width="1024px">
+                <template #default="data">
+                    <detail :data="data" />
+                </template>
+            </z-action>
         </template>
-      </z-action>
-    </template>
-  </z-layout>
+        <!-- <template #profile>
+            <mods />
+        </template> -->
+    </z-layout>
 </template>
 
 <script>
-import detail from './detail'
-import logo from './logo'
-import mods from './mods.vue'
+import AppList from './appList.vue';
+import detail from './detail';
 export default {
-  components: { logo, detail, mods },
-  data() {
-    return { detail }
-  },
+    components: { detail, AppList },
+    data() {
+        return { detail }
+    },
 }
 </script>
-<style lang="scss" scoped>
-.title {
-  position: absolute;
-  left: 10px;
-  top: 6px;
-
-  :deep(svg) {
-    width: 108px;
-  }
-}
-</style>

@@ -38,16 +38,17 @@ export default {
         }
     },
     created() {
-        const { value, current } = this
+        const current = $.getParam("item") || this.current
+        const { value } = this
         if (current === value.id) {
             this.open(value)
         }
     },
     methods: {
         open(item) {
-            if (item.id === this.value.id) {
-                this.collapse = !this.collapse
-            }
+            this.collapse = false
+            const url = $.setParam('item', item.id)
+            window.history.replaceState(null, null, url)
             this.$emit('open', item)
         },
     }

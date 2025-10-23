@@ -6,7 +6,7 @@ import com.zen.ZenData;
 import com.zen.ZenResult;
 import com.zen.annotation.ZenHook;
 import com.zen.domain.ZenUser;
-import com.zen.enums.UserTag;
+import com.zen.enums.UserBasicTag;
 import com.zen.enums.ZenAction;
 import com.zen.enums.ZenRole;
 import com.zen.interfaces.IHook;
@@ -54,7 +54,7 @@ public class LadpHook implements IHook {
                 user.setMobile(person.getMobile());
                 user.setRole(ZenRole.CONSOLE);
                 UserKit.insert(user);
-            } else if (user.hasTag(UserTag.FORBIDDEN)) return ZenResult.fail(FORBIDDEN);
+            } else if (user.hasTag(UserBasicTag.FORBIDDEN)) return ZenResult.fail(FORBIDDEN);
 
             String token = UserKit.createToken(user.getId());
             return ZenResult.success().setData(token).setAction(ZenAction.END);

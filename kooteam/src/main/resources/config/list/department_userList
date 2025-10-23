@@ -1,0 +1,1 @@
+{"name":"department_userList","type":"list","table":"department_user","where":{"relate":"AND","exprs":[{"operator":0,"column":"employee_id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id"]}
