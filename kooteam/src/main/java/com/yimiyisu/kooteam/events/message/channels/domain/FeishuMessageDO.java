@@ -20,21 +20,6 @@ public class FeishuMessageDO {
     //每次都不同
     private String uuid;
 
-    public String getUUID(){
-        this.uuid = StringKit.rand(50);
-        return uuid;
-    }
-
-    @Data
-    @Builder
-    public static class TextContent {
-        /**
-         * 消息文本内容
-         * 必填，长度限制：post类型 ≤ 10K；text/卡片消息 ≤ 15000字符
-         */
-        private String text;
-    }
-
     /* 快捷构建方法 */
     public static FeishuMessageDO buildTextMessage(
             String receiveId,
@@ -48,6 +33,21 @@ public class FeishuMessageDO {
                         .build())
                 .uuid(uuid)
                 .build();
+    }
+
+    public String getUUID() {
+        this.uuid = StringKit.objectId();
+        return uuid;
+    }
+
+    @Data
+    @Builder
+    public static class TextContent {
+        /**
+         * 消息文本内容
+         * 必填，长度限制：post类型 ≤ 10K；text/卡片消息 ≤ 15000字符
+         */
+        private String text;
     }
 
 

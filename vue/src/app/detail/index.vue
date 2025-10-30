@@ -9,6 +9,7 @@
                 </template>
             </z-block>
             <Knowlege :value="item" />
+            <File :value="item" />
             <Watcher :value="item" />
         </el-col>
         <el-col :span="8">
@@ -19,6 +20,7 @@
 <script>
 import Comment from "./blocks/comment";
 import Describe from "./blocks/describe";
+import File from "./blocks/file.vue";
 import Header from "./blocks/header/index.vue";
 import Knowlege from './blocks/knowlege/index.vue';
 import SubTodo from "./blocks/subTodo/index";
@@ -34,7 +36,8 @@ export default {
         Header,
         Watcher,
         SubTodo,
-        Knowlege
+        Knowlege,
+        File
     },
     data() {
         return {
@@ -85,10 +88,10 @@ export default {
             this.item.overtime =
                 data.status === 0 && data.end && data.end < now;
         },
-        async log(content, closed) {
+        async log(content, type, closed) {
             const { item } = this
             await $.post({
-                data: { thingId: item.id, content },
+                data: { thingId: item.id, content, type, original: this.item },
                 url: "/do/put/thing_log",
             });
             closed && this.$button.close()

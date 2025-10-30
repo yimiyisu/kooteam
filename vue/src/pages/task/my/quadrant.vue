@@ -78,12 +78,12 @@ export default {
 
 .a,
 .b {
-    border-bottom: solid 2px var(--a-border-color-light);
+    border-bottom: solid 2px var(--a-border-color-extra-light);
 }
 
 .a,
 .c {
-    border-right: solid 2px var(--a-border-color-light);
+    border-right: solid 2px var(--a-border-color-extra-light);
 }
 
 .k-thing {

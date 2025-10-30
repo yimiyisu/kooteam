@@ -10,7 +10,7 @@
             <span v-if="overtime" class="delay">(已延期{{ overtime }}) </span>
         </el-col>
         <el-col :span="4">
-            <!-- <z-dict code="thingRepeat" v-model="repeat" /> -->
+            <!-- <z-dict code="thingRepeat" v-model="value.repeat" @change="updateRepeat" /> -->
         </el-col>
     </el-row>
 </template>
@@ -18,7 +18,7 @@
 const defTime = new Date()
 export default {
     name: "detailPlan",
-    inject: ['log'],
+    inject: ['log', '$dict'],
     props: { value: Object, readonly: Boolean },
     computed: {
         start() {
@@ -85,7 +85,7 @@ export default {
                 },
             }
             ],
-            repeat: 0,
+            isUpdated: false,
         };
     },
     created() {
@@ -121,7 +121,9 @@ export default {
                 this.value.end = data[1] / 1000
             }
             await $.post({ url: '/do/patch/thing', data: this.value })
-        }
+            let content = "修改任务计划"
+            this.log(content)
+        },
     },
 };
 </script>

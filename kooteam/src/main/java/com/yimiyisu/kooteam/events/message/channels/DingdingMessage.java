@@ -11,8 +11,11 @@ import com.zen.domain.MessageDO;
 import com.zen.kit.ConfigKit;
 import com.zen.kit.HttpKit;
 import com.zen.kit.JsonKit;
+import com.zen.kit.StringKit;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DingdingMessage implements IMessage {
@@ -35,11 +38,14 @@ public class DingdingMessage implements IMessage {
         Map<String, Object> body = new HashMap<>();
         //钉钉应用的ID
         body.put("agent_id", this.agentId);
-        if (messageDO.getTo().isEmpty()) body.put("to_all_user", true);
-        else {
-            String userIds = OpenPlatformKit.getOpenId(messageDO, ",");
-            body.put("userid_list", userIds);
-        }
+        List<String> userIds = new ArrayList<>();
+        userIds.add("3564075531954999");
+        body.put("userid_list", JsonKit.stringify(userIds));
+//        if (messageDO.getTo().isEmpty()) body.put("to_all_user", true);
+//        else {
+//            String userIds = OpenPlatformKit.getOpenId(messageDO, ",");
+//            body.put("userid_list", userIds);
+//        }
 
         //消息类型。
         //文本消息类型为：text。
@@ -52,7 +58,7 @@ public class DingdingMessage implements IMessage {
         body.put("msg", msg);
 
         String requestBodyJson = JsonKit.stringify(body);
-        System.out.println("完整请求体：" + requestBodyJson);
+//        System.out.println("完整请求体：" + requestBodyJson);
 
         String url = "https://oapi.dingtalk.com/topapi/message/corpconversation/asyncsend_v2?access_token=" + accessToken;
         String response = HttpKit.post(url, body);

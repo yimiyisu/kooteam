@@ -1,6 +1,7 @@
 package com.yimiyisu.kooteam.controller;
 
 import com.google.gson.JsonObject;
+import com.yimiyisu.kooteam.events.message.channels.DingdingMessage;
 import com.yimiyisu.kooteam.kit.WeixinKit;
 import com.yimiyisu.kooteam.service.WxAuthService;
 import com.zen.ZenController;
@@ -133,7 +134,7 @@ public class Home extends ZenController {
             openId = decryptResult.getValue();
         }
         boolean subscribed = true;
-        if (StringKit.isNotEmpty(ConfigKit.get("trialUid"))) {
+        if (StringKit.isNotEmpty(ConfigKit.get("trialUid")) || ConfigKit.isTrial()) {
             String accessToken = wxAuthService.getminiAppToken(mpId);
             subscribed = WeixinKit.isSubscribed(accessToken, openId);
         }

@@ -1,5 +1,5 @@
 <template>
-    <z-action fixed="noteDetail" ref="action" :beforeShow="show" width="95%" mode="drawer" >
+    <z-action fixed="noteDetail" ref="action" :beforeShow="show" width="95%" mode="drawer">
         <el-container>
             <el-aside width="260px">
                 <h2 class="title1">
@@ -266,7 +266,7 @@ export default {
 }
 
 .detail {
-    height: 92vh;
+    height: 85vh;
 }
 
 .fullscreen {

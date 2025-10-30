@@ -39,18 +39,21 @@ export default {
             }
             await $.post({ url: '/do/patch/thing', data: value })
             let message;
+            let logType;
             if (type === 'owner') {
                 message = "修改责任人为：" + $.nick(value.owner)
+                logType = 1
             } else if (type === 'thingStatus') {
-                const dict = this.$dict(type, value.status)
+                console.log(this.$dict(type))
+                const dict = this.$dict(type).v.find(item => item.value === value.status)
                 message = '修改状态为：' + dict.label
-                console.log('dict.label', dict.label)
+                logType = 2
             } else {
-                const dict = this.$dict(type, value.quadrant)
+                const dict = this.$dict(type).v.find(item => item.value === value.quadrant)
                 message = '调整优先级为：' + dict.label
             }
+            this.log(message, logType)
             $.emit("thingUpdate", value, this.quadrant);
-            this.log(message)
         }
     },
 }

@@ -4,6 +4,7 @@ import TaskCalendar from "./calendar/calendar";
 import TaskGantt from "./gantt/gantt";
 import TaskList from "./list/list";
 import TaskMy from "./my/my";
+import TaskRepeatThing from "./repeatThing/repeatThing";
 import TaskWatch from "./watch/watch";
 
 export default {
@@ -13,5 +14,6 @@ export default {
 	'task/gantt': TaskGantt,
 	'task/list': TaskList,
 	'task/my': TaskMy,
+	'task/repeatThing': TaskRepeatThing,
 	'task/watch': TaskWatch
 }

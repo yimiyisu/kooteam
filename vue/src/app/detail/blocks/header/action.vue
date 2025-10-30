@@ -42,7 +42,7 @@ export default {
             }
             let content = status ? "完成了任务" : "取消了完成";
             $.post({
-                data: { thingId: id, content },
+                data: { thingId: id, content, type: 2, original: this.value },
                 url: "/do/put/thing_log",
             });
         },
@@ -61,7 +61,7 @@ export default {
                 };
                 await $.post({
                     url: '/do/put/thing_archive', data: data, success: async () => {
-                        this.log("归档了任务", true);
+                        this.log("归档了任务", null, true);
                         await $.post({ url: "/do/delete/thing", data: { id: value.id } })
                         $.emit("thingUpdate", value, 'remove');
                     }
@@ -76,7 +76,7 @@ export default {
             if (command === 'delete') {
                 return $.confirm('确定删除该任务吗？', async () => {
                     await $.post({ url: "/do/delete/thing", data: { id: value.id } })
-                    this.log("删除了任务");
+                    this.log("删除了任务" + value.title);
                     $.emit("thingUpdate", value, 'remove');
                 })
             }

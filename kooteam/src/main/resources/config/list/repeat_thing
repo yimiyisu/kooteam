@@ -1,0 +1,1 @@
+{"name":"repeat_thing","type":"list","table":"repeat_thing","where":{"relate":"AND","exprs":[{"operator":0,"column":"is_open","alias":"","from":2,"need":false,"value":"1"}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","creator","create_gmt","update_gmt","title","content","file","owner","type","quadrant","is_open"]}

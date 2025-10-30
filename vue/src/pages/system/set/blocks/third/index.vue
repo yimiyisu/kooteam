@@ -16,7 +16,7 @@ export default {
                         { label: '钉钉平台', value: 'dingding' },
                         { label: '企业微信平台', value: 'wework' },
                         { label: '飞书平台', value: 'feishu' },
-                        { label: '域账户LADP', value: 'ladp' }
+                        // { label: '域账户LADP', value: 'ladp' }
                     ]
                 },
                 { component: Detail },

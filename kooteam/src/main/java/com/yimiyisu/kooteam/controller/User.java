@@ -1,6 +1,7 @@
 package com.yimiyisu.kooteam.controller;
 
 import com.yimiyisu.kooteam.domain.PermissionAppDO;
+import com.yimiyisu.kooteam.domain.ThingDO;
 import com.yimiyisu.kooteam.service.PermissionService;
 import com.zen.ZenController;
 import com.zen.ZenData;
@@ -13,13 +14,18 @@ import com.zen.enums.UserBasicTag;
 import com.zen.enums.ZenException;
 import com.zen.enums.ZenRole;
 import com.zen.kit.ConfigKit;
+import com.zen.kit.DateKit;
 import com.zen.kit.StringKit;
 import com.zen.kit.UserKit;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @AccessRole(ZenRole.SIGNATURE)
 public class User extends ZenController {
+    private final int DAY = 24 * 60 * 60;
     private final String TEMPLATENAME = "mail";
     private String htmlTemplate = """
             <html>
@@ -33,6 +39,24 @@ public class User extends ZenController {
     private PermissionService permissionService;
     @Inject
     private ZenEngine zenEngine;
+
+    // 首页统计数据： uid 今日到期 逾期任务 已完成
+    public ZenResult count(ZenData data) {
+        String uid = data.getUid(); // uid
+        Map<String, Object> count = new HashMap<>(); // 最终返回数据
+        count.put("uid", uid);
+
+        // 查询我的任务列表
+        ZenResult myThingList = zenEngine.execute("list/thingByOwner", ZenData.create("owner", data.getUid()));
+        if (myThingList.isEmpty()) ZenResult.success().setData(count);
+        List<ThingDO> thingList = myThingList.asList(ThingDO.class);
+
+        // 统计任务数
+        Map<String, Object> countDetail = getCountDetail(thingList);
+        count.putAll(countDetail);
+
+        return ZenResult.success().setData(count);
+    }
 
     public ZenResult current(ZenData data) {
         ZenUser user = data.getUser();
@@ -91,5 +115,34 @@ public class User extends ZenController {
             return ZenResult.success().setData("success");
         }
         return ZenResult.success();
+    }
+
+    public Map<String, Object> getCountDetail(List<ThingDO> thingList) {
+        Map<String, Object> count = new HashMap<>();
+
+        int today = 0;
+        int expired = 0;
+        int completed = 0;
+
+        for (ThingDO thing : thingList) {
+            long now = DateKit.now(); // 当前时间
+            long end = thing.getEnd(); // 截止时间
+            if (thing.getStatus() == 6) { // 已完成
+                completed += 1;
+                continue;
+            }
+            if (end != 0 && now >= end) { // 已逾期
+                expired += 1;
+                continue;
+            }
+            if (end != 0 && end - now < DAY) {
+                today += 1;
+            }
+        }
+
+        count.put("today", today);
+        count.put("expired", expired);
+        count.put("completed", completed);
+        return count;
     }
 }

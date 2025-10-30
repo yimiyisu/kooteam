@@ -1,7 +1,12 @@
 <template>
     <div class="editor">
-        <el-input v-model="text" @focus="focus" @blur="blur" :autosize="{ minRows: 3, maxRows: 6 }" type="textarea"
-            placeholder="请输入评论内容，支持粘贴截图" />
+        <!-- <el-input v-model="text" @focus="focus" @blur="blur" :autosize="{ minRows: 3, maxRows: 6 }" type="textarea"
+            placeholder="请输入评论内容，支持粘贴截图" /> -->
+        <el-mention v-model="text" @focus="focus" @blur="blur" :options="options" placeholder="请输入评论内容，支持粘贴截图"
+            :autosize="{ minRows: 3, maxRows: 6 }" type="textarea" :props="{ value: 'id', label: 'title' }"
+            :whole="true">
+        </el-mention>
+
         <div class="action">
             <el-button v-show="actived" size="small" type="primary" @click="submit">提交</el-button>
             <el-image v-for="(img, idx) in images" :zoom-rate="1.2" :hide-on-click-modal="true" :initial-index="idx"
@@ -11,11 +16,18 @@
 </template>
 <script>
 export default {
+    inject: ["log"],
     props: { value: Object },
     data() {
-        return { actived: false, text: null, images: [] }
+        return { actived: false, text: null, images: [], options: [] }
+    },
+    created() {
+        this.getEmployeeAll()
     },
     methods: {
+        async getEmployeeAll() {
+            this.options = await $.get({ url: '/do/list/employeeAll' })
+        },
         focus() {
             this.actived = true
             document.addEventListener("paste", this.pasteImage);
@@ -63,6 +75,7 @@ export default {
             }, this);
             this.text = "";
             this.images = []
+            this.log("添加评论")
             this.$emit('finish')
         },
     },

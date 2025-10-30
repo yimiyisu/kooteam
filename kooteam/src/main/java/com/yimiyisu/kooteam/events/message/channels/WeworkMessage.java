@@ -9,6 +9,7 @@ import com.yimiyisu.kooteam.kit.openPlatform.WeworkPlatform;
 import com.zen.domain.MessageDO;
 import com.zen.kit.ConfigKit;
 import com.zen.kit.HttpKit;
+import com.zen.kit.JsonKit;
 import com.zen.kit.StringKit;
 
 import java.util.HashMap;
@@ -47,32 +48,37 @@ public class WeworkMessage implements IMessage {
     @Override
     public boolean send(MessageDO messageDO, ChannelInfo channelInfo) {
         String accessToken = openPlatform.getAccessToken();
-        System.out.println(accessToken);
         Map<String, String> config = channelInfo.getConfig();
+        // 构建通用请求参数
         Map<String, Object> body = new HashMap<>();
         body.put("msgtype", channelInfo.getMessageType());
         body.put("agentid", this.agentid);
         if (StringKit.isEmpty(messageDO.getTo())) return false;
         String userIds = OpenPlatformKit.getOpenId(messageDO, "|");
         body.put("touser", userIds);
-        body.put("msgtype", "text");
-        WeworkTextMessageDO.TextContent textContent = new WeworkTextMessageDO.TextContent();
-        textContent.setContent(messageDO.getContent());
-        body.put("text", textContent);
-        if (!config.get("safe").isEmpty()) body.put("safe", config.get("safe"));
-        else body.put("safe", this.safe);
-        if (!config.get("enable_id_trans").isEmpty()) body.put("enable_id_trans", config.get("enable_id_trans"));
-        else body.put("enable_id_trans", this.enableIdTrans);
-        if (!config.get("enable_duplicate_check").isEmpty())
-            body.put("enable_duplicate_check", config.get("enable_duplicate_check"));
-        else body.put("enable_duplicate_check", this.enableDuplicateCheck);
-        if (!config.get("duplicate_check_interval").isEmpty())
-            body.put("duplicate_check_interval", config.get("duplicate_check_interval"));
-        else body.put("duplicate_check_interval", this.duplicateCheckInterval);
+        body.put("msgtype", channelInfo.getMessageType());
+        if (config != null) {
+            if (StringKit.isNotEmpty(config.get("safe"))) body.put("safe", config.get("safe"));
+            else body.put("safe", this.safe);
+            if (StringKit.isNotEmpty(config.get("enable_id_trans"))) body.put("enable_id_trans", config.get("enable_id_trans"));
+            else body.put("enable_id_trans", this.enableIdTrans);
+            if (StringKit.isNotEmpty(config.get("enable_duplicate_check")))
+                body.put("enable_duplicate_check", config.get("enable_duplicate_check"));
+            else body.put("enable_duplicate_check", this.enableDuplicateCheck);
+            if (StringKit.isNotEmpty(config.get("duplicate_check_interval")))
+                body.put("duplicate_check_interval", config.get("duplicate_check_interval"));
+            else body.put("duplicate_check_interval", this.duplicateCheckInterval);
+        }
+
+        // 设置消息内容
+        String messageType = channelInfo.getMessageType();
+        Map<String, Object> content = JsonKit.parseAsMap(messageDO.getContent());
+        body.put(messageType, content);
+
         String url = this.url + accessToken;
-        System.out.println(body);
+//        System.out.println(body);
         String response = HttpKit.post(url, body);
-        System.out.println(response);
+//        System.out.println(response);
         return true;
     }
 

@@ -91,9 +91,6 @@ public class MessageEvent implements IEvent<MessageDO> {
                 case 6:
                     messageChannel = EmailMessage.getInstance();
                     break;
-                case 8:
-                    messageChannel = WldMessage.getInstance();
-                    break;
                 default:
                     return;
             }

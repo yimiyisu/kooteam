@@ -1,12 +1,11 @@
 <template>
-    <el-row>
+    <el-row :class="'q' + data.tag">
         <el-col :span="22">
             <label v-if="active" @click="show(1)">
-                <el-input type="primary"  autosize  size="default" v-model="text"
-                    placeholder="请在这里输入需要处理的事项，按shift+enter保存" @keyup.shift.enter="() => save(true)"
-                    @keyup.esc.prevent.stop="hide" />
+                <el-input type="primary" autosize size="default" v-model="text" placeholder="请输入待处理的事项，按Enter键保存，ESC键退出"
+                    @keyup.enter="() => save(true)" @keyup.esc.prevent.stop="hide" />
             </label>
-            <div v-else :class="'title ' + data.tag" @click="show(1)">
+            <div v-else class="title" @click="show(1)">
                 <z-icon value="flag" />
                 {{ data.title }}
             </div>
@@ -70,6 +69,10 @@ export default {
     line-height: 40px;
 }
 
+.a-input {
+    max-width: 100%;
+}
+
 .a-col-2 {
     text-align: center;
     margin-left: -5px;
@@ -83,6 +86,8 @@ export default {
     position: relative;
     color: var(--a-text-color-primary);
 
+
+
     .z-icon {
         position: absolute;
         left: 10px;
@@ -94,19 +99,35 @@ export default {
     margin-right: 12px;
 }
 
-.a {
-    color: rgba(248, 14, 21, 0.9);
+.qa {
+    border-bottom: 1px solid rgba(248, 14, 21, 0.5);
+
+    .title {
+        color: rgba(248, 14, 21, 0.9);
+    }
 }
 
-.b {
-    color: #c6a815;
+.qb {
+    border-bottom: 1px solid rgba(198, 168, 21, 0.5);
+
+    .title {
+        color: #c6a815;
+    }
 }
 
-.c {
-    color: rgba(0, 159, 227, 0.9);
+.qc {
+    border-bottom: 1px solid rgba(0, 159, 227, 0.5);
+
+    .title {
+        color: rgba(0, 159, 227, 0.9);
+    }
 }
 
-.d {
-    color: #75ad0b;
+.qd {
+    border-bottom: 1px solid rgba(117, 173, 11, 0.5);
+
+    .title {
+        color: #75ad0b;
+    }
 }
 </style>

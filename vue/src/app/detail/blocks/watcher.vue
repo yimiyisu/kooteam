@@ -13,6 +13,7 @@
 </template>
 <script>
 export default {
+    inject: ["log"],
     name: "detailFollw",
     props: { value: Object },
     data() {
@@ -39,6 +40,7 @@ export default {
             const { value, list } = this;
             value.watchers = list
             await $.post({ url: '/do/patch/thing', data: value })
+            this.log("添加关注人")
         }
     },
 };

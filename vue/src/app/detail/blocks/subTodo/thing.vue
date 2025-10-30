@@ -44,7 +44,7 @@ export default {
             });
             let msg = status === 0 ? "取消完成" : "完成了";
             value.status = status
-            this.log(msg + "子任务:" + value.title);
+            this.log(msg + "子任务:" + value.title, 2);
             $.emit('thingUpdate', value)
         },
     },

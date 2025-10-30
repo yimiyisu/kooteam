@@ -11,7 +11,7 @@
                     保存
                 </el-button>
             </div>
-            <z-editor v-if="editable" v-model="content" height="260px" @save="save" />
+            <z-editor v-if="editable" mode="mini" v-model="content" height="260px" @save="save" />
             <div v-else @dblclick="set" v-html="value.content || '双击添加描述'" class="article-body mce-content-body" />
         </el-col>
     </el-row>
@@ -20,6 +20,7 @@
 export default {
     name: "detailDescribe",
     props: ["value"],
+    inject: ["log"],
     data() {
         return {
             editable: false,
@@ -47,6 +48,8 @@ export default {
         },
         async change() {
             this.save(this.content)
+            let content = "修改任务详细描述"
+            this.log(content)
         },
     },
 };
