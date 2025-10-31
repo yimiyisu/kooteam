@@ -5,7 +5,9 @@
 
 # 体验地址 [https://abc.yimiyisu.com](https://abc.yimiyisu.com)
 
-# [gitee 源码地址](https://gitee.com/yimiyisu/kooteam)
+1. 用微信扫码系统二维码
+2. 第一次体验，需要关注服务号
+3. 自动进入系统
 
 # 功能简介
 
