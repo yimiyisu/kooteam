@@ -4,6 +4,7 @@ import com.yimiyisu.kooteam.events.message.IMessage;
 import com.yimiyisu.kooteam.events.message.channels.domain.ChannelInfo;
 import com.zen.domain.MessageDO;
 import com.zen.kit.ConfigKit;
+import com.zen.kit.MessageKit;
 import com.zen.kit.StringKit;
 
 import java.util.HashMap;
@@ -44,10 +45,24 @@ public class CommonMessage {
             if (platformMessage instanceof WeworkMessage) {
                 channelInfo.setMessageType("textcard");
             }
-            platformMessage.send(messageDO, channelInfo);
+            boolean status = platformMessage.send(messageDO, channelInfo);
+            //消息发送完成，标记状态
+            if (status) {
+                MessageKit.finish(messageDO.getId());
+            } else {
+                // 发送失败
+                MessageKit.fail(messageDO.getId());
+            }
         }
         if (mailMessage != null) { // 发送邮件
-            mailMessage.send(messageDO, null);
+            boolean status = mailMessage.send(messageDO, null);
+            //消息发送完成，标记状态
+            if (status) {
+                MessageKit.finish(messageDO.getId());
+            } else {
+                // 发送失败
+                MessageKit.fail(messageDO.getId());
+            }
         }
     }
 }

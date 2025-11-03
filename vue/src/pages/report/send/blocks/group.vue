@@ -1,7 +1,5 @@
 <template>
-    <el-form-item label="抄送组">
-        <z-search v-model="value['groups']" depend="week_group" multiple />
-    </el-form-item>
+    <z-form-item label="抄送组" type="search" name="groups" depend="week_group" multiple />
 </template>
 <script>
 export default {

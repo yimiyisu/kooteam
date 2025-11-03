@@ -44,20 +44,19 @@ public class ThingEmailEvent implements IEvent<ThingEmailEventModel> {
         if (receivers == null || receivers.isEmpty()) return;
 
         // 创建消息对象
-        ZenMessage zenMessage = new ZenMessage("");
         Map<String, String> content = new HashMap<>();
         content.put("title", "待办任务");
         content.put("description", LogType.getMessageByValue(type) + "待办名：" + thing.getTitle());
         content.put("url", "URL");
-        zenMessage.setContent(JsonKit.stringify(content));
-        zenMessage.setFrom(from);
-        zenMessage.setTitle("待办任务");
-        String messageId = zenMessage.test(JsonKit.stringify(receivers));
-        MessageDO messageDO = MessageKit.get(messageId);
+        MessageDO message = new MessageDO();
+        message.setTo(JsonKit.stringify(receivers));
+        message.setFrom(from);
+        message.setTitle("待办任务");
+        message.setContent(JsonKit.stringify(content));
 
         // 发送消息
         CommonMessage commonMessage = new CommonMessage();
-        commonMessage.send(messageDO);
+        commonMessage.send(message);
     }
 
     /**

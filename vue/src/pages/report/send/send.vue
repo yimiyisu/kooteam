@@ -1,5 +1,5 @@
 <template>
-    <z-table name="oezdwauakls">
+    <z-table name="oezdwauakls" :beforeSubmit="beforeSubmit">
         <template #recieversSlot="data">
             <a-users label="抄送人" :value="data" name="recievers" />
         </template>
@@ -23,6 +23,13 @@ export default {
     provide: { configs },
     data() {
         return {
+        }
+    },
+    methods: {
+        beforeSubmit(formData) {
+            if (!formData.timer) {
+                formData.timer = 0
+            }
         }
     }
 }

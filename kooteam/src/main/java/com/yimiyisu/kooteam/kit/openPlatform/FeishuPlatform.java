@@ -7,6 +7,10 @@ import com.yimiyisu.kooteam.domain.openPlatformResult.FeishuDepartment;
 import com.yimiyisu.kooteam.domain.openPlatformResult.FeishuResult;
 import com.zen.domain.ZenUser;
 import com.zen.kit.*;
+import me.zhyd.oauth.config.AuthConfig;
+import me.zhyd.oauth.request.AuthFeishuRequest;
+import me.zhyd.oauth.request.AuthRequest;
+import me.zhyd.oauth.utils.AuthStateUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +29,15 @@ public class FeishuPlatform implements IOpenPlatform {
     @Override
     public void completeUser(ZenUser user) {
 
+    }
+
+    public static String login() {
+        AuthRequest authRequest = new AuthFeishuRequest(AuthConfig.builder()
+                .clientId(ConfigKit.get("feishuAppId"))
+                .clientSecret(ConfigKit.get("feishuAppSecret"))
+                .redirectUri("https://zxy.daily.zeto.me/api/oAuth/callback")
+                .build());
+        return authRequest.authorize(AuthStateUtils.createState());
     }
 
     @Override

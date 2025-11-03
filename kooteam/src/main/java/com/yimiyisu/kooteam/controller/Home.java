@@ -1,7 +1,6 @@
 package com.yimiyisu.kooteam.controller;
 
 import com.google.gson.JsonObject;
-import com.yimiyisu.kooteam.events.message.channels.DingdingMessage;
 import com.yimiyisu.kooteam.kit.WeixinKit;
 import com.yimiyisu.kooteam.service.WxAuthService;
 import com.zen.ZenController;
@@ -16,12 +15,7 @@ import com.zen.domain.MessageDO;
 import com.zen.domain.ZenUser;
 import com.zen.enums.ZenMethod;
 import com.zen.enums.ZenRole;
-import com.zen.kit.ConfigKit;
-import com.zen.kit.EventKit;
-import com.zen.kit.HttpKit;
-import com.zen.kit.MessageKit;
-import com.zen.kit.StringKit;
-
+import com.zen.kit.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.System;
@@ -71,10 +65,8 @@ public class Home extends ZenController {
         ZenUser user = data.getUser();
         if (type != 0 && user == null)
             return ZenResult.fail("您无访问权限");
-        if (type == 1) {
-            if (user.getRole() < ZenRole.CONSOLE.value())
-                return ZenResult.fail("您无访问权限").setData(-1);
-        }
+        if (type == 1) if (user.getRole() < ZenRole.CONSOLE.value())
+            return ZenResult.fail("您无访问权限").setData(-1);
         return noteResult;
     }
 
@@ -86,15 +78,15 @@ public class Home extends ZenController {
         ZenUser user = data.getUser();
         if (type != 0 && user == null)
             return ZenResult.fail("您无访问权限");
-        if (type == 1) {
-            if (user.getRole() < ZenRole.CONSOLE.value())
-                return ZenResult.fail("您无访问权限");
-        }
+        if (type == 1) if (user.getRole() < ZenRole.CONSOLE.value())
+            return ZenResult.fail("您无访问权限");
         return noteContentResult;
     }
 
-    @MethodType(ZenMethod.GET)
-    public ZenResult outIp() {
+    @MethodType(ZenMethod.ALL)
+    public ZenResult outIp(ZenData data) {
+        this.checkOAuth(data);
+
         // SimpleHttpResponse response = HttpUtil.get("https://ipv4_cm.itdog.cn");
         // return ZenResult.success().setData(response);
         // curl -x http://172.24.0.12:8899 https://ifconfig.io/ip
@@ -127,9 +119,8 @@ public class Home extends ZenController {
         ZenResult authResult = zenEngine.execute("get/wx_auth", ZenData.create("id", id));
         String mpId = authResult.get("appid");
         String openId = null;
-        if (StringKit.isEmpty(openIdEncrypt)) {
-            openId = wxAuthService.getOpenId(mpId, code);
-        } else {
+        if (StringKit.isEmpty(openIdEncrypt)) openId = wxAuthService.getOpenId(mpId, code);
+        else {
             DecryptResult decryptResult = StringKit.decrypt(openIdEncrypt);
             openId = decryptResult.getValue();
         }
@@ -142,17 +133,13 @@ public class Home extends ZenController {
         String domain = authResult.get("domain");
         domain += "?xy=" + encrypt;
         if (!subscribed) {
-            if (StringKit.isNotEmpty(polling)) {
-                return ZenResult.success();
-            }
+            if (StringKit.isNotEmpty(polling)) return ZenResult.success();
             String image = wxAuthService.getMpInfo(mpId).get("image");
             String appDomain = ConfigKit.get("appDomain") + "/wap.html#/wap/subscribed?state=" + id + "&encrypt="
                     + encrypt + "&image=" + image;
             return ZenResult.redirect(appDomain);
         }
-        if (StringKit.isNotEmpty(polling)) {
-            return ZenResult.jump(domain);
-        }
+        if (StringKit.isNotEmpty(polling)) return ZenResult.jump(domain);
         System.out.println(domain);
         return ZenResult.redirect(domain);
     }

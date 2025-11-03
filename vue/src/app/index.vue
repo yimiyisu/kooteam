@@ -8,9 +8,6 @@
                 </template>
             </z-action>
         </template>
-        <!-- <template #profile>
-            <mods />
-        </template> -->
     </z-layout>
 </template>
 

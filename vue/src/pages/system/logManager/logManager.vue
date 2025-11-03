@@ -35,14 +35,14 @@ export default {
         }
     },
     async created() {
-        const { apps } = await $.get({ url: "/api/system/apps" })
+        const { logMapping } = await $.get({ url: "/api/system/logMapping" })
         this.fields = [{
-            name: 'app', label: '相关应用', type: 'select', options: apps.map(({ name, title }) => {
+            name: 'app', label: '相关应用', type: 'select', options: logMapping.map(({ name, title }) => {
                 return { value: name, label: title }
             })
         },
         { name: 'date', label: '日志时间', type: 'date' }]
-        this.params = { app: apps[0].name || "", page: 1 ,limit:10};
+        this.params = { app: logMapping[0].name || "", page: 1 ,limit:10};
         this.load = true;
     },
     methods: {

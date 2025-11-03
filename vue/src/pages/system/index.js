@@ -6,6 +6,7 @@ import SystemDepartment from "./department/department";
 import SystemDepartmentUser from "./departmentUser/departmentUser";
 import SystemEmployee from "./employee/employee";
 import SystemLogManager from "./logManager/logManager";
+import SystemLogMapping from "./logMapping/logMapping";
 import SystemMonitor from "./monitor/monitor";
 import SystemMp from "./mp/mp";
 import SystemOauth from "./oauth/oauth";
@@ -26,6 +27,7 @@ export default {
 	'system/departmentUser': SystemDepartmentUser,
 	'system/employee': SystemEmployee,
 	'system/logManager': SystemLogManager,
+	'system/logMapping': SystemLogMapping,
 	'system/monitor': SystemMonitor,
 	'system/mp': SystemMp,
 	'system/oauth': SystemOauth,

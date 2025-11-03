@@ -7,6 +7,10 @@ import com.yimiyisu.kooteam.domain.openPlatformResult.WeWorkResult;
 import com.yimiyisu.kooteam.domain.openPlatformResult.WeWorkUserResult;
 import com.zen.domain.ZenUser;
 import com.zen.kit.*;
+import me.zhyd.oauth.config.AuthConfig;
+import me.zhyd.oauth.request.AuthRequest;
+import me.zhyd.oauth.request.AuthWeChatEnterpriseQrcodeV2Request;
+import me.zhyd.oauth.utils.AuthStateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +23,17 @@ public class WeworkPlatform implements IOpenPlatform {
 
     @Override
     public void refreshToken() {
+    }
+
+    public static String login() {
+        AuthRequest authRequest = new AuthWeChatEnterpriseQrcodeV2Request(AuthConfig.builder()
+                .clientId(ConfigKit.get("weworkId"))
+                .clientSecret(ConfigKit.get("weworkSecret"))
+                .redirectUri("https://zxy.daily.zeto.me/api/oAuth/callback")
+                .agentId(ConfigKit.get("weworkAppId"))
+                .lang("zh")
+                .build());
+        return authRequest.authorize(AuthStateUtils.createState());
     }
 
     @Override
@@ -46,7 +61,7 @@ public class WeworkPlatform implements IOpenPlatform {
         String token = CacheKit.get(WeworkPlatform.TOKEN_KEY);
         if (StringKit.isNotEmpty(token)) return token;
         String corpId = ConfigKit.get("weworkId");
-        String corpSecret = ConfigKit.get("weworkAppSecret");
+        String corpSecret = ConfigKit.get("weworkSecret");
         String url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=" + corpId + "&corpsecret=" + corpSecret;
         Map<String, Object> result = HttpKit.getAsMap(url);
         if (result.containsKey("access_token")) {

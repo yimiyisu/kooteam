@@ -1,6 +1,6 @@
 <template>
     <el-form-item label="工作详情">
-        <z-editor v-model="data['content']" ref="editor" :beforeInit="beforeInit" @save="save" />
+        <z-editor v-model="data['content']" height="420px" ref="editor" @save="save" />
         <z-action ref="thingAction" width="800px" title="插入处理的任务" href="/report/thingSelector"
             :beforeSubmit="insertThings">
         </z-action>

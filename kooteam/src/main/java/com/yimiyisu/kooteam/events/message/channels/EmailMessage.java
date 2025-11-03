@@ -13,6 +13,7 @@ import jakarta.activation.DataHandler;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -83,22 +84,23 @@ public class EmailMessage implements IMessage {
             }
             // 设置邮件内容
             message.setContent(multipart);
-//            String[] recievers = messageDO.getTo().split(",");
-            List<String> recievers = messageDO.getRecievers();
+            List<String> recievers = messageDO.getRecievers() == null ? new ArrayList<>() : messageDO.getRecievers();
             for (String reciever : recievers) {//验证收件人邮箱
-                if (PatternKit.isEmail(reciever))
+                if (PatternKit.isEmail(reciever)) {
                     message.addRecipient(Message.RecipientType.TO, new InternetAddress(reciever));
+                    System.out.println("=====add receiver:" + reciever + "=====");
+                }
                 else {
                     user = UserKit.get(reciever);
                     if (user != null && StringKit.isNotEmpty(user.getEmail()))
                         message.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
                 }
-                // 发送邮件
-                Transport.send(message);
             }
-
+            // 发送邮件
+            Transport.send(message);
+            System.out.println("=====发送=====");
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             return false;
         }
         return true;

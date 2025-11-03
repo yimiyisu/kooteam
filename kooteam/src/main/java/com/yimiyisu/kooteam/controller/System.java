@@ -26,6 +26,7 @@ import com.zen.kit.StringKit;
 public class System extends ZenController {
 
     private static final String APPS_KEY = "apps";
+    private static final String LOGMAPPING_KEY = "logmapping";
     @Inject
     private ZenEngine zenEngine;
     @Inject
@@ -82,10 +83,10 @@ public class System extends ZenController {
 
     public ZenResult createOAuth(ZenData data) {
         String id = data.getId();
-        String domain = data.get("domain");
+        String domain = data.get("domain").trim();
         String accessKey = StringKit.SHA1(id);
-        String secretKey = StringKit.encrypt(domain + ":" + id, id);
-        data.put("accessKey", accessKey);
+        String secretKey = StringKit.md5(domain + ":" + id);
+        data.put("accessId", accessKey);
         data.put("secretKey", secretKey);
         return zenEngine.execute("put/oauth", data);
     }
@@ -95,6 +96,15 @@ public class System extends ZenController {
         List<AuthDO> authDOList = oauths.asList(AuthDO.class);
         ConfigKit.self("oauth", "kooteam", JsonKit.stringify(authDOList));
         return ZenResult.success(null);
+    }
+
+    public ZenResult logMapping(ZenData data) {
+        if (data.isEmpty()) {
+            Object appsData = ConfigKit.self(System.LOGMAPPING_KEY);
+            return ZenResult.success().setData(appsData);
+        }
+        ConfigKit.self(System.LOGMAPPING_KEY, data.toString());
+        return ZenResult.success("保存成功");
     }
 
 }
