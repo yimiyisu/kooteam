@@ -12,10 +12,10 @@
 # 功能简介
 
 **1. 待办四象限：突出事情优先级，帮助员工合理安排时间，提高工作效率**
-![待办四象限：突出事情优先级，帮助员工合理安排时间，提高工作效率](https://images.gitee.com/uploads/images/2020/0401/145234_27d3043d_472.jpeg)
+![待办四象限：突出事情优先级，帮助员工合理安排时间，提高工作效率](./release/screenshot/console.png)
 
-**2. 在线流程图：在线流程图工具，使用方便**
-![在线流程图：在线流程图工具，使用方便](https://images.gitee.com/uploads/images/2020/0401/145236_7ff14512_472.jpeg)
+**2. 无线端效果图**
+![无线端效果图](./release/screenshot/mobile.png)
 
 **3. 在线思维导图：梳理思路，优化工作流程**
 ![在线思维导图：梳理思路，优化工作流程](https://images.gitee.com/uploads/images/2020/0401/145237_69870064_472.jpeg)
