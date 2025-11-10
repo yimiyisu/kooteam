@@ -28,7 +28,6 @@
 
 # 本项目基于以下开源项目
 
-- Http Server (Apache 2.0 协议) [smart-http](https://gitee.com/wwtbnbw6688/smart-http)
 - 文本编辑器 (GNU 定制协议) [tinymce](https://github.com/tinymce/tinymce)
 - 思维导图（MIT 协议）[mind-map](https://github.com/wanglin2/mind-map)
 - 在线表格 (MIT 协议) [x-spreadsheet](https://github.com/myliang/x-spreadsheet)
@@ -43,14 +42,14 @@
 
 # 本地开发说明
 
-- 该项目 60%以上代码由低码工具生成，包含大部分前后端代码，强行改写会影响迭代升级
+- 本项目使用了自研的 Java 技术框架，非传统 Spring 项目，不适合个人学习使用。
+- 项目中大部分由低码工具生成，包含大部分前后端代码，强行改写会影响迭代升级。
 - 我们研发规范上禁止了 SQL 代码，所以目不包含任何 SQL 语言，不要误认为代码不全，工程可以完整运行
 - 低码引擎会自动创建表，自动适配不同类型数据库，不需要数据库初始化脚本
 
 # 为什么本地源码打包后，程序体积变大
 
 - 本地打包是标准 mvn 打包模式。公司内部研发平台，开发了编译优化技术，将 jar 包体积减少 50%以上，程序启动速度，运行性能也有明显提升。
-- 不要问什么代码开源不完整，没开源的是低码引擎，不是业务代码。所有前后端业务代码都已开源。
 
 ## 源码目录结构
 
