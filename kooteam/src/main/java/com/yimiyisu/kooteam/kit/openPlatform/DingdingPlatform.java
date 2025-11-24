@@ -12,7 +12,6 @@ import com.zen.annotation.Component;
 import com.zen.domain.ZenUser;
 import com.zen.kit.*;
 import me.zhyd.oauth.config.AuthConfig;
-import me.zhyd.oauth.request.AuthDingTalkRequest;
 import me.zhyd.oauth.request.AuthDingTalkV2Request;
 import me.zhyd.oauth.request.AuthRequest;
 import me.zhyd.oauth.utils.AuthStateUtils;
