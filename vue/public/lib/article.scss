@@ -7,7 +7,7 @@
     border-color: var(--a-border-color);
 }
 
-.mce-content-body {
+.a-richtext {
     outline: none;
     cursor: text;
     position: relative;
@@ -160,6 +160,7 @@
     }
 
     blockquote {
+        background-color: var(--a-fill-color-light);
         border-left: 6px solid var(--a-border-color);
         color: var(--a-text-color-secondary);
         padding-left: 6px;
@@ -195,6 +196,7 @@
         border-right: 3px solid var(--a-border-color-lighter);
         word-wrap: normal;
         overflow-x: auto;
+        
     }
 
     pre code {
