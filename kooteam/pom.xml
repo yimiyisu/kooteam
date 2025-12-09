@@ -12,7 +12,7 @@
         <dependency>
             <groupId>io.gitee.yimiyisu</groupId>
             <artifactId>core</artifactId>
-            <version>1.2.7</version>
+            <version>1.2.8</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
