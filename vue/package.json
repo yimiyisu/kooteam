@@ -79,7 +79,7 @@
             "ItemMovement": true,
             "CalendarScroll": true,
             "GSTC": true,
-            "mxUtils": true,
+            "wx": true,
             "STYLE_PATH": true,
             "STENCIL_PATH": true,
             "Graph": true,

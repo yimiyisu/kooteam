@@ -1,0 +1,1 @@
+{"name":"goal_end","type":"patch","table":"goal","msg":"操作成功！","where":{"relate":"AND","exprs":[{"operator":0,"column":"id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[{"name":"status","value":"3","from":1},{"name":"update_gmt","value":"current","from":2}],"outputs":["id"]}

@@ -1,16 +1,19 @@
 <template>
-    <z-block url="/do/get/week" :params="params" v-if="show">
+    <z-block :url="url" :params="params" v-if="show">
         <template #default="data">
             <div class="mce-content-body">
-                <el-descriptions border>
+                <el-descriptions border style="margin-bottom: 20px;">
                     <el-descriptions-item label="发送人">
-                        <z-user :plain="false" :value="data.uid" />
+                        <z-user :plain="false" :value="data.uid == null ? data.creator : data.uid" />
                     </el-descriptions-item>
                     <el-descriptions-item label="发送时间">
                         <z-date :value="data.timer" />
                     </el-descriptions-item>
                 </el-descriptions>
-                <div v-html="data.content"></div>
+                <div>
+                    <z-editor :modelValue="data.content" />
+                </div>
+                <!-- <div v-html="data.content"></div> -->
                 <div v-if="data.summary">
                     <h1>总结与思考</h1>
                     <div class="ml-2">
@@ -29,17 +32,24 @@ export default {
     data() {
         return {
             params: null,
-            show: false
+            show: false,
+            url: "",
         }
     },
     async created() {
-        this.params = { id: this.week.weekId };
-        if(this.week.status === 0){
+        if (this.week.weekId.includes("ai")) {
+            this.url = "/do/get/ai_week"
+            this.params = { id: this.week.weekId.replace("ai_", "") }
+        } else {
+            this.params = { id: this.week.weekId };
+            this.url = "/do/get/week"
+        }
+        if (this.week.status === 0) {
             this.week.status = 1;
             await $.get({
                 url: '/do/patch/week_recieve',
                 data: this.week,
-                success: () => {}
+                success: () => { }
             })
         }
         this.show = true;

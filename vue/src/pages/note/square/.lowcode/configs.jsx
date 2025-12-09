@@ -1,22 +1,21 @@
 export default {
-  url: "/do/select/note",
-  conditionLimit:null,
-  selectable: false,
-  showIndex: false,
-  compact: 220,
-  path: 'note/square',
-  title: "开放知识库",
-  entitys: [{"name":"id","label":"编号"},{"name":"title","label":"标题","type":"textarea"},{"name":"createId","label":"创建人","type":"user"},{"name":"content","label":"知识库目录","type":"inputTag"},{"name":"projectId","label":"所属项目","type":"search"},{"name":"createGmt","label":"创建时间","type":"date"},{"name":"updateGmt","label":"更新时间","type":"date"},{"name":"pub","label":"公共读","code":"pubType"},{"name":"groupId","label":"分组ID","type":"search","depend":"note_group"},{"name":"configs","label":"综合配置","type":"map"}],
-  columns: ["title","createId","updateGmt"],
-  condition: ["title","createId"],
-  slots: {
-    action$({ row }) {
-      return (
-        <>
-          <z-action p='amb8h5cu' label='访问知识库' href={`/kooteam/view.html?id=${row.id}`} mode='blank' link />
-        </>
-      )
+    url: "/do/select/note",
+    conditionLimit: null,
+    selectable: false,
+    showIndex: false,
+    compact: 220,
+    path: 'note/square',
+    title: "开放知识库",
+    entitys: [{ "name": "id", "label": "编号" }, { "name": "title", "label": "标题", "type": "textarea" }, { "name": "createId", "label": "创建人", "type": "user" }, { "name": "content", "label": "知识库目录", "type": "inputTag" }, { "name": "projectId", "label": "所属项目", "type": "search" }, { "name": "createGmt", "label": "创建时间", "type": "date" }, { "name": "updateGmt", "label": "更新时间", "type": "date" }, { "name": "pub", "label": "公共读", "code": "pubType" }, { "name": "groupId", "label": "分组ID", "type": "search", "depend": "note_group" }, { "name": "configs", "label": "综合配置", "type": "map" }],
+    columns: ["title", "createId", "updateGmt"],
+    condition: ["title", "createId"],
+    slots: {
+        action$({ row }) {
+            return (
+                <>
+                    <z-action p='amb8h5cu' label='访问知识库' href={`/view.html?id=${row.id}`} mode='blank' link />
+                </>
+            )
+        }
     }
-  }
 }
-  

@@ -34,7 +34,6 @@ public class MessageEvent implements IEvent<MessageDO> {
     public void execute(MessageDO message) {
         if (!MessageKit.beforeSendCheck(message.getId())) return;
         String templateName = message.getTemplateName();
-        System.out.println(templateName);
         //获取模版消息的消息渠道
         TemplateDO channels = templateCache.get(templateName);
         if (channels == null) {

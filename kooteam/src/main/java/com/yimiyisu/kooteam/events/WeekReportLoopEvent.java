@@ -40,7 +40,7 @@ public class WeekReportLoopEvent implements IEvent<WeekReportLoopModel> {
             long now = DateKit.now();
             long timediff = timer - now;
             if (timediff < 0 || timediff > 10) { // 当前时间超过发送时间或在10s内 都创建消息等待轮训任务发送
-                emailService.sendWeekReport(weekReport.getId(), weekReport.getUid());
+                emailService.sendWeekReport(weekReport.getId(), weekReport.getUid(), "week");
             }
         }
     }

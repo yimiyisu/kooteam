@@ -2,7 +2,6 @@ package com.yimiyisu.kooteam.events.message.channels;
 
 import com.yimiyisu.kooteam.events.message.IMessage;
 import com.yimiyisu.kooteam.events.message.channels.domain.ChannelInfo;
-import com.yimiyisu.kooteam.events.message.channels.domain.WeworkTextMessageDO;
 import com.yimiyisu.kooteam.kit.OpenPlatformKit;
 import com.yimiyisu.kooteam.kit.openPlatform.IOpenPlatform;
 import com.yimiyisu.kooteam.kit.openPlatform.WeworkPlatform;
@@ -48,6 +47,7 @@ public class WeworkMessage implements IMessage {
     @Override
     public boolean send(MessageDO messageDO, ChannelInfo channelInfo) {
         String accessToken = openPlatform.getAccessToken();
+        if (StringKit.isEmpty(accessToken)) return false;
         Map<String, String> config = channelInfo.getConfig();
         // 构建通用请求参数
         Map<String, Object> body = new HashMap<>();
@@ -76,9 +76,7 @@ public class WeworkMessage implements IMessage {
         body.put(messageType, content);
 
         String url = this.url + accessToken;
-//        System.out.println(body);
         String response = HttpKit.post(url, body);
-//        System.out.println(response);
         return true;
     }
 

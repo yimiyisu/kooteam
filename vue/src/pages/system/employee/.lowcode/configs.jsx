@@ -13,7 +13,7 @@ export default {
       header$() {
       return (
         <>
-        <z-action p='s8qajfm4' label='测试' mode='confirm' type='success' url='/api/home/test' />
+        <z-action p='s8qajfm4' label='测试' mode='confirm' type='success' url='/api/home/test123' />
         </>
       )
     },

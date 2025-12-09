@@ -1,0 +1,1 @@
+{"name":"plan_user","type":"get","table":"plan_user","where":{"relate":"AND","exprs":[{"operator":0,"column":"id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","create_gmt","update_gmt","uid","plan_id","title","description","start_gmt","end_gmt","cycle","stage","score","charge"]}

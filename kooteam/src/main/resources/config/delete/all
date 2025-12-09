@@ -1,0 +1,1 @@
+{"name":"all","type":"delete","table":"department_user","msg":"操作成功！","where":{"relate":"AND","exprs":[{"operator":0,"column":"employee_id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id"]}

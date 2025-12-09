@@ -1,5 +1,5 @@
 <template>
-    <iframe ref="iframe" style="border:0;height:100%;width:100%" :srcdoc="doc"> </iframe>
+    <iframe ref="iframe" style="border:0;width:100%;height:100%" :srcdoc="doc"> </iframe>
 </template>
 <script>
 import iframe from './blocks/iframeTemplate';
@@ -7,13 +7,19 @@ export default {
     props: {
         noteId: String,
         content: String,
+        readonly: Boolean,
         type: Number
     },
     data() {
         return { doc: null }
     },
+    watch: {
+        readonly(val) {
+            this.doc = iframe(this.type, this.noteId, val)
+        }
+    },
     mounted() {
-        this.doc = iframe(this.type, this.noteId)
+        this.doc = iframe(this.type, this.noteId, this.readonly)
         window.addEventListener('message', this.listen)
     },
     unmounted() {

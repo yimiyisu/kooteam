@@ -1,18 +1,9 @@
 <template>
-    <el-dropdown v-if="apps" @command="change" :teleported="false">
-        <span>
-            {{ title }}
-            <z-icon value="chevronDown" />
-        </span>
-        <template #dropdown>
-            <el-dropdown-menu>
-                <el-dropdown-item v-for="app in apps" :command="app.name" :disabled="app.name === appName"
-                    :key="app.name">
-                    <span :class="{ actived: app.name === appName }">{{ app.title }}</span>
-                </el-dropdown-item>
-            </el-dropdown-menu>
-        </template>
-    </el-dropdown>
+    <el-menu v-if="apps" mode="horizontal" :default-active="appName" @select="change">
+        <el-menu-item v-for="app in apps" :key="app.name" :index="app.name">
+            {{ app.title }}
+        </el-menu-item>
+    </el-menu>
 </template>
 <script>
 export default {
@@ -30,14 +21,14 @@ export default {
     data() {
         return { configs: {}, appName: 'kooteam', apps: null }
     },
-    created() {
-        this.apps = window._apps
+    mounted() {
         $.on('_appChange', (app) => {
             this.appName = app
         })
+        this.apps = window._apps
     },
     methods: {
-        async change(app) {
+        change(app) {
             const { appName } = this
             if (app === appName) {
                 return
@@ -47,15 +38,3 @@ export default {
     },
 }
 </script>
-<style lang="scss" scoped>
-.a-dropdown {
-    .a-icon {
-        width: 14px;
-        translate: 0 4px;
-    }
-
-    :deep(.is-disabled) {
-        color: var(--a-color-primary);
-    }
-}
-</style>

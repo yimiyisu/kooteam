@@ -1,43 +1,45 @@
 package com.yimiyisu.kooteam.controller;
 
-import java.util.List;
-
 import com.yimiyisu.kooteam.domain.LogDO;
 import com.yimiyisu.kooteam.events.department.model.DepartmentEventModel;
 import com.yimiyisu.kooteam.service.AliLogGetService;
-import com.zen.ZenController;
-import com.zen.ZenData;
-import com.zen.ZenEngine;
-import com.zen.ZenMessage;
-import com.zen.ZenResult;
+import com.zen.*;
 import com.zen.annotation.AccessRole;
 import com.zen.annotation.Inject;
 import com.zen.domain.AuthDO;
 import com.zen.domain.MessageDO;
 import com.zen.enums.ZenRole;
-import com.zen.kit.CacheKit;
-import com.zen.kit.ConfigKit;
-import com.zen.kit.EventKit;
-import com.zen.kit.JsonKit;
-import com.zen.kit.MessageKit;
-import com.zen.kit.StringKit;
+import com.zen.kit.*;
+
+import java.util.List;
 
 @AccessRole(ZenRole.SUPPER)
 public class System extends ZenController {
 
     private static final String APPS_KEY = "apps";
     private static final String LOGMAPPING_KEY = "logmapping";
+    private static final String DEEPSEEK_API_KEY = "deepseekApikey";
     @Inject
     private ZenEngine zenEngine;
     @Inject
     private AliLogGetService aliLogGetService;
+
+    // deepseek配置
+    public ZenResult deepseek(ZenData data) {
+        if (data.isEmpty()) {
+            Object deepseekApikey = ConfigKit.self(System.DEEPSEEK_API_KEY);
+            return ZenResult.success().setData(deepseekApikey);
+        }
+        ConfigKit.self(System.DEEPSEEK_API_KEY, data.getOrigin());
+        return ZenResult.success("保存成功");
+    }
 
     public ZenResult apps(ZenData data) {
         if (data.isEmpty()) {
             Object appsData = ConfigKit.self(System.APPS_KEY);
             return ZenResult.success().setData(appsData);
         }
-        ConfigKit.self(System.APPS_KEY, data.toString());
+        ConfigKit.self(System.APPS_KEY, data.getOrigin());
         return ZenResult.success("保存成功");
     }
 
@@ -67,13 +69,11 @@ public class System extends ZenController {
         zenMessage.setTitle(data.get("title"));
         zenMessage.setMobile(data.get("mobile"));
         String to = data.get("recipient");
-        if (StringKit.isEmpty(to)) {
+        if (StringKit.isEmpty(to))
             to = data.getUid();
-        }
 
-        if (!data.isEmpty("link")) {
+        if (!data.isEmpty("link"))
             zenMessage.setLink(data.get("link"));
-        }
 
         String messageId = zenMessage.test(to);
         MessageDO messageDO = MessageKit.get(messageId);
@@ -82,7 +82,8 @@ public class System extends ZenController {
     }
 
     public ZenResult createOAuth(ZenData data) {
-        String id = data.getId();
+        String id = StringKit.shortId();
+        data.put("id", id);
         String domain = data.get("domain").trim();
         String accessKey = StringKit.SHA1(id);
         String secretKey = StringKit.md5(domain + ":" + id);
@@ -94,7 +95,7 @@ public class System extends ZenController {
     public ZenResult rsyncOAuth() {
         ZenResult oauths = zenEngine.execute("list/oauth", ZenData.create("pageSize", "100"));
         List<AuthDO> authDOList = oauths.asList(AuthDO.class);
-        ConfigKit.self("oauth", "kooteam", JsonKit.stringify(authDOList));
+        ConfigKit.self("oauth", "kooteam", JsonKit.parse(authDOList));
         return ZenResult.success(null);
     }
 
@@ -103,7 +104,7 @@ public class System extends ZenController {
             Object appsData = ConfigKit.self(System.LOGMAPPING_KEY);
             return ZenResult.success().setData(appsData);
         }
-        ConfigKit.self(System.LOGMAPPING_KEY, data.toString());
+        ConfigKit.self(System.LOGMAPPING_KEY, data.getOrigin());
         return ZenResult.success("保存成功");
     }
 

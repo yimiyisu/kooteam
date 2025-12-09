@@ -15,7 +15,7 @@ public class ThingDO {
     private long start;
     private long end;
     private int status;
-    private String creator;
+    private String createUid;
     private List<String> file;
     private int type;
     private int quadrant;

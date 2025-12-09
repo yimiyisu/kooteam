@@ -6,7 +6,7 @@ import './sass/index.scss'
 ;(async function () {
   const kooteam = 'kooteam'
   const fix = '_'
-  __webpack_public_path__ = zen.path(kooteam)
+  zen.path(kooteam)
   // 提前初始化，声明是portal
   const { pathname } = window.location
   const whiteURLS = ['/login', '/_auth']

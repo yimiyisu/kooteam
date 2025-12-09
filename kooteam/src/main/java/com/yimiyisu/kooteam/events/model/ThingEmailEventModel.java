@@ -10,4 +10,6 @@ public class ThingEmailEventModel {
     private String from; // 发送人
     private int type; // 操作类型
     private String original; // 原始数据
+    private String content; // 日志内容
+    private String logUid;
 }

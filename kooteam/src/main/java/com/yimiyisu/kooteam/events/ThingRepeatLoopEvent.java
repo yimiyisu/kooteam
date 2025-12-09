@@ -8,13 +8,11 @@ import com.yimiyisu.kooteam.events.model.ThingRepeatLoopEventModel;
 import com.zen.ZenData;
 import com.zen.ZenEngine;
 import com.zen.ZenResult;
-import com.zen.annotation.Crontab;
 import com.zen.annotation.Inject;
 import com.zen.interfaces.IEvent;
 import com.zen.kit.*;
 
 import java.util.List;
-import java.util.Map;
 
 //@Crontab("1 1 0 * * ? *")
 //@Crontab("0 */1 * * * ? *")
@@ -63,7 +61,7 @@ public class ThingRepeatLoopEvent implements IEvent<ThingRepeatLoopEventModel> {
     // 创建待办
     private void createThing(ThingDO thing, boolean workDay) {
         int type = thing.getType(); // 重复任务类型
-        String owner = StringKit.isEmpty(thing.getOwner()) ? thing.getCreator() : thing.getOwner();
+        String owner = StringKit.isEmpty(thing.getOwner()) ? thing.getCreateUid() : thing.getOwner();
         String thingId = "";
         String preTitle = type == 1 ? "(每日任务)" : "(工作日任务)";
         if (type == 1 || (workDay && type == 2)) { // 每日重复 || 工作日&&工作日重复
@@ -71,7 +69,7 @@ public class ThingRepeatLoopEvent implements IEvent<ThingRepeatLoopEventModel> {
                             .put("createGmt", DateKit.now())
                             .put("start", DateKit.today())
                             .put("end", DateKit.today() + DAY)
-                            .put("create_uid", thing.getCreator())
+                            .put("create_uid", thing.getCreateUid())
                             .put("status", 0)
                             .put("updateGmt", DateKit.now())
                             .put("title", thing.getTitle() + preTitle)
@@ -84,7 +82,7 @@ public class ThingRepeatLoopEvent implements IEvent<ThingRepeatLoopEventModel> {
 
         // 调用异步通知负责人
         ThingEmailEventModel emailEventModel = ThingEmailEventModel.builder()
-                .from(thing.getCreator())
+                .from(thing.getCreateUid())
                 .thingId(thingId)
                 .type(1)
                 .build();

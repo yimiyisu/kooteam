@@ -11,11 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DepartmentEventModel {
-    /*private List<DepartmentDO> departments;
-    private String id;
-    private String name;
-    private String outParentId;*/
-
     private String departmentId;
     private String title;
     private String parentId;

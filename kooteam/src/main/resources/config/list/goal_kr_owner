@@ -1,0 +1,1 @@
+{"name":"goal_kr_owner","type":"list","table":"goal","where":{"relate":"AND","exprs":[{"operator":0,"column":"owner","alias":"","from":2,"need":false,"value":"uid"},{"operator":6,"column":"parent_id","alias":"","from":1,"need":false}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["parent_id"]}

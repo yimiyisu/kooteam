@@ -39,7 +39,7 @@
                     <!-- <z-icon tooltip="关闭文档" value="x" size="18" @click="close" /> -->
                 </div>
                 <div class="detail">
-                    <Editor v-if="params" :params="params" />
+                    <Editor v-if="params" :key="params.id" :params="params" />
                     <el-empty v-else description="请选择文件" />
                 </div>
                 <!-- <z-block class="detail" v-if="params" href="/editor" :params="params" /> -->
@@ -49,9 +49,9 @@
 </template>
 <script>
 import Editor from '@/editor/index';
+import { useZIndex } from 'element-plus';
 import Extend from './extend.vue';
 export default {
-    inject: ['$index'],
     components: { Extend, Editor },
     data() {
         return {
@@ -88,16 +88,17 @@ export default {
     },
     methods: {
         async show(data) {
+            const { article } = this.$route.query
+            if (article) {
+                this.$router.replace({ query: { ...this.$route.query, article: undefined } })
+                this.params = null
+            }
             const { id } = data;
             this.isFull = false
             this.noteId = id
             const result = await $.get({ url: "/do/get/note", data: { id } })
             this.content = result.content || [];
             this.title = result.title;
-            const { article } = this.$route.query
-            if (article) {
-                this.open({ id: article })
-            }
         },
         async add(formData, parent) {
             if (formData.type !== 2) {
@@ -134,14 +135,14 @@ export default {
             this.save()
         },
         view() {
-            $.open('/kooteam/view.html?id=' + this.noteId)
+            $.open('/view.html?id=' + this.noteId)
         },
         async save() {
             await $.post({ url: "/do/patch/note", data: { id: this.noteId, content: this.content } })
         },
         full() {
             const { isFull } = this
-            let nextIndex = isFull ? 0 : this.$index()
+            let nextIndex = isFull ? 0 : useZIndex().nextZIndex()
             $.fullscreen(this.$refs['canvas'].$el, nextIndex)
             this.isFull = !isFull
         },

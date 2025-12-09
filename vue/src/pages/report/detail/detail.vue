@@ -1,55 +1,47 @@
 <template>
-    <z-block url="/do/get/week" :params="params">
-        <template #default="data">
-            <div class="mce-content-body">
-                <el-descriptions border>
-                    <el-descriptions-item label="发送人">
-                        <z-user :plain="false" :value="data.uid" />
-                    </el-descriptions-item>
-                    <el-descriptions-item label="发送时间">
-                        <z-date v-if="data.status" :value="data.updateGmt" />
-                        <el-text v-else type="info">未发送</el-text>
-                    </el-descriptions-item>
-                </el-descriptions>
-                <div v-html="data.content"></div>
-                <div v-if="data.summary">
-                    <h1>总结与思考</h1>
-                    <pre>
-                        {{ data.summary }}
-                    </pre>
-                </div>
-            </div>
-            <!-- <el-button @click="prevDocument">上一篇</el-button>
-            <el-button @click="nextDocument">下一篇</el-button> -->
+  <z-block url="/do/get/ai_week" :params="params">
+    <template #default="data">
+      <z-form :data="data" :fields="fields" url="/do/patch/ai_week">
+        <template #recivers="row">
+          <a-users label="抄送人" :value="row" name="recivers" />
         </template>
-    </z-block>
+        <template #groups="row">
+          <Group :value="row" />
+        </template>
+      </z-form>
+    </template>
+  </z-block>
 </template>
+
 <script>
+import { provide } from 'vue';
+import Group from '../send/blocks/group.vue';
+import configs from './.lowcode/configs';
+
 export default {
-    props: {
-        id: String
-    },
-    data() {
-        return {
-            params: null
-        }
-    },
-    created() {
-        this.params = { id: this.id };
-    },
-    methods: {
-        async prevDocument() {
-            const result = await $.get({ url: '/do/list/lastWeek', data: { id: this.params.id, size: 2 } });
-            if (result && result.length > 0) {
-                this.params.id = result[0].id;
-            }
-        },
-        async nextDocument() {
-            const result = await $.get({ url: '/do/list/nextWeek', data: { id: this.params.id, size: 2 } });
-            if (result && result.length > 0) {
-                this.params.id = result[0].id;
-            }
-        },
+  inject: ['$map'],
+  name: 'p-ccuv3klt',
+  setup() {
+    provide('configs', configs)
+  },
+  components: {
+    Group
+  },
+  computed: {
+    params() {
+      return this.$map.id
     }
+  },
+  data() {
+    return {
+      fields: [
+        { name: 'title', label: '标题' },
+        { name: 'recivers' },
+        { name: 'groups', label: '抄送组' },
+        { name: 'reason', label: '失败原因', visible: (formData) => { return formData.status === 5 }, readonly: true },
+        { name: 'content', label: '内容', type: 'tiptap', visible: (formData) => { return formData.status === 3 } },
+      ]
+    }
+  }
 }
 </script>

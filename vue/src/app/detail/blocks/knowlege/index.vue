@@ -6,7 +6,8 @@
                 <Selector @update="change" />
             </z-action>
             <div v-if="notes.length > 0" class="list">
-                <el-link v-for="(note, idx) in notes" :key="note" :href="'/kooteam/knowledge/' + note" target="_blank">
+                <el-link v-for="(note, idx) in notes" :key="note" href="javascript:void(0);"
+                    @click.prevent="openNote(note)">
                     <z-text type="primary" :modelValue="note" depend="note_content" />
                     <z-icon value="externalLink" />
                     <z-icon class="hover" @click.prevent="remove(idx)" value="trash2" />
@@ -27,6 +28,7 @@ export default {
     },
     created() {
         this.notes = this.value.notes || []
+        console.log(this.notes)
     },
     methods: {
         remove(idx) {
@@ -45,6 +47,17 @@ export default {
         async save() {
             this.value.notes = this.notes
             await $.post({ url: '/do/patch/thing', data: this.value })
+        },
+        async openNote(note) {
+            const data = await this.getNoteContent(note)
+            if (data && data.noteId) {
+                window.open(`/view.html?id=${data.noteId}`, '_blank')
+            }
+        },
+        //查询noteId对应的知识库
+        async getNoteContent(note) {
+            const data = await $.get({ url: '/do/get/note_content', data: { id: note } })
+            return data
         }
     },
 };

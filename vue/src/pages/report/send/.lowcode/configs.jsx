@@ -1,20 +1,20 @@
 export default {
   url: "/do/select/week",
   conditionLimit:null,
-  selectable: false,
-  showIndex: false,
+  selectable: true,
+  showIndex: true,
   compact: 220,
   path: 'report/send',
   title: "我发出的",
 	tabs: {"list":[{"label":"已发送","value":"1","id":"skezsl3n"},{"label":"未发送","value":"0","id":"a9aqyk7o"}],"keyword":"status"},
   entitys: [{"name":"id","label":"编号","type":"search"},{"name":"title","label":"周报标题"},{"name":"recievers","label":"接收人","type":"inputTag"},{"name":"groups","label":"接受的组","type":"inputTag"},{"name":"uid","label":"创建人","type":"user"},{"name":"content","label":"日报内容","type":"tiptap"},{"name":"createGmt","label":"创建时间","type":"date"},{"name":"updateGmt","label":"更新时间","type":"date"},{"name":"status","label":"是否已发送","code":"weekStatus"},{"name":"timer","label":"定时发送时间","type":"date"},{"name":"summary","label":"总结与思考","type":"textarea"}],
-  columns: ["title","status","createGmt","updateGmt"],
+  columns: ["title","status","createGmt","updateGmt","id"],
   condition: ["title"],
   slots: {
       header$() {
       return (
         <>
-        <z-action p='fq8u20tc' label='新建周报' width='900px' fields={["title",{"name":"recievers","slot":"recieversSlot"},{"name":"groups","slot":"groupSlot"},"summary",{"name":"content","slot":"editorSlot"},"timer"]} br='beforeSubmit' type='primary' url='/do/put/week' />
+        <z-action p='fq8u20tc' label='新建周报' width='1000px' fields={["title",{"name":"groups","slot":"groupSlot"},"summary",{"name":"content","slot":"editorSlot"},"timer"]} br='beforeSubmit' type='primary' url='/do/put/week' />
         </>
       )
     },

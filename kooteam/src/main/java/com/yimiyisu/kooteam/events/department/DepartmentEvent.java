@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.yimiyisu.kooteam.domain.DepartmentDO;
 import com.yimiyisu.kooteam.domain.DepartmentUserDO;
 import com.yimiyisu.kooteam.events.department.model.DepartmentEventModel;
-import com.yimiyisu.kooteam.kit.LoginKit;
 import com.yimiyisu.kooteam.kit.openPlatform.DingdingPlatform;
 import com.yimiyisu.kooteam.kit.openPlatform.FeishuPlatform;
 import com.yimiyisu.kooteam.kit.openPlatform.IOpenPlatform;
@@ -37,9 +36,7 @@ public class DepartmentEvent implements IEvent<DepartmentEventModel> {
     @Override
     @Subscribe
     public void execute(DepartmentEventModel departmentEventModel) {
-        String loginMode;
-        if (ConfigKit.isDev()) loginMode = ConfigKit.get("loginMode");
-        else loginMode = LoginKit.login().get("loginMode");
+        String loginMode = ConfigKit.get("loginMode");
         if (StringKit.isEmpty(loginMode)) return;
         IOpenPlatform openPlatform;
         int userTag;
@@ -61,10 +58,7 @@ public class DepartmentEvent implements IEvent<DepartmentEventModel> {
         }
         // 1. 获取部门树
         List<DepartmentDO> departmentDOList = openPlatform.syncDepartmentData();
-        if (ConfigKit.isDev()) {
-
-        }
-        if (ConfigKit.isDaily()) {// 2. 预加载本地部门数据，生成外部部门ID与本地部门ID的映射
+        if (!ConfigKit.isOnline()) {// 2. 预加载本地部门数据，生成外部部门ID与本地部门ID的映射
             Map<String, String> outIdToLocalId = deptIdMappings();
             for (DepartmentDO departmentDO : departmentDOList) {
                 String departmentId = outIdToLocalId.get(departmentDO.getOutId());
@@ -134,7 +128,7 @@ public class DepartmentEvent implements IEvent<DepartmentEventModel> {
                 //更新时间超过一天没更新就删除
                 zenEngine.execute("delete/employee", employeeData.put("id", uid));
                 //删除相对应的外键表
-                ZenResult employeeIds = zenEngine.execute("list/department_userList", employeeData.put("employeeId", uid));
+                ZenResult employeeIds = zenEngine.execute("list/department_userList", ZenData.create().put("employeeId", uid));
                 if (employeeIds != null && !employeeIds.isEmpty()) {
                     employeeIds.asList(Map.class).forEach(map -> {
                         String id = map.get("id").toString();
@@ -191,11 +185,11 @@ public class DepartmentEvent implements IEvent<DepartmentEventModel> {
     // 预加载本地已有部门的ID映射
     private Map<String, String> deptIdMappings() {
         Map<String, String> outIdToLocalId = new HashMap<>();
-        int page = 1;
+        int page = 0;
         boolean hasMore;
         do {
             ZenResult result = zenEngine.execute("list/departmentList",
-                    ZenData.create("pageSize", "500").put("page", page));
+                    ZenData.create().put("page", page).put("pageSize", 500));
             List<JsonObject> resultList = result.asList();
             if (resultList == null || resultList.isEmpty()) {
                 if (page == 1) return outIdToLocalId;

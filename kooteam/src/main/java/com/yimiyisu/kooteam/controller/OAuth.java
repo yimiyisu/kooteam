@@ -11,7 +11,10 @@ import com.zen.annotation.MethodType;
 import com.zen.enums.ZenAction;
 import com.zen.enums.ZenMethod;
 import com.zen.enums.ZenRole;
-import com.zen.kit.*;
+import com.zen.kit.ConfigKit;
+import com.zen.kit.StringKit;
+
+import java.lang.System;
 
 @AccessRole(ZenRole.ANONYMITY)
 public class OAuth extends ZenController {
@@ -40,28 +43,53 @@ public class OAuth extends ZenController {
     // 登陆回调
     @MethodType(ZenMethod.GET)
     public ZenResult callback(ZenData data) throws Exception {
-        String loginMode = ConfigKit.get("loginMode");
+        String loginMode = data.get("state");
         String authCode = data.get("code"); // 临时授权码
 
         String accessToken;
         switch (loginMode) {
             case "dingding":
-                accessToken = DingdingPlatform.callback(authCode);
+                DingdingPlatform dingdingPlatform = new DingdingPlatform();
+                accessToken = dingdingPlatform.getToken(authCode);
                 break;
             case "wework":
                 WeworkPlatform weworkPlatform = new WeworkPlatform();
-                accessToken = weworkPlatform.getAccessToken();
+                accessToken = weworkPlatform.getToken(authCode);
                 break;
             case "feishu":
                 FeishuPlatform feishuPlatform = new FeishuPlatform();
-                accessToken = feishuPlatform.getAccessToken();
+                accessToken = feishuPlatform.getToken(authCode, false);
                 break;
             default:
                 return ZenResult.fail("未知登陆方式");
         }
         if (StringKit.isEmpty(accessToken)) return ZenResult.fail("授权失败");
-
-        return ZenResult.success();
+        return ZenResult.redirect("https://daily.zeto.me/kooteam_/auth_/" + accessToken);
     }
 
+    public ZenResult getToken(ZenData data) throws Exception {
+        String code = data.get("code");
+        String mode = data.get("mode");
+
+        System.out.println("getToken_code:" + code);
+        String accessToken;
+        switch (mode) {
+            case "dingding":
+                DingdingPlatform dingdingPlatform = new DingdingPlatform();
+                accessToken = dingdingPlatform.getToken(code);
+                break;
+            case "wework":
+                WeworkPlatform weworkPlatform = new WeworkPlatform();
+                accessToken = weworkPlatform.getToken(code);
+                break;
+            case "feishu":
+                FeishuPlatform feishuPlatform = new FeishuPlatform();
+                accessToken = feishuPlatform.getToken(code, true);
+                break;
+            default:
+                return ZenResult.fail("未知登陆方式");
+        }
+        if (StringKit.isEmpty(accessToken)) return ZenResult.fail("授权失败");
+        return ZenResult.success().setData(accessToken);
+    }
 }

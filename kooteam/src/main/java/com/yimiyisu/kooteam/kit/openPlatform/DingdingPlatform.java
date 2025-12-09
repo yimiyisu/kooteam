@@ -2,24 +2,22 @@ package com.yimiyisu.kooteam.kit.openPlatform;
 
 import com.yimiyisu.kooteam.domain.DepartmentDO;
 import com.yimiyisu.kooteam.domain.DepartmentUserDO;
-import com.yimiyisu.kooteam.domain.openPlatformAccessToken.AccessToken;
 import com.yimiyisu.kooteam.domain.openPlatformAccessToken.DingTokenRes;
 import com.yimiyisu.kooteam.domain.openPlatformResult.DingUserInfo;
 import com.yimiyisu.kooteam.domain.openPlatformResult.DingdingDepartmentResult;
 import com.yimiyisu.kooteam.domain.openPlatformResult.DingdingUserResult;
 import com.yimiyisu.kooteam.domain.openPlatformResult.SnsUserInfo;
-import com.zen.annotation.Component;
 import com.zen.domain.ZenUser;
+import com.zen.enums.UserBasicTag;
+import com.zen.enums.ZenRole;
 import com.zen.kit.*;
 import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.request.AuthDingTalkV2Request;
 import me.zhyd.oauth.request.AuthRequest;
-import me.zhyd.oauth.utils.AuthStateUtils;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.URLEncoder;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 public class DingdingPlatform implements IOpenPlatform {
@@ -39,9 +37,9 @@ public class DingdingPlatform implements IOpenPlatform {
         AuthRequest authRequest = new AuthDingTalkV2Request(AuthConfig.builder()
                 .clientId(ConfigKit.get("dingClientId"))
                 .clientSecret(ConfigKit.get("dingSecret"))
-                .redirectUri("https://zxy.daily.zeto.me/api/oAuth/callback")
+                .redirectUri(ConfigKit.get("appDomain") + "/kooteam/api/oAuth/callback")
                 .build());
-        return authRequest.authorize(AuthStateUtils.createState());
+        return authRequest.authorize("dingding");
     }
 
     public String getUserToken(String authCode) {
@@ -68,6 +66,7 @@ public class DingdingPlatform implements IOpenPlatform {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
         String res = HttpKit.postWidthHeader(url, body, headers);
+        System.out.println("dingTRes: " + res);
         if (StringKit.isEmpty(res)) return null;
         DingTokenRes dingTokenRes = JsonKit.parse(res, DingTokenRes.class);
         String accessToken = dingTokenRes.getAccessToken();
@@ -96,7 +95,7 @@ public class DingdingPlatform implements IOpenPlatform {
             String getRes = HttpKit.get(geturl);
             DingdingDepartmentResult dingdingDepartmentResult = JsonKit.parse(getRes, DingdingDepartmentResult.class);
             System.out.println(dingdingDepartmentResult);
-            departmentDO.add(toDepartmentDO(dingdingDepartmentResult.getResult()));
+            departmentDO.add(DingdingPlatform.toDepartmentDO(dingdingDepartmentResult.getResult()));
         }
         return departmentDO;
     }
@@ -142,12 +141,11 @@ public class DingdingPlatform implements IOpenPlatform {
             String res = HttpKit.get(listUrl);
             System.out.println(res);
             DingdingDepartmentResult dingdingDepartmentResult = JsonKit.parse(HttpKit.get(listUrl), DingdingDepartmentResult.class);
-            if (dingdingDepartmentResult.getResult().getDept_id_list() != null) {
+            if (dingdingDepartmentResult.getResult().getDept_id_list() != null)
                 for (String id : dingdingDepartmentResult.getResult().getDept_id_list()) {
                     int subId = Integer.parseInt(id);
                     if (allIds.add(subId)) queue.add(subId);// 添加成功说明是新的ID
                 }
-            }
         }
         return allIds;
     }
@@ -178,11 +176,10 @@ public class DingdingPlatform implements IOpenPlatform {
         return departmentUserDo;
     }
 
-    public static String callback(String authCode) throws Exception {
+    public String getToken(String authCode) throws Exception {
         if (StringKit.isEmpty(authCode)) return null;
         // 获取token
-        DingdingPlatform dingdingPlatform = new DingdingPlatform();
-        String accessToken = dingdingPlatform.getUserToken(authCode);
+        String accessToken = getAccessToken();
         if (StringKit.isEmpty(accessToken)) return null;
 
         // 通过免登码获取用户信息-unionid
@@ -190,32 +187,46 @@ public class DingdingPlatform implements IOpenPlatform {
 //        getUserMap.put("code", authCode);
 //        String getUnionidUrl = "https://oapi.dingtalk.com/topapi/v2/user/getuserinfo?access_token=" + accessToken;
 //        String unionRes = HttpKit.post(getUnionidUrl, getUserMap);
+//        System.out.println("user: " + unionRes);
 //        if (StringKit.isEmpty(unionRes)) return null;
 //        DingUserInfo userResult = JsonKit.parse(unionRes, DingUserInfo.class);
 //        if (userResult.getErrcode() == null || userResult.getErrcode() != 0) return null;
-//        String unionid = userResult.getResult().getUnionid();
+//        String openId = userResult.getResult().getUnionid();
         String timestamp = System.currentTimeMillis() + "";
-        String signature = sign(timestamp);
+        String signature = DingdingPlatform.sign(timestamp);
         String url = "https://oapi.dingtalk.com/sns/getuserinfo_bycode?accessKey=" + ConfigKit.get("dingClientId") + "&timestamp=" + timestamp + "&signature=" + signature;
         Map<String, Object> params = new HashMap<>();
         params.put("tmp_auth_code", authCode);
         String post = HttpKit.post(url, params);
+        System.out.println("post = " + post);
         if (StringKit.isEmpty(post)) return null;
         SnsUserInfo parse = JsonKit.parse(post, SnsUserInfo.class);
-        String unionid = parse.getUser_info().getUnionid();
+        String openId = parse.getUser_info().getUnionid();
 
         // 通过unionid获取用户信息
         Map<String, Object> body = new HashMap<>();
-        body.put("unionid", unionid);
-        String getUserUrl = "POST https://oapi.dingtalk.com/topapi/user/getbyunionid?access_token=" + accessToken;
+        body.put("unionid", openId);
+        String getUserUrl = "https://oapi.dingtalk.com/topapi/user/getbyunionid?access_token=" + accessToken;
         String userInfo = HttpKit.post(getUserUrl, body);
         if (StringKit.isEmpty(userInfo)) return null;
         DingUserInfo user = JsonKit.parse(userInfo, DingUserInfo.class);
         if (user.getErrcode() != 0) return null;
         int contactType = user.getResult().getContact_type();
-        if (contactType == 0) return null;
 
-        return accessToken;
+        String token = "";
+        if (contactType == 0) return null;
+        else if (contactType == 1) { // 是企业员工
+            ZenUser zenUser = UserKit.getByOpenId(openId, UserBasicTag.DING.value());
+            if (zenUser == null) {
+                ZenUser newUser = new ZenUser();
+                newUser.setOpenId(openId);
+                newUser.addTag(UserBasicTag.DING);
+                newUser.setRole(ZenRole.CONSOLE);
+                token = UserKit.insert(newUser);
+            } else token = UserKit.createToken(zenUser.getId());
+        }
+
+        return token;
     }
 
     private static String sign(String timestamp) throws Exception {
@@ -224,9 +235,7 @@ public class DingdingPlatform implements IOpenPlatform {
         mac.init(new SecretKeySpec(appSecret.getBytes("UTF-8"), "HmacSHA256"));
         byte[] signatureBytes = mac.doFinal(timestamp.getBytes("UTF-8"));
         String signature = Base64.getEncoder().encodeToString(signatureBytes);
-        if("".equals(signature)) {
-            return "";
-        }
+        if ("".equals(signature)) return "";
         String encoded = URLEncoder.encode(signature, "UTF-8");
         String urlEncodeSignature = encoded.replace("+", "%20").replace("*", "%2A").replace("~", "%7E").replace("/", "%2F");
         return urlEncodeSignature;

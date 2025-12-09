@@ -1,5 +1,8 @@
 <template>
   <z-table name="16xwzbmt">
+    <template #title="{ row }">
+      <a-thing :data="row" />
+    </template>
   </z-table>
 </template>
 
@@ -14,4 +17,3 @@ export default {
   },
 }
 </script>
-    

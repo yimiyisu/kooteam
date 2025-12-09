@@ -41,8 +41,12 @@ export default {
             let message;
             let logType;
             if (type === 'owner') {
-                message = "修改责任人为：" + $.nick(value.owner)
-                logType = 1
+                if (value.owner == null) {
+                    message = "删除了负责人"
+                } else {
+                    message = "修改责任人为：" + $.nick(value.owner)
+                    logType = 1
+                }
             } else if (type === 'thingStatus') {
                 console.log(this.$dict(type))
                 const dict = this.$dict(type).v.find(item => item.value === value.status)

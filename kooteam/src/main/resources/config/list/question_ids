@@ -1,0 +1,1 @@
+{"name":"question_ids","type":"list","table":"question","where":{"relate":"AND","exprs":[{"operator":7,"column":"id","alias":"questions","from":1,"need":false,"value":"['0']"}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","creator","evaluation_id","order","create_gmt","score","update_gmt","title","type","options","require"]}

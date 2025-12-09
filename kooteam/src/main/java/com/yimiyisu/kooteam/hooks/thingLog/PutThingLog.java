@@ -2,15 +2,14 @@ package com.yimiyisu.kooteam.hooks.thingLog;
 
 import com.yimiyisu.kooteam.events.model.ThingEmailEventModel;
 import com.zen.ZenData;
-import com.zen.ZenEngine;
 import com.zen.ZenResult;
-import com.zen.annotation.Inject;
 import com.zen.annotation.ZenHook;
 import com.zen.interfaces.IHook;
 import com.zen.kit.EventKit;
+import com.zen.kit.JsonKit;
 import com.zen.kit.StringKit;
 
-import java.util.List;
+import java.util.Map;
 
 @ZenHook("put/thing_log")
 public class PutThingLog implements IHook {
@@ -23,14 +22,16 @@ public class PutThingLog implements IHook {
         int type = Integer.parseInt(typeStr);
 
         String thingId = data.get("thingId"); // 待办id
-        String original = data.get("original"); // 原始数据
+        Map<String, Object> original = data.getAsMap("original");// 原始数据
 
         // 调用异步发送邮件
         ThingEmailEventModel thingEmailEventModel = ThingEmailEventModel.builder()
                 .from(result.get("uid"))
                 .thingId(thingId)
                 .type(type)
-                .original(original)
+                .original(JsonKit.stringify(original))
+                .content(result.get("content"))
+                .logUid(result.get("uid"))
                 .build();
         EventKit.trigger(thingEmailEventModel);
 

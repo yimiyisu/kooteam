@@ -1,6 +1,8 @@
 package com.yimiyisu.kooteam.kit;
 
-import com.zen.kit.*;
+import com.zen.kit.CacheKit;
+import com.zen.kit.HttpKit;
+import com.zen.kit.StringKit;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -12,7 +14,7 @@ public class WeixinKit {
 
     // 获取开放平台token
     public static String getMiniAppToken(String mpId, String appid, String appsecret) {
-        String cacheKey = TOKEN_OPEN_CACHE_KEY + ":" + mpId;
+        String cacheKey = WeixinKit.TOKEN_OPEN_CACHE_KEY + ":" + mpId;
         String token = CacheKit.get(cacheKey);
         if (StringKit.isNotEmpty(token)) return token;
 

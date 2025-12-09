@@ -17,6 +17,8 @@
 const quadrantOptions = {
     1: { color: '#F80E15', label: 'P1' },
     2: { color: '#BF9F03', label: 'P2' },
+    3: { color: '#009fe3', label: 'P3' },
+    4: { color: '#79aa1c', label: 'P4' }
 }
 export default {
     inheritAttrs: false,

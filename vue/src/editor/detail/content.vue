@@ -19,12 +19,12 @@
             <z-icon value="chevronLeft" v-if="prevId" size="48" @click="() => open(prevId)" class="hover prev" />
             <z-icon value="chevronRight" v-if="nextId" size="48" @click="() => open(nextId)" class="hover next" />
             <div ref="content" class="content">
-                <z-block v-if="data != -1" url="/api/home/noteContent" :params="params" @finish="renderPlugin">
+                <z-block v-if="data != -1" url="/api/home/noteContent" :params="params">
                     <template #default="result">
                         <h3 class="title2">
                             {{ result.title }}
                         </h3>
-                        <div v-if="result.type === 1" class="mce-content-body" v-html="result.content"></div>
+                        <div v-if="result.type === 1" class="a-richtext" v-html="result.content"></div>
                         <Other v-else :data="result" :key="result.id" />
                     </template>
                 </z-block>
@@ -34,12 +34,11 @@
 </template>
 <script>
 // import Plugin from '../blocks/index';
+import { useZIndex } from 'element-plus';
 import Chapter from './chapter.vue';
 import Other from './other.vue';
-
 export default {
     components: { Chapter, Other },
-    inject: ['$index'],
     props: {
         data: Object
     },
@@ -67,12 +66,11 @@ export default {
         if (article) {
             this.current = article
             this.params = { id: article }
-        } else {
-            let id = this.getDefaultId(this.data.content)
-            this.current = id
-            this.params = { id }
+            return
         }
-        console.log(this.params)
+        let id = this.getDefaultId(this.data.content)
+        this.current = id
+        this.params = { id }
     },
     methods: {
         open(item) {
@@ -117,7 +115,7 @@ export default {
         fullscreen() {
             const { isFulled } = this
             let element = this.$refs['main'].$el
-            let nextIndex = isFulled ? 0 : this.$index()
+            let nextIndex = isFulled ? 0 : useZIndex().nextZIndex()
             $.fullscreen(element, nextIndex)
             this.isFulled = !isFulled
         },
@@ -135,15 +133,6 @@ export default {
                 }
             }
             return null
-        },
-        renderPlugin(data, el) {
-            this.$nextTick(() => {
-                const sons = el.getElementsByClassName('k-doc')
-                for (let i = 0; i < sons.length; i++) {
-                    // Plugin(sons[i], false)
-                }
-                $.lib(['tinymce/prism.js', 'tinymce/prism.css'])
-            })
         }
     },
 }

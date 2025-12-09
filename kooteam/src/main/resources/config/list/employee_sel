@@ -1,0 +1,1 @@
+{"name":"employee_sel","type":"list","table":"employee","where":{"relate":"AND","exprs":[{"operator":5,"column":"title","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","title"]}

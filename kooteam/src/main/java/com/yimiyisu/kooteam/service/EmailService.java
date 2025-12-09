@@ -25,29 +25,40 @@ public class EmailService {
     @Inject
     private static ZenEngine zenEngine;
 
-    public void sendWeekReport(String weekId, String uid) {
-        ZenResult reportData = zenEngine.execute("get/weekByOwner", ZenData.create().put("id", weekId));
+    /**
+     * 发送周报信息
+     * @param weekId 周报id
+     * @param uid 发送人
+     * @param type 类型：AI周报/普通周报
+     */
+    public void sendWeekReport(String weekId, String uid, String type) {
+        String sendName = StringKit.equals("ai_week", type) ? "isSend" : "status";
+        String recivers = StringKit.equals("ai_week", type) ? "recivers" : "recievers";
+        ZenResult reportData = zenEngine.execute("get/" + type, ZenData.create().put("id", weekId));
         if (reportData.isEmpty()) return;
 
         // 获取接收人邮件集合
-        List<String> receiverList = reportData.getAsStringList("recievers") == null ? new ArrayList<>() : reportData.getAsStringList("recievers");
+        List<String> receiverList = reportData.getAsStringList(recivers) == null ? new ArrayList<>() : reportData.getAsStringList(recivers);
         Set<String> receivers = new HashSet<>(receiverList);
         List<String> groupIds = reportData.getAsStringList("groups");
-        List<String> email = EmailService.getUidByGroupIds(receivers, groupIds, weekId, uid);
+        List<String> email = getUidByGroupIds(receivers, groupIds, weekId, uid, type);
 
         // 创建消息，等待轮训触发
         ZenMessage zenMessage = new ZenMessage(EmailService.TEMPLATENAME);
         zenMessage.setTitle(reportData.get("title"));
-        zenMessage.setFrom(reportData.get("uid"));
-        zenMessage.setContent(Email.getTemplate(reportData.get("uid"), reportData.get("content")));
-        if (email.isEmpty()) return;
+        zenMessage.setFrom(uid);
+        zenMessage.setContent(Email.getTemplate(uid, reportData.get("content")));
+        if (email.isEmpty()) {
+            zenEngine.execute("patch/" + type, ZenData.create().put("id", weekId).put(sendName, 3));
+            return;
+        }
         zenMessage.send(email);
 
         // 更新周报发送状态
-        zenEngine.execute("patch/week", ZenData.create().put("id", weekId).put("status", 3));
+        zenEngine.execute("patch/" + type, ZenData.create().put("id", weekId).put(sendName, 3));
     }
 
-    public static List<String> getUidByGroupIds(Set<String> receivers, List<String> groupIds,String weekId,String uid) {
+    public static List<String> getUidByGroupIds(Set<String> receivers, List<String> groupIds,String weekId,String uid, String type) {
         if (groupIds != null && !groupIds.isEmpty()) {
             List<JsonObject> groups = zenEngine.selectByIds("week_group", groupIds);
             if (groups != null) {
@@ -65,13 +76,14 @@ public class EmailService {
         List<String> receiverList = new ArrayList<>(receivers);
         List<String> email = new ArrayList<>();
 
-        ZenData data = ZenData.create();
         List<ZenUser> users = UserKit.selectByUids(receiverList);
         for (ZenUser user : users) {
             if (StringKit.isNotEmpty(user.getEmail())) {
+                ZenData data = ZenData.create();
                 email.add(user.getEmail());
-                data.put("weekId", weekId);
-                data.put("uid", user.getId()).refresh();
+                String newWeekId = StringKit.equals("ai_week", type) ? "ai_" + weekId : weekId;
+                data.put("weekId", newWeekId);
+                data.put("uid", user.getId());
                 data.put("sendUid", uid);
                 zenEngine.execute("put/week_recieve", data);
             }

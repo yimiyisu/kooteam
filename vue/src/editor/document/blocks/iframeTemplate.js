@@ -1,13 +1,13 @@
-const docs = { 3: "mindmap", 4: "flowable", 5: "xspreadsheet", 6: "excalidraw" };
+const docs = { 3: 'mindmap', 4: 'flow', 5: 'xspreadsheet', 6: 'excalidraw', 7: 'task' }
 
 export default function (type, id, readonly = false) {
-    const file = docs[type];
-    if (!file) {
-        return "";
-    }
-    const { res, lib, host } = window.zen;
-    let pluginJS = zen.path(`lib/${file}.js`);
-    return `<!DOCTYPE html>
+  const file = docs[type]
+  if (!file) {
+    return ''
+  }
+  const { res, lib, host = '' } = window.zen
+  let pluginJS = zen.path(`lib/${file}.js`)
+  return `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8" />
@@ -22,8 +22,8 @@ export default function (type, id, readonly = false) {
   <script src="${lib}.js"></script>
   <link rel="stylesheet" type="text/css" href="${lib}.css">
 <body data-id="${id}" res-path="${res}">
-<script>zen.host = '${host || ""}';var _rd_=${readonly};</script>
+<script>zen.host = '${host}';var _rd_=${readonly};</script>
 <div id="root"></div>
 <script src="${pluginJS}"></script></body>
-</html>`;
+</html>`
 }

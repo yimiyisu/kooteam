@@ -5,16 +5,14 @@ import com.yimiyisu.kooteam.events.message.channels.domain.AttachDataSource;
 import com.yimiyisu.kooteam.events.message.channels.domain.ChannelInfo;
 import com.zen.domain.MessageDO;
 import com.zen.domain.ZenUser;
-import com.zen.kit.ConfigKit;
-import com.zen.kit.PatternKit;
-import com.zen.kit.StringKit;
-import com.zen.kit.UserKit;
+import com.zen.kit.*;
 import jakarta.activation.DataHandler;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 public class EmailMessage implements IMessage {
@@ -27,12 +25,14 @@ public class EmailMessage implements IMessage {
     }
 
     public static IMessage getInstance() {
-        if (EmailMessage.instance == null) EmailMessage.instance = new EmailMessage();
+        if (EmailMessage.instance == null)
+            EmailMessage.instance = new EmailMessage();
         return EmailMessage.instance;
     }
 
     private Session getSession() {
-        if (EmailMessage._session != null) return EmailMessage._session;
+        if (EmailMessage._session != null)
+            return EmailMessage._session;
         Properties props = new Properties();
         props.put("mail.smtp.host", ConfigKit.get("mailHost"));
         props.put("mail.smtp.port", ConfigKit.get("mailPort"));
@@ -61,14 +61,15 @@ public class EmailMessage implements IMessage {
             ZenUser user = UserKit.get(messageDO.getFrom());
             message.setFrom(new InternetAddress(sender, messageDO.getTitle()));
 
-            if (user != null && StringKit.isNotEmpty(user.getEmail())) message.setHeader("Sender", user.getEmail());
+            if (user != null && StringKit.isNotEmpty(user.getEmail()))
+                message.setHeader("Sender", user.getEmail());
 
             // 设置邮件主题
             message.setSubject(messageDO.getTitle());
-
-            // 构建邮件内容
+            String content = getMessageContent(messageDO.getContent(), channelInfo.getMessageType());
+            content = StringKit.isEmpty(content) ? messageDO.getTitle() : content;
             MimeBodyPart htmlPart = new MimeBodyPart();
-            htmlPart.setContent(messageDO.getContent(), "text/html; charset=utf-8");
+            htmlPart.setContent(content, "text/html; charset=utf-8");
 
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(htmlPart);
@@ -85,25 +86,68 @@ public class EmailMessage implements IMessage {
             // 设置邮件内容
             message.setContent(multipart);
             List<String> recievers = messageDO.getRecievers() == null ? new ArrayList<>() : messageDO.getRecievers();
-            for (String reciever : recievers) {//验证收件人邮箱
-                if (PatternKit.isEmail(reciever)) {
+            // 验证收件人邮箱
+            for (String reciever : recievers)
+                if (PatternKit.isEmail(reciever))
                     message.addRecipient(Message.RecipientType.TO, new InternetAddress(reciever));
-                    System.out.println("=====add receiver:" + reciever + "=====");
-                }
                 else {
                     user = UserKit.get(reciever);
                     if (user != null && StringKit.isNotEmpty(user.getEmail()))
                         message.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
                 }
-            }
             // 发送邮件
             Transport.send(message);
-            System.out.println("=====发送=====");
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
         }
         return true;
+    }
+
+    public String getMessageContent(String contentStr, String messageType) {
+        String loginMode = ConfigKit.get("loginMode");
+        if (StringKit.isEmpty(contentStr))
+            return null;
+        if (!judgeJson(contentStr)) return contentStr;
+        Map<String, Object> contentMap = JsonKit.parseAsMap(contentStr);
+        String content = switch (loginMode) {
+            case "wework" -> weworkContent(contentMap, messageType);
+            case "dingding" -> dingContent(contentMap, messageType);
+            case "feishu" -> feishuContent(contentMap, messageType);
+            default -> "";
+        };
+        return content;
+    }
+
+    private boolean judgeJson(String content) {
+        try {
+            JsonKit.parseAsMap(content);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // 获取钉钉消息主体内容
+    private String dingContent(Map<String, Object> contentMap, String messageType) {
+        if (StringKit.equals(messageType, "text")) return contentMap.get("content").toString();
+        else if (StringKit.equals(messageType, "action_card") || StringKit.equals(messageType, "textcard"))
+            return contentMap.get("markdown").toString();
+        return null;
+    }
+
+    // 获取企业微信消息主体内容
+    private String weworkContent(Map<String, Object> contentMap, String messageType) {
+        if (StringKit.equals(messageType, "text")) return contentMap.get("content").toString();
+        else if (StringKit.equals(messageType, "textcard")) return contentMap.get("description").toString();
+        return null;
+    }
+
+    // 获取飞书消息主体内容
+    private String feishuContent(Map<String, Object> contentMap, String messageType) {
+        if (StringKit.equals(messageType, "text")) return contentMap.get("text").toString();
+        else if (StringKit.equals(messageType, "interactive")) return JsonKit.stringify(contentMap);
+        return null;
     }
 
 }

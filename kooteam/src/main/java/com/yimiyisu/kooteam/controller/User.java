@@ -48,7 +48,7 @@ public class User extends ZenController {
 
         // 查询我的任务列表
         ZenResult myThingList = zenEngine.execute("list/thingByOwner", ZenData.create("owner", data.getUid()));
-        if (myThingList.isEmpty()) ZenResult.success().setData(count);
+        if (myThingList.isEmpty()) return ZenResult.success().setData(count);
         List<ThingDO> thingList = myThingList.asList(ThingDO.class);
 
         // 统计任务数
@@ -110,6 +110,9 @@ public class User extends ZenController {
 
     // 体验环境扫码登录
     public ZenResult trialLogin(ZenData data) throws UnsupportedEncodingException {
+        if (!ConfigKit.isTrial()){
+            return ZenResult.fail("请求异常");
+        }
         if(StringKit.isNotEmpty(ConfigKit.get("trialUid"))){
             UserKit.createToken(ConfigKit.get("trialUid"), StringKit.decrypt(data.get("loginCode")).getValue());
             return ZenResult.success().setData("success");
@@ -119,6 +122,7 @@ public class User extends ZenController {
 
     public Map<String, Object> getCountDetail(List<ThingDO> thingList) {
         Map<String, Object> count = new HashMap<>();
+
 
         int today = 0;
         int expired = 0;

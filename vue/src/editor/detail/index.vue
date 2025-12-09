@@ -12,8 +12,8 @@ export default {
     data() {
         return {
             params: null,
-            url:null,
-         }
+            url: null,
+        }
     },
     created() {
         this.params = $.getParams()

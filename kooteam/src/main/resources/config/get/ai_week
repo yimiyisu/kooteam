@@ -1,0 +1,1 @@
+{"name":"ai_week","type":"get","table":"ai_week","where":{"relate":"AND","exprs":[{"operator":0,"column":"id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","creator","create_gmt","update_gmt","title","content","type","group","recivers","groups","status","is_send","reason","start_gmt","end_gmt","timer"]}

@@ -6,11 +6,12 @@ import com.yimiyisu.kooteam.domain.openPlatformResult.WeWorkDepartmentResult;
 import com.yimiyisu.kooteam.domain.openPlatformResult.WeWorkResult;
 import com.yimiyisu.kooteam.domain.openPlatformResult.WeWorkUserResult;
 import com.zen.domain.ZenUser;
+import com.zen.enums.UserBasicTag;
+import com.zen.enums.ZenRole;
 import com.zen.kit.*;
 import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.request.AuthRequest;
 import me.zhyd.oauth.request.AuthWeChatEnterpriseQrcodeV2Request;
-import me.zhyd.oauth.utils.AuthStateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +29,12 @@ public class WeworkPlatform implements IOpenPlatform {
     public static String login() {
         AuthRequest authRequest = new AuthWeChatEnterpriseQrcodeV2Request(AuthConfig.builder()
                 .clientId(ConfigKit.get("weworkId"))
-                .clientSecret(ConfigKit.get("weworkSecret"))
-                .redirectUri("https://zxy.daily.zeto.me/api/oAuth/callback")
+                .clientSecret(ConfigKit.get("weworkAppSecret"))
+                .redirectUri(ConfigKit.get("appDomain") + "/kooteam/api/oAuth/callback")
                 .agentId(ConfigKit.get("weworkAppId"))
                 .lang("zh")
                 .build());
-        return authRequest.authorize(AuthStateUtils.createState());
+        return authRequest.authorize("wework");
     }
 
     @Override
@@ -49,26 +50,54 @@ public class WeworkPlatform implements IOpenPlatform {
                 avatar = UploadKit.image(avatar, "/user/" + user.getId() + ".jpg");
                 user.setAvatar(avatar);
             }
-            if (result.containsKey("email")) {
-                user.setEmail(result.get("email").toString());
-            }
+            if (result.containsKey("email")) user.setEmail(result.get("email").toString());
             UserKit.update(user);
         }
-        System.out.println(result);
     }
 
+    // 获取平台token
     public String getAccessToken() {
         String token = CacheKit.get(WeworkPlatform.TOKEN_KEY);
         if (StringKit.isNotEmpty(token)) return token;
         String corpId = ConfigKit.get("weworkId");
-        String corpSecret = ConfigKit.get("weworkSecret");
+        String corpSecret = ConfigKit.get("weworkAppSecret");
         String url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=" + corpId + "&corpsecret=" + corpSecret;
         Map<String, Object> result = HttpKit.getAsMap(url);
+        if (result == null) return token;
         if (result.containsKey("access_token")) {
             token = result.get("access_token").toString();
-            CacheKit.set(WeworkPlatform.TOKEN_KEY, token);
+            CacheKit.set(WeworkPlatform.TOKEN_KEY, token, 60);
         }
         return token;
+    }
+
+    // 获取系统token
+    public String getToken(String code) {
+        // 获取unionId
+        String platformToken = getAccessToken();
+        if (StringKit.isEmpty(platformToken)) return null;
+        String openId = getUserInfo(platformToken, code);
+        if (StringKit.isEmpty(openId)) return null;
+
+        // 获取系统token
+        String token = "";
+        ZenUser zenUser = UserKit.getByOpenId(openId, UserBasicTag.WEWORK.value());
+        if (zenUser == null) {
+            ZenUser newUser = new ZenUser();
+            newUser.setOpenId(openId);
+            newUser.addTag(UserBasicTag.WEWORK);
+            newUser.setRole(ZenRole.CONSOLE);
+            token = UserKit.insert(newUser);
+        } else token = UserKit.createToken(zenUser.getId());
+
+        return token;
+    }
+
+    public String getUserInfo(String accessToken, String code) {
+        String url = "https://qyapi.weixin.qq.com/cgi-bin/auth/getuserinfo?access_token=" + accessToken + "&code=" + code;
+        Map<String, Object> userInfo = HttpKit.getAsMap(url);
+        if (userInfo == null || !StringKit.equals("ok", userInfo.get("errmsg").toString())) return null;
+        return userInfo.get("userid").toString();
     }
 
     @Override
@@ -78,7 +107,7 @@ public class WeworkPlatform implements IOpenPlatform {
 
     // 从企业微信API获取部门数据
     @Override
-    public List<DepartmentDO> syncDepartmentData(){
+    public List<DepartmentDO> syncDepartmentData() {
         String accessToken = getAccessToken();
         List<WeWorkResult.Result> weWorkResult = getWeWorkDeptId(accessToken);
         String geturl = "https://qyapi.weixin.qq.com/cgi-bin/department/get?access_token=";
@@ -91,21 +120,18 @@ public class WeworkPlatform implements IOpenPlatform {
         List<DepartmentDO> departmentList = weDeptResult.parallelStream()
                 .map(WeworkPlatform::toDepartmentDO)
                 .collect(Collectors.toList());
-        System.out.println(departmentList);
         return departmentList;
     }
 
     // 从企业微信API获取部门员工数据
     @Override
-    public List<DepartmentUserDO> syncUserData(String departmentId){
+    public List<DepartmentUserDO> syncUserData(String departmentId) {
         String accessToken = getAccessToken();
         String url = "https://qyapi.weixin.qq.com/cgi-bin/user/list?access_token=";
         String response = HttpKit.get(url + accessToken + "&department_id=" + departmentId);
         WeWorkUserResult weWorkUserResult = JsonKit.parse(response, WeWorkUserResult.class);
         List<WeWorkUserResult.UserResult> userList = new ArrayList<>();
-        if (weWorkUserResult != null){
-            userList = weWorkUserResult.getUserlist();
-        }
+        if (weWorkUserResult != null) userList = weWorkUserResult.getUserlist();
         return userList.parallelStream()
                 .map(WeworkPlatform::toDepartmentUserDO)
                 .collect(Collectors.toList());

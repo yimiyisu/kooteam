@@ -2,16 +2,13 @@ package com.yimiyisu.kooteam.events.message.channels;
 
 import com.yimiyisu.kooteam.events.message.IMessage;
 import com.yimiyisu.kooteam.events.message.channels.domain.ChannelInfo;
-import com.yimiyisu.kooteam.events.message.channels.domain.DingdingMessageDO;
 import com.yimiyisu.kooteam.events.message.domain.MessageResultDO;
-import com.yimiyisu.kooteam.kit.OpenPlatformKit;
 import com.yimiyisu.kooteam.kit.openPlatform.DingdingPlatform;
 import com.yimiyisu.kooteam.kit.openPlatform.IOpenPlatform;
 import com.zen.domain.MessageDO;
 import com.zen.kit.ConfigKit;
 import com.zen.kit.HttpKit;
 import com.zen.kit.JsonKit;
-import com.zen.kit.StringKit;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,24 +38,18 @@ public class DingdingMessage implements IMessage {
         List<String> userIds = new ArrayList<>();
         userIds.add("3564075531954999");
         body.put("userid_list", JsonKit.stringify(userIds));
+
+        // todo 钉钉无法登录，userIds先写死
 //        if (messageDO.getTo().isEmpty()) body.put("to_all_user", true);
 //        else {
 //            String userIds = OpenPlatformKit.getOpenId(messageDO, ",");
 //            body.put("userid_list", userIds);
 //        }
 
-        //消息类型。
-        //文本消息类型为：text。
-        //初始化 msg 和 text 对象
-        DingdingMessageDO.Msg msg = new DingdingMessageDO.Msg();
-        msg.setText(new DingdingMessageDO.TextContent());
-        msg.getText().setContent(messageDO.getContent());
-        msg.setMsgtype("text");
-
-        body.put("msg", msg);
-
-        String requestBodyJson = JsonKit.stringify(body);
-//        System.out.println("完整请求体：" + requestBodyJson);
+        // 设置消息内容
+        String messageType = channelInfo.getMessageType();
+        Map<String, Object> content = JsonKit.parseAsMap(messageDO.getContent());
+        body.put(messageType, content);
 
         String url = "https://oapi.dingtalk.com/topapi/message/corpconversation/asyncsend_v2?access_token=" + accessToken;
         String response = HttpKit.post(url, body);

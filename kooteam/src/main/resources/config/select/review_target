@@ -1,0 +1,1 @@
+{"name":"review_target","type":"select","table":"review","msg":"","where":{"relate":"AND","exprs":[{"operator":0,"column":"target_id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["id","creator","create_gmt","update_gmt","title","content","range","file","target_id"],"order":{"name":"create_gmt","type":-1}}

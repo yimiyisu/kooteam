@@ -10,6 +10,7 @@ import com.zen.ZenResult;
 import com.zen.annotation.AccessRole;
 import com.zen.annotation.Inject;
 import com.zen.annotation.MethodType;
+import com.zen.annotation.Tracker;
 import com.zen.domain.DecryptResult;
 import com.zen.domain.MessageDO;
 import com.zen.domain.ZenUser;
@@ -30,8 +31,10 @@ public class Home extends ZenController {
     private WxAuthService wxAuthService;
 
     @MethodType(ZenMethod.ALL)
+    @Tracker(10)
     public ZenResult test(ZenData data) {
-        return ZenResult.success().setData(StringKit.objectId() + "-" + StringKit.shortId());
+        String httpContent = HttpKit.get("https://www.baidu.com/index.html");
+        return ZenResult.success().setData(httpContent);
     }
 
     public ZenResult apps() {
@@ -125,7 +128,7 @@ public class Home extends ZenController {
             openId = decryptResult.getValue();
         }
         boolean subscribed = true;
-        if (StringKit.isNotEmpty(ConfigKit.get("trialUid")) || ConfigKit.isTrial()) {
+        if (authResult.getInt("subscribed") == 1) {
             String accessToken = wxAuthService.getminiAppToken(mpId);
             subscribed = WeixinKit.isSubscribed(accessToken, openId);
         }
@@ -142,5 +145,16 @@ public class Home extends ZenController {
         if (StringKit.isNotEmpty(polling)) return ZenResult.jump(domain);
         System.out.println(domain);
         return ZenResult.redirect(domain);
+    }
+
+    /**
+     * 体验环境移动端kooteam登录
+     */
+    public ZenResult trialLogin(ZenData data) {
+        if (ConfigKit.get("trialUid") != null) {
+            String token = UserKit.createToken(ConfigKit.get("trialUid"));
+            return ZenResult.success().setData(token);
+        }
+        return ZenResult.success();
     }
 }

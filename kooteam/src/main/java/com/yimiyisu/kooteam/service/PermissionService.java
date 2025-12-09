@@ -10,11 +10,7 @@ import com.zen.annotation.Component;
 import com.zen.annotation.Inject;
 import com.zen.domain.PageEntity;
 import com.zen.kit.CacheKit;
-import com.zen.kit.ConfigKit;
 import com.zen.kit.StringKit;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class PermissionService {
@@ -61,7 +57,7 @@ public class PermissionService {
                     permissionAppDO.addPoints(pageDO.getPointsLeft());
                 }
                 permissionConfigDO.set(appName, permissionAppDO);
-                CacheKit.set(PermissionService.prifix + uid, permissionConfigDO, CACHE_TIME);
+                CacheKit.set(PermissionService.prifix + uid, permissionConfigDO, PermissionService.CACHE_TIME);
             }
         }
         return permissionAppDO;
@@ -73,14 +69,13 @@ public class PermissionService {
      * @param uid 用户ID
      */
     public void remove(String uid, String appName) {
-        if (StringKit.isEmpty(appName)) {
-            CacheKit.remove(PermissionService.prifix + uid);
-        } else {
+        if (StringKit.isEmpty(appName)) CacheKit.remove(PermissionService.prifix + uid);
+        else {
             PermissionConfigDO permissionConfigDO = this.get(uid);
             if (permissionConfigDO == null) return;
             if (permissionConfigDO.get(appName) == null) return;
             permissionConfigDO.remove(appName);
-            CacheKit.set(PermissionService.prifix + uid, permissionConfigDO, CACHE_TIME);
+            CacheKit.set(PermissionService.prifix + uid, permissionConfigDO, PermissionService.CACHE_TIME);
         }
     }
 }

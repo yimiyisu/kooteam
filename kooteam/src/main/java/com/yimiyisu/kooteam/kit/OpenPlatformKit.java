@@ -46,6 +46,7 @@ public class OpenPlatformKit {
         List<String> uidList = new ArrayList<>();
         for (String uid : recievers) {
             ZenUser zenUser = UserKit.get(uid);
+            if (zenUser == null) continue;
             uidList.add(zenUser.getOpenId());
         }
         return String.join(delimiter, uidList);

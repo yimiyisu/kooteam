@@ -25,6 +25,11 @@
                 <Apps v-if="current === 'app'" />
             </div>
         </el-tab-pane>
+        <el-tab-pane label="其它配置" name="deepseek">
+            <div style="width:960px">
+                <Deepseek v-if="current === 'deepseek'" />
+            </div>
+        </el-tab-pane>
         <!-- <el-tab-pane label="开发平台配置" name="open">
             <div style="width:720px">
                 <Open v-if="current === 'open'" />
@@ -34,12 +39,13 @@
 </template>
 <script>
 import Apps from './blocks/apps.vue';
+import Deepseek from './blocks/deepseek.vue';
 import Mail from './blocks/mail.vue';
 import Storage from './blocks/storage/index.vue';
 import Third from './blocks/third/index.vue';
 
 export default {
-    components: { Third, Storage, Mail, Apps },
+    components: { Third, Storage, Mail, Apps, Deepseek },
     data() {
         return {
             current: 'basic',
@@ -48,7 +54,9 @@ export default {
                 { label: "系统名称", name: "title" },
                 { label: "系统描述", name: "desc" },
                 { label: "ICP备案号", name: "icp" },
+                { label: "版权信息", name: "copyright" },
                 { label: "默认主题色", name: "color", type: "color" },
+                { label: "页面布局", name: "mode", type: "radiobox", options: [{ value: 'nm', label: '默认布局' }, { value: 'erp', label: '简易布局' }] },
                 { label: "禁用多主题", name: "theme", type: "switch" },
                 { label: "系统Logo", name: "logo", type: "image", tip: "建议尺寸64x64" },
                 // { label: "欢迎背景图", name: "bg", type: "image", tip: "建议尺寸900x1500" }

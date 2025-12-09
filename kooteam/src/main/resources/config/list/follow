@@ -1,0 +1,1 @@
+{"name":"follow","type":"list","table":"follow","where":{"relate":"AND","exprs":[{"operator":0,"column":"table","alias":"","from":1,"need":false,"value":""},{"operator":0,"column":"uid","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["target_id","id","creator","create_gmt","update_gmt","table","uid"]}

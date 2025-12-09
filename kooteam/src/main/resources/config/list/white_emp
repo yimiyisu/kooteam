@@ -1,0 +1,1 @@
+{"name":"white_emp","type":"list","table":"white_emp","where":{"relate":"AND","exprs":[{"operator":0,"column":"white_id","alias":"","from":1,"need":false,"value":""}],"operator":0,"from":0,"need":false},"role":3,"params":[],"outputs":["emp_id"]}
