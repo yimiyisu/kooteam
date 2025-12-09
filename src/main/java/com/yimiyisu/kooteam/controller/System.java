@@ -1,0 +1,111 @@
+package com.yimiyisu.kooteam.controller;
+
+import com.yimiyisu.kooteam.domain.LogDO;
+import com.yimiyisu.kooteam.events.department.model.DepartmentEventModel;
+import com.yimiyisu.kooteam.service.AliLogGetService;
+import com.zen.*;
+import com.zen.annotation.AccessRole;
+import com.zen.annotation.Inject;
+import com.zen.domain.AuthDO;
+import com.zen.domain.MessageDO;
+import com.zen.enums.ZenRole;
+import com.zen.kit.*;
+
+import java.util.List;
+
+@AccessRole(ZenRole.SUPPER)
+public class System extends ZenController {
+
+    private static final String APPS_KEY = "apps";
+    private static final String LOGMAPPING_KEY = "logmapping";
+    private static final String DEEPSEEK_API_KEY = "deepseekApikey";
+    @Inject
+    private ZenEngine zenEngine;
+    @Inject
+    private AliLogGetService aliLogGetService;
+
+    // deepseek配置
+    public ZenResult deepseek(ZenData data) {
+        if (data.isEmpty()) {
+            Object deepseekApikey = ConfigKit.self(System.DEEPSEEK_API_KEY);
+            return ZenResult.success().setData(deepseekApikey);
+        }
+        ConfigKit.self(System.DEEPSEEK_API_KEY, data.getOrigin());
+        return ZenResult.success("保存成功");
+    }
+
+    public ZenResult apps(ZenData data) {
+        if (data.isEmpty()) {
+            Object appsData = ConfigKit.self(System.APPS_KEY);
+            return ZenResult.success().setData(appsData);
+        }
+        ConfigKit.self(System.APPS_KEY, data.getOrigin());
+        return ZenResult.success("保存成功");
+    }
+
+    public ZenResult log(ZenData data) {
+        String functionName = data.get("app");
+        String date = data.get("date");
+        List<LogDO> logDOList = aliLogGetService.getLog(date, functionName, Integer.parseInt(data.get("page")), 20);
+        return ZenResult.success().setData(logDOList);
+    }
+
+    public ZenResult rsyncDepartment() {
+        String cacheKey = "departmentRsync";
+        String status = CacheKit.get(cacheKey);
+        if (status != null)
+            return ZenResult.fail("正在同步中，请勿重复点击");
+        // 10分钟内，只能同步一次
+        CacheKit.set(cacheKey, "rsync", 10);
+        EventKit.trigger(new DepartmentEventModel());
+        return ZenResult.success("正在同步中，请稍后刷新页面");
+    }
+
+    public ZenResult checkMessage(ZenData data) {
+        String templateName = data.get("name");
+        ZenMessage zenMessage = new ZenMessage(templateName);
+        zenMessage.setContent(data.get("content"));
+        zenMessage.setFrom(data.getUid());
+        zenMessage.setTitle(data.get("title"));
+        zenMessage.setMobile(data.get("mobile"));
+        String to = data.get("recipient");
+        if (StringKit.isEmpty(to))
+            to = data.getUid();
+
+        if (!data.isEmpty("link"))
+            zenMessage.setLink(data.get("link"));
+
+        String messageId = zenMessage.test(to);
+        MessageDO messageDO = MessageKit.get(messageId);
+        EventKit.trigger(messageDO);
+        return ZenResult.success("消息已发送，请检查是否查收成功");
+    }
+
+    public ZenResult createOAuth(ZenData data) {
+        String id = StringKit.shortId();
+        data.put("id", id);
+        String domain = data.get("domain").trim();
+        String accessKey = StringKit.SHA1(id);
+        String secretKey = StringKit.md5(domain + ":" + id);
+        data.put("accessId", accessKey);
+        data.put("secretKey", secretKey);
+        return zenEngine.execute("put/oauth", data);
+    }
+
+    public ZenResult rsyncOAuth() {
+        ZenResult oauths = zenEngine.execute("list/oauth", ZenData.create("pageSize", "100"));
+        List<AuthDO> authDOList = oauths.asList(AuthDO.class);
+        ConfigKit.self("oauth", "kooteam", JsonKit.parse(authDOList));
+        return ZenResult.success(null);
+    }
+
+    public ZenResult logMapping(ZenData data) {
+        if (data.isEmpty()) {
+            Object appsData = ConfigKit.self(System.LOGMAPPING_KEY);
+            return ZenResult.success().setData(appsData);
+        }
+        ConfigKit.self(System.LOGMAPPING_KEY, data.getOrigin());
+        return ZenResult.success("保存成功");
+    }
+
+}
