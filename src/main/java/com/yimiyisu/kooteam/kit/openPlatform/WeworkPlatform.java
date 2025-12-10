@@ -117,10 +117,9 @@ public class WeworkPlatform implements IOpenPlatform {
             WeWorkDepartmentResult weWorkDepartmentResult = JsonKit.parse(getresponse, WeWorkDepartmentResult.class);
             weDeptResult.add(weWorkDepartmentResult.getDepartment());
         }
-        List<DepartmentDO> departmentList = weDeptResult.parallelStream()
+        return weDeptResult.parallelStream()
                 .map(WeworkPlatform::toDepartmentDO)
                 .collect(Collectors.toList());
-        return departmentList;
     }
 
     // 从企业微信API获取部门员工数据

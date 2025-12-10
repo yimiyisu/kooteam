@@ -10,13 +10,6 @@ export default {
   columns: ["id","title","english","updateGmt"],
   condition: [],
   slots: {
-      header$() {
-      return (
-        <>
-        <z-action p='s8qajfm4' label='测试' mode='confirm' type='success' url='/api/home/test123' />
-        </>
-      )
-    },
     action$({ row }) {
       return (
         <>
