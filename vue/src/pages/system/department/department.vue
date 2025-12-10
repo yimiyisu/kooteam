@@ -3,7 +3,7 @@
         <el-col :span="6">
             <z-page-title value="部门管理" />
             <z-action label='添加部门' mode='dialog' :fields="['title', 'titleEn', 'order', 'isLeaf']" type='primary'
-                @finish="(result) => addFinish(result, node)" url='/do/put/department' />
+                @finish="(result,formData) => addFinish(result,formData, node)" url='/do/put/department' />
             <z-action label='同步' mode="confirm" title='确定要同步部门吗？' url="/api/system/rsyncDepartment" />
             <el-tree ref="tree" node-key="id" :props="props" :load="loadNode" lazy style="margin-top: 6px">
                 <template #default="{ data, node }">
@@ -13,13 +13,13 @@
                             <z-action icon="plus" type="text" :title="'添加' + data.title + '子部门'"
                                 url="/do/put/department" :data="{ parentId: data.id }"
                                 :fields="['title', 'titleEn', 'order', 'isLeaf']" style="margin-right:12px"
-                                v-if="data.isLeaf == 0" @finish="(result) => addFinish(result, node)" />
+                                v-if="data.isLeaf == 0" @finish="(result,formData) => addFinish(result,formData, node)" />
                             <z-action icon="edit" type="text" :title="'编辑' + data.title + '子部门'"
                                 url="/do/patch/department" :data="data"
                                 :fields="['title', 'titleEn', 'order', 'isLeaf']" style="margin-right:12px"
                                 @finish="(result) => edit(result, node)" />
                             <z-action icon="x" type="text" url="/do/delete/department" mode="confirm" :data="data"
-                                :title="'刪除' + data.title + '部门'" @finish="(result) => remove(result)" />
+                                :title="'刪除' + data.title + '部门'" @finish="() => remove(data)" />
                         </span>
                     </span>
                 </template>
@@ -70,7 +70,8 @@ export default {
             const data = Array.isArray(result) ? result : [];
             callback(data);
         },
-        async addFinish(result, node) {
+        async addFinish(result, formData, node) {
+            result.isLeaf = formData.isLeaf
             if (node) {
                 if (!node.loaded) {
                     // 当节点还未加载时，把新添加的子节点暂存起来
@@ -93,8 +94,8 @@ export default {
             console.log(node);
             node.data.title = result.title
         },
-        remove(result) {
-            this.$refs['tree'].remove(result.id)
+        remove(data) {
+            this.$refs['tree'].remove(data.id)
         },
     },
 }

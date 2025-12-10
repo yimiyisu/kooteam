@@ -149,7 +149,7 @@ public class DepartmentEvent implements IEvent<DepartmentEventModel> {
                 .put("mobile", employee.getMobile())
                 .put("email", employee.getEmail());
         //新增操作
-        zenEngine.execute("put/employee", employeeData);
+        zenEngine.execute("put/employee_platform", employeeData);
         //判断该部门下有没有添加过员工
         ZenData relateData = ZenData.create("employeeId", zenUserId)
                 .put("departmentId", departmentId)
@@ -177,7 +177,7 @@ public class DepartmentEvent implements IEvent<DepartmentEventModel> {
                 put("title", departmentDO.getTitle()).
                 put("parentId", departmentDO.getParentId()).
                 put("outId", departmentDO.getOutId());
-        zenEngine.execute("put/department", data);
+        zenEngine.execute("put/department_platform", data);
         outIdToLocalId.put(departmentDO.getOutId(), departmentDO.getId());
         return departmentDO.getId();
     }

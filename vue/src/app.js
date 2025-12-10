@@ -1,9 +1,9 @@
-import App from './app/index.vue'
-import components from './components/index'
-import dict from './pages/dict'
-import routes from './pages/routes'
-import './sass/index.scss'
-;(async function () {
+import App from './app/index.vue';
+import components from './components/index';
+import dict from './pages/dict';
+import routes from './pages/routes';
+import './sass/index.scss';
+(async function () {
   const kooteam = 'kooteam'
   const fix = '_'
   zen.path(kooteam)
